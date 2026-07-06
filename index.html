@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏数据埋点统计看板 - 首页</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 32px;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        .header .subtitle {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .stats-bar .item {
+            text-align: center;
+        }
+        .stats-bar .item .num {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .stats-bar .item .label {
+            font-size: 13px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* Section title */
+        .section-title {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 32px 0 16px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Cards grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        .card-header .info h3 {
+            font-size: 20px;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+        .card-header .info .id {
+            font-size: 13px;
+            color: #999;
+        }
+        .card-header .status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-done {
+            background: #e6f7ed;
+            color: #52c41a;
+        }
+        .status-wip {
+            background: #fff7e6;
+            color: #fa8c16;
+        }
+        .status-todo {
+            background: #f0f0f0;
+            color: #999;
+        }
+
+        .card-body {
+            margin-bottom: 16px;
+        }
+        .card-body .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .card-body .tag {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            background: #f5f5f5;
+            color: #666;
+        }
+        .card-body .desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .card-footer .meta {
+            font-size: 12px;
+            color: #999;
+        }
+        .card-footer .action {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Empty state */
+        .empty-card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .empty-card .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+        .empty-card .text {
+            font-size: 14px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            margin-top: 40px;
+            padding-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 24px; }
+            .stats-bar { gap: 20px; }
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 游戏数据埋点统计看板</h1>
+            <div class="subtitle">各游戏项目数据埋点设计与可视化看板统一入口</div>
+            <div class="stats-bar">
+                <div class="item">
+                    <div class="num">44</div>
+                    <div class="label">已接入项目</div>
+                </div>
+                <div class="item">
+                    <div class="num">60+</div>
+                    <div class="label">游戏模式</div>
+                </div>
+                <div class="item">
+                    <div class="num">80+</div>
+                    <div class="label">埋点事件</div>
+                </div>
+                <div class="item">
+                    <div class="num">180+</div>
+                    <div class="label">数据图表</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 命名规范入口 -->
+        <a href="naming/naming_standards_standalone.html" style="text-decoration: none; display: block; margin-bottom: 20px;">
+            <div style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); border-radius: 16px; padding: 20px 28px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(14,165,233,0.25); transition: all 0.3s ease;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="font-size: 28px;">📋</div>
+                    <div>
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 2px;">埋点命名规范</div>
+                        <div style="font-size: 13px; opacity: 0.9;">跨项目统一标准 · 基础字段 · 事件模板 · 属性命名 · 废弃对照</div>
+                    </div>
+                </div>
+                <div style="font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 8px; white-space: nowrap;">
+                    查看规范 →
+                </div>
+            </div>
+        </a>
+
+        <!-- 早期接入项目 -->
+        <div class="section-title">✅ 早期接入项目</div>
+        <div class="cards-grid">
+            <a class="card" href="dashboards/1001_篮球火_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🏀 篮球火</h3>
+                        <div class="id">项目编号：1001</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">道具模式</span>
+                        <span class="tag">1~4人个人对战</span>
+                    </div>
+                    <div class="desc">道具模式、街机模式、1~4人个人对战</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1003_怪兽大乱斗_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>👾 怪兽大乱斗</h3>
+                        <div class="id">项目编号：1003</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">竞技模式</span>
+                        <span class="tag">1~2人</span>
+                    </div>
+                    <div class="desc">竞技模式、探险模式、球赛模式、1~2人</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1013_海底世界_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🌊 海底世界</h3>
+                        <div class="id">项目编号：1013</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">20个魔法模式</span>
+                        <span class="tag">自由探索</span>
+                    </div>
+                    <div class="desc">20个魔法模式、1~4人、自由探索</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1023_唐唐甜品屋_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🍰 唐唐甜品屋</h3>
+                        <div class="id">项目编号：1023</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">游戏人数</span>
+                    </div>
+                    <div class="desc">埋点偏向：游戏人数、通关进度</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1040_小伴龙与动物朋友们_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🐉 小伴龙与动物朋友们</h3>
+                        <div class="id">项目编号：1040</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热门动物</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门动物、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1041_萝卜蹲_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🥕 萝卜蹲</h3>
+                        <div class="id">项目编号：1041</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">游戏人数</span>
+                    </div>
+                    <div class="desc">埋点偏向：游戏人数、动作扣分率</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a></div>
+
+        <!-- 2026.05.10 上线项目 -->
+        <div class="section-title">📅 2026.05.10 上线项目</div>
+        <div class="cards-grid">
+            <a class="card" href="dashboards/1002_猫爪特工_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🐱 猫爪特工</h3>
+                        <div class="id">项目编号：1002</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">1~2人合作</span>
+                    </div>
+                    <div class="desc">欢乐模式、炸弹模式、无尽模式、1~2人合作</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1010_功夫节拍_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🥋 功夫节拍</h3>
+                        <div class="id">项目编号：1010</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热门模式</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门模式、游戏人数、各模式平均得分</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1011_凯斯节奏_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🎵 凯斯节奏</h3>
+                        <div class="id">项目编号：1011</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热门歌曲</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门歌曲、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1012_七十二变_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🎭 七十二变</h3>
+                        <div class="id">项目编号：1012</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热点图片</span>
+                    </div>
+                    <div class="desc">埋点偏向：热点图片、图片平均得分</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1017_天天拳击_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🥊 天天拳击</h3>
+                        <div class="id">项目编号：1017</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热门模式</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门模式、热门课程、关卡平均得分</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1019_客厅运动会_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🏃 客厅运动会</h3>
+                        <div class="id">项目编号：1019</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热门模式</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门模式、各模式平均得分</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1024_蟹蟹大冒险_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🦀 蟹蟹大冒险</h3>
+                        <div class="id">项目编号：1024</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">通关进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：通关进度、游戏人数、关卡失败率、关卡时长</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1026_小鳄鱼的水果乐园_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🐊 小鳄鱼的水果乐园</h3>
+                        <div class="id">项目编号：1026</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热门模式</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门模式、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1028_流光庭径_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>✨ 流光庭径</h3>
+                        <div class="id">项目编号：1028</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">场均分数</span>
+                    </div>
+                    <div class="desc">埋点偏向：场均分数、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1032_斑马百科_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🦓 斑马百科</h3>
+                        <div class="id">项目编号：1032</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热门关卡</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门关卡</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1036_超级飞侠_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>✈️ 超级飞侠：环游冒险</h3>
+                        <div class="id">项目编号：1036</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">飞行+小游戏</span>
+                    </div>
+                    <div class="desc">埋点偏向：通关进度、游戏人数、关卡平均时长、能量收集总数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-06-01</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1039_萌鸡小队脑力课堂_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🐤 萌鸡小队脑力课堂</h3>
+                        <div class="id">项目编号：1039</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">游戏人数</span>
+                    </div>
+                    <div class="desc">埋点偏向：游戏人数、问题正确率</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1042_贪心大作战_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>😈 贪心大作战</h3>
+                        <div class="id">项目编号：1042</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">热门模式</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门模式、模式平均得分</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1043_森林树乐园_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🌳 森林树乐园</h3>
+                        <div class="id">项目编号：1043</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">双人协作</span>
+                        <span class="tag">4种玩法</span>
+                    </div>
+                    <div class="desc">埋点偏向：单人/双人模式分别统计、平均得分、家具购买次数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-06-02</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1045_摇摆掘金车_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>⛏️ 摇摆掘金车</h3>
+                        <div class="id">项目编号：1045</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">关卡进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：关卡进度、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1046_一滚到底_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🔵 一滚到底</h3>
+                        <div class="id">项目编号：1046</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">通关进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：通关进度、游戏人数、关卡平均时长</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1052_扭扭橡皮艇_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🚣 扭扭橡皮艇</h3>
+                        <div class="id">项目编号：1052</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">游戏人数</span>
+                    </div>
+                    <div class="desc">埋点偏向：游戏人数、关卡跌落区域编号、复活点开始次数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1063_墨韵寻诗_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🖌️ 墨韵寻诗</h3>
+                        <div class="id">项目编号：1063</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">5.10上线</span>
+                        <span class="tag">关卡时长</span>
+                    </div>
+                    <div class="desc">埋点偏向：关卡时长、热门关卡</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a></div>
+
+        <!-- 2026.06.25 上线项目 -->
+        <div class="section-title">📅 2026.06.25 上线项目</div>
+        <div class="cards-grid">
+            <a class="card" href="dashboards/1007_炫舞宝贝_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>💃 炫舞宝贝</h3>
+                        <div class="id">项目编号：1007</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门关卡</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门关卡、游戏人数、关卡平均得分</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1008_悦动英语单词_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>📚 悦动英语单词</h3>
+                        <div class="id">项目编号：1008</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">关卡进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：关卡进度、关卡平均得分、语音宝箱开启率</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1009_魔法塔防_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🔮 魔法塔防</h3>
+                        <div class="id">项目编号：1009</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">通关进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：通关进度、游戏人数、魔法启动率、魔法释放成功率</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1016_悦动儿歌_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🎤 悦动儿歌</h3>
+                        <div class="id">项目编号：1016</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门关卡</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门关卡、关卡平均得分</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1018_镜之修行_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🪞 镜之修行</h3>
+                        <div class="id">项目编号：1018</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门课程</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门课程、课程平均得分</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1020_家庭健康体能测试档案_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>💪 家庭健康体能测试档案</h3>
+                        <div class="id">项目编号：1020</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门关卡</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门关卡、关卡平均得分(区分年龄)、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1021_动物指挥家_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🎼 动物指挥家</h3>
+                        <div class="id">项目编号：1021</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门歌曲</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门歌曲、乐队人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1025_体感卡丁车_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🏎️ 体感卡丁车</h3>
+                        <div class="id">项目编号：1025</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门地图</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门地图、游戏人数、热门难度、热门角色、热门卡丁车、平均时长</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1030_莱美-生来悦动_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🏋️ 莱美-生来悦动</h3>
+                        <div class="id">项目编号：1030</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门关卡</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门关卡、关卡平均得分、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1031_网球大师_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🎾 网球大师</h3>
+                        <div class="id">项目编号：1031</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">杯赛进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：杯赛进度、杯赛失败率、热门角色</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1034_巅峰骑士_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🐴 巅峰骑士</h3>
+                        <div class="id">项目编号：1034</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">通关进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：通关进度、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1044_啪叽啪叽叠塔对决_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🏗️ 啪叽啪叽叠塔对决</h3>
+                        <div class="id">项目编号：1044</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门角色</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门角色、场均时间、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1048_我家小猫_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🐱 我家小猫</h3>
+                        <div class="id">项目编号：1048</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">热门猫咪</span>
+                    </div>
+                    <div class="desc">埋点偏向：热门猫咪、时长</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1049_弹珠迷城_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🔮 弹珠迷城</h3>
+                        <div class="id">项目编号：1049</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">通关进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：通关进度、关卡平均时长、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1051_提线木偶_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🎎 提线木偶</h3>
+                        <div class="id">项目编号：1051</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">通关进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：通关进度、游戏人数、热门模式、竞技模式场均分数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1053_悦钓时光_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🎣 悦钓时光</h3>
+                        <div class="id">项目编号：1053</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">鱼图鉴达成率</span>
+                        <span class="tag">6个钓场</span>
+                        <span class="tag">120+鱼种</span>
+                    </div>
+                    <div class="desc">核心指标：鱼图鉴达成率 · 各钓场达成率对比 · 稀有鱼类占比 · 钓具使用分布。含 6 KPI + 10 组可视化图表。</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-06-11（v2.0）</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1055_超智能工程机_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🤖 超智能工程机</h3>
+                        <div class="id">项目编号：1055</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">通关进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：通关进度、关卡重玩率、关卡失败率</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1058_深空突袭_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🚀 深空突袭</h3>
+                        <div class="id">项目编号：1058</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">游戏人数</span>
+                    </div>
+                    <div class="desc">埋点偏向：游戏人数、通关进度、复活次数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1062_愿望喵喵跑酷_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🏃 愿望喵喵跑酷</h3>
+                        <div class="id">项目编号：1062</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">关卡进度</span>
+                    </div>
+                    <div class="desc">埋点偏向：关卡进度、游戏人数</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-05-17</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1068_完美定格_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>🎭 完美定格</h3>
+                        <div class="id">项目编号：1068</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">题目难度</span>
+                        <span class="tag">单人/双人体感</span>
+                    </div>
+                    <div class="desc">埋点偏向：题目难度、题目通过率、热门模式、通关进度。含 6 KPI + 8 组图表 + 题目难度排行榜。</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-06-21</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+<a class="card" href="dashboards/1005_光能守护者_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>⚡ 光能守护者</h3>
+                        <div class="id">项目编号：1005</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">6.25上线</span>
+                        <span class="tag">轨道射击</span>
+                    </div>
+                    <div class="desc">埋点偏向：命中率、关卡进度、游玩人数、单关时长</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-06-05</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a></div>
+
+        <!-- 2026.07.20 上线项目 -->
+        <div class="section-title">📅 2026.07.20 上线项目</div>
+        <div class="cards-grid">
+            <a class="card" href="dashboards/1083%E3%80%8A%E5%86%B3%E6%88%98%E4%B8%96%E7%95%8C%E4%B9%8B%E5%B7%85%E3%80%8B_analytics_dashboard.html">
+                <div class="card-header">
+                    <div class="info">
+                        <h3>⚽ 决战世界之巅</h3>
+                        <div class="id">项目编号：1083</div>
+                    </div>
+                    <span class="status status-done">已完成</span>
+                </div>
+                <div class="card-body">
+                    <div class="tags">
+                        <span class="tag">7.20上线</span>
+                        <span class="tag">比赛情况</span>
+                    </div>
+                    <div class="desc">埋点偏向：比赛情况、热门模式、热门球队、比赛比分、球赛激烈程度。含 5 KPI + 10 组图表 + 球队排行榜。</div>
+                </div>
+                <div class="card-footer">
+                    <div class="meta">更新于 2026-07-02</div>
+                    <div class="action">查看看板 →</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>游戏数据埋点统计看板 | 本地 Git 仓库管理 | 支持多项目扩展</p>
+        </div>
+    </div>
+</body>
+</html>
