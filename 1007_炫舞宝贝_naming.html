@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1007 炫舞宝贝 - 埋点事件与属性定义</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f8fafc; min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #f472b6 0%, #fbc2eb 100%);
+            border-radius: 16px; padding: 32px; margin-bottom: 24px; color: white;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+        }
+        .header h1 { font-size: 26px; margin-bottom: 6px; }
+        .header .subtitle { opacity: 0.85; font-size: 14px; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 10px 20px; background: rgba(255,255,255,0.2);
+            color: white; text-decoration: none; border-radius: 8px;
+            font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.3); }
+        .info-bar {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06); display: flex; gap: 32px; flex-wrap: wrap;
+            font-size: 13px; color: #666;
+        }
+        .info-bar strong { color: #1a1a2e; margin-right: 6px; }
+        .legend {
+            background: white; border-radius: 12px; padding: 14px 20px; margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06); display: flex; gap: 20px; flex-wrap: wrap;
+            font-size: 12px; color: #666;
+        }
+        .legend .tag { display: inline-flex; align-items: center; gap: 6px; }
+        .legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .dot-common { background: #16a34a; }
+        .dot-project { background: #d97706; }
+        .event-section {
+            background: white; border-radius: 16px; padding: 24px; margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        .event-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            flex-wrap: wrap; gap: 12px; margin-bottom: 16px; padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .event-header .left h2 { font-size: 18px; color: #1a1a2e; display: flex; align-items: center; gap: 10px; }
+        .event-header .left .ename {
+            font-family: 'SF Mono', Monaco, monospace; font-size: 14px; color: #0c4a6e;
+            background: #e0f2fe; padding: 2px 10px; border-radius: 6px;
+        }
+        .event-header .left .edesc { font-size: 13px; color: #666; margin-top: 6px; }
+        .tag-badge {
+            padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500;
+            background: #e6f7ed; color: #52c41a;
+        }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 13px; }
+        th, td { vertical-align: top; padding: 12px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { font-weight: 600; color: #666; font-size: 12px; background: #f8fafc; }
+        tr:hover { background: #fafafa; }
+        .field-name {
+            font-family: 'SF Mono', Monaco, monospace; font-size: 13px;
+            color: #0c4a6e; background: #e0f2fe; padding: 2px 8px; border-radius: 4px; white-space: nowrap;
+        }
+        .type-tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+        .type-string { background: #e0f2fe; color: #0284c7; }
+        .type-int { background: #fef3c7; color: #d97706; }
+        .type-float { background: #ede9fe; color: #7c3aed; }
+        .type-list { background: #dcfce7; color: #16a34a; }
+        .type-time { background: #fce7f3; color: #be123c; }
+        .type-object { background: #fef9c3; color: #854d0e; }
+        .note-row td {
+            text-align: left; background: #fdf2f8; color: #9d174d;
+            font-size: 12px; padding: 8px 12px;
+        }
+        .note-row td code { background: #fce7f3; padding: 1px 5px; border-radius: 3px; font-family: 'SF Mono', Monaco, monospace; }
+        .example { color: #999; font-size: 12px; word-break: break-all; max-width: 200px; display: inline-block; }
+        .scope-tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+        .scope-common { background: #dcfce7; color: #16a34a; }
+        .scope-project { background: #fef3c7; color: #d97706; }
+        .note-box {
+            background: #fdf2f8; border-left: 4px solid #ec4899;
+            padding: 14px 18px; border-radius: 0 10px 10px 0;
+            margin-bottom: 20px; font-size: 13px; color: #9d174d; line-height: 1.7;
+        }
+        .note-box .note-title { font-weight: 600; margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>💃 1007 炫舞宝贝</h1>
+            <div class="subtitle">埋点事件与属性定义 &nbsp;|&nbsp; 舞蹈体感</div>
+        </div>
+        <a class="back-btn" href="naming_standards_standalone.html">← 返回命名规范</a>
+    </div>
+
+    <div class="info-bar">
+        <div><strong>游戏类型：</strong>舞蹈体感</div>
+        <div><strong>难度：</strong>简单 / 普通 / 困难</div>
+        <div><strong>支持人数：</strong>1~4人</div>
+        <div><strong>歌曲数量：</strong>36首</div>
+    </div>
+
+    <div class="legend">
+        <div class="tag"><span class="dot dot-common"></span> 通用属性（跨项目复用）</div>
+        <div class="tag"><span class="dot dot-project"></span> 项目特有属性</div>
+        <div class="tag"><span class="tag-badge">✅ 必含</span> 所有项目必须上报</div>
+    </div>
+
+
+    <!-- enter_game -->
+    <div class="event-section">
+        <div class="event-header">
+            <div class="left">
+                <h2><span class="ename">enter_game</span> 进入游戏 / 舞蹈关卡开始</h2>
+                <div class="edesc">玩家选择歌曲、难度并完成准备，正式开始舞蹈时触发</div>
+            </div>
+            <span class="tag-badge">✅ 必含</span>
+        </div>
+        <table>
+            <colgroup>
+                <col style="width: 160px">
+                <col style="width: 110px">
+                <col style="width: 80px">
+                <col style="width: auto">
+                <col style="width: 170px">
+                <col style="width: 100px">
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>固定值 1007</td><td class="example">1007</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136","137","138"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">difficulty</span></td><td>难度</td><td><span class="type-tag type-string">文本</span></td><td>0=简单 / 1=普通 / 2=困难</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">song_id</span></td><td>歌曲ID</td><td><span class="type-tag type-string">文本</span></td><td>当前所选歌曲编号</td><td class="example">song_01（小火车）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- end_game -->
+    <div class="event-section">
+        <div class="event-header">
+            <div class="left">
+                <h2><span class="ename">end_game</span> 退出游戏 / 舞蹈关卡结束</h2>
+                <div class="edesc">一首歌曲舞蹈完毕，进入结算界面时触发</div>
+            </div>
+            <span class="tag-badge">✅ 必含</span>
+        </div>
+        <table>
+            <colgroup>
+                <col style="width: 160px">
+                <col style="width: 110px">
+                <col style="width: 80px">
+                <col style="width: auto">
+                <col style="width: 170px">
+                <col style="width: 100px">
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>固定值 1007</td><td class="example">1007</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>与 enter_game 同一 session</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748315100000</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>以下字段为封装在 <code>user_info</code> 对象组中的各角色结算数据，
+                        <code>user_info</code> 为对象数组，每个对象以 <code>user_id</code>（文本类型）标识角色。
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="field-name">user_info</span></td>
+                    <td>各角色结算数据</td>
+                    <td><span class="type-tag type-object">对象组</span></td>
+                    <td>对象数组，每个对象包含 user_id（文本）及各角色的 total_score / star_rating / hit_rate</td>
+                    <td class="example">[{"user_id":135,"total_score":8850,"star_rating":4,"hit_rate":0.85},{"user_id":136,"total_score":7620,"star_rating":3,"hit_rate":0.72}]</td>
+                    <td><span class="scope-tag scope-project">项目特有</span></td>
+                </tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr><td><span class="field-name">user_info.total_score</span></td><td>最终得分</td><td><span class="type-tag type-string">文本</span></td><td>本局舞蹈最终得分（0~10000）</td><td class="example">8850</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.star_rating</span></td><td>星级评价</td><td><span class="type-tag type-string">文本</span></td><td>1~5 星评级</td><td class="example">1 / 2 / 3 / 4 / 5</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.hit_rate</span></td><td>舞蹈准确率</td><td><span class="type-tag type-string">文本</span></td><td>动作判定准确率（0~1）</td><td class="example">0.85</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- pause_game -->
+    <div class="event-section">
+        <div class="event-header">
+            <div class="left">
+                <h2><span class="ename">pause_game</span> 游戏暂停</h2>
+                <div class="edesc">游戏暂停时触发</div>
+            </div>
+            <span class="tag-badge">✅ 必含</span>
+        </div>
+        <table>
+            <colgroup>
+                <col style="width: 160px">
+                <col style="width: 110px">
+                <col style="width: 80px">
+                <col style="width: auto">
+                <col style="width: 170px">
+                <col style="width: 100px">
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>固定值 1007</td><td class="example">1007</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314850000</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- continue_game -->
+    <div class="event-section">
+        <div class="event-header">
+            <div class="left">
+                <h2><span class="ename">continue_game</span> 回到游戏</h2>
+                <div class="edesc">从暂停恢复时触发</div>
+            </div>
+            <span class="tag-badge">✅ 必含</span>
+        </div>
+        <table>
+            <colgroup>
+                <col style="width: 160px">
+                <col style="width: 110px">
+                <col style="width: 80px">
+                <col style="width: auto">
+                <col style="width: 170px">
+                <col style="width: 100px">
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>固定值 1007</td><td class="example">1007</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314870000</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

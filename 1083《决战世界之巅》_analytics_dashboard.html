@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1083《决战世界之巅》数据统计看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a5f2a 0%, #0d3320 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        /* ======== Header ======== */
+        .header {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 { font-size: 26px; color: #1a1a2e; }
+        .header .subtitle { color: #666; font-size: 14px; margin-top: 6px; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; background: rgba(0,0,0,0.05);
+            color: #666; text-decoration: none; border-radius: 8px;
+            font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap;
+        }
+        .back-btn:hover { background: rgba(0,0,0,0.1); color: #333; }
+
+        /* 数据说明 */
+        .data-notice {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ======== KPI 卡片 ======== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+            background: linear-gradient(180deg, #4ade80, #16a34a);
+        }
+        .stat-card .label { font-size: 13px; color: #888; margin-bottom: 6px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; color: #1a1a2e; line-height: 1.1; }
+        .stat-card .unit { font-size: 14px; font-weight: 400; color: #666; margin-left: 4px; }
+        .stat-card .change {
+            font-size: 12px; margin-top: 8px; padding: 3px 8px;
+            border-radius: 6px; display: inline-block;
+        }
+        .change.positive { background: #e6f7ed; color: #52c41a; }
+        .change.negative { background: #fff1f0; color: #f5222d; }
+        .change.neutral { background: #f0f0f0; color: #999; }
+
+        /* ======== 图表区 ======== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .chart-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .chart-card.wide { grid-column: 1 / -1; }
+        .chart-card h3 {
+            font-size: 16px; color: #1a1a2e; margin-bottom: 6px;
+            padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .chart-card .chart-desc {
+            font-size: 12px; color: #999; margin-bottom: 14px;
+        }
+        .chart-container { position: relative; }
+
+        /* ======== 表格 ======== */
+        .table-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-bottom: 24px;
+        }
+        .table-card h3 {
+            font-size: 16px; color: #1a1a2e; margin-bottom: 16px;
+            padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { font-weight: 600; color: #666; font-size: 13px; background: #fafafa; }
+        td { color: #333; font-size: 13px; }
+        tr:hover td { background: #fafafe; }
+        tr:last-child td { border-bottom: none; }
+
+        .badge {
+            display: inline-block; padding: 2px 8px;
+            border-radius: 10px; font-size: 11px; font-weight: 500;
+        }
+        .badge-danger { background: #fff1f0; color: #f5222d; }
+        .badge-warning { background: #fff7e6; color: #fa8c16; }
+        .badge-success { background: #e6f7ed; color: #52c41a; }
+        .badge-info { background: #e6f4ff; color: #1890ff; }
+        .badge-purple { background: #f4eeff; color: #764ba2; }
+        .badge-gray { background: #f0f0f0; color: #888; }
+        .badge-gold { background: #fffbe6; color: #d48806; }
+
+        /* ======== 区段标题 ======== */
+        .section-title {
+            color: rgba(255,255,255,0.9);
+            font-size: 15px;
+            font-weight: 600;
+            margin: 8px 0 16px 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .module-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 28px 0 18px 0;
+        }
+
+        /* ======== Footer ======== */
+        .footer {
+            text-align: center; color: rgba(255,255,255,0.7);
+            font-size: 13px; margin-top: 40px; padding-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header { padding: 16px 20px; }
+            .header h1 { font-size: 20px; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .stat-card .value { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ======== Header ======== -->
+    <div class="header">
+        <div>
+            <h1>⚽ 决战世界之巅 - 数据统计看板</h1>
+            <div class="subtitle">
+                项目编号：1083 ｜ 统计偏向：比赛情况 ｜ 支持人数：1~2人 ｜ 计划上线：2026.07.20
+            </div>
+        </div>
+        <a class="back-btn" href="index.html">← 返回汇总看板</a>
+    </div>
+
+    <!-- 数据说明 -->
+    <div class="data-notice">
+        ℹ️ 以下数据均为<strong>示例数据</strong>，用于说明看板结构与指标设计，待接入真实数据后替换。
+    </div>
+
+    <!-- ======== 核心指标概览 ======== -->
+    <div class="section-title">📌 核心指标概览</div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="label">总比赛场次</div>
+            <div class="value">8,642</div>
+            <div class="change neutral">来源：enter_game 事件</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">活跃角色</div>
+            <div class="value">1,856</div>
+            <div class="change neutral">近7日 UV</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">总进球数</div>
+            <div class="value">24,158</div>
+            <div class="change positive">⚽ 场均 2.8 球</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">世界杯冠军率</div>
+            <div class="value">12.4<span class="unit">%</span></div>
+            <div class="change neutral">玩家夺冠占比</div>
+        </div>
+    </div>
+
+    <!-- ======== 模式与对局分布 ======== -->
+    <div class="module-divider"></div>
+    <div class="section-title">🎮 模式与对局分布</div>
+    <div class="charts-grid">
+        <!-- 热门模式分布 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🏆 热门模式分布</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：enter_game 事件 → game_type 字段 · 分析比赛/世界杯/训练三种模式占比</div>
+            <div class="chart-container" style="max-width:280px;margin:0 auto;">
+                <canvas id="modeDoughnutChart" height="220"></canvas>
+            </div>
+        </div>
+
+        <!-- 比赛时长选择分布 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">⏱️ 比赛时长选择分布</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：enter_game 事件 → match_duration 字段 · 观察玩家偏好时长</div>
+            <div class="chart-container">
+                <canvas id="durationBarChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- 近7日比赛场次趋势 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">📈 近7日比赛场次趋势</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：enter_game 事件 · 按日统计三种模式启动次数</div>
+            <div class="chart-container">
+                <canvas id="matchTrendChart" height="180"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== 球队与比分分析 ======== -->
+    <div class="module-divider"></div>
+    <div class="section-title">⚽ 球队与比分分析</div>
+    <div class="charts-grid">
+        <!-- 热门球队 TOP 10 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🔥 热门球队选择 TOP 10</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：enter_game 事件 → user_info.role_id 字段 · 按球队选择次数排序</div>
+            <div class="chart-container">
+                <canvas id="teamBarChart" height="260"></canvas>
+            </div>
+        </div>
+
+        <!-- 冷门球队 TOP 10 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🧊 冷门球队选择 TOP 10</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：enter_game 事件 → user_info.role_id 字段 · 按选择次数倒序，识别冷门球队</div>
+            <div class="chart-container">
+                <canvas id="coldTeamBarChart" height="260"></canvas>
+            </div>
+        </div>
+
+        <!-- 比赛结果分布 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🏁 比赛结果分布</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：end_game 事件 → user_info.winner 字段 · 统计胜/负/平/未完成占比</div>
+            <div class="chart-container" style="max-width:260px;margin:0 auto;">
+                <canvas id="resultDoughnutChart" height="220"></canvas>
+            </div>
+        </div>
+
+        <!-- 世界杯晋级漏斗 -->
+        <div class="chart-card wide" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🌍 世界杯晋级漏斗</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：enter_game 事件 → round_id 字段 · 统计世界杯各阶段留存人数</div>
+            <div class="chart-container">
+                <canvas id="worldcupFunnelChart" height="140"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== 球赛激烈程度 ======== -->
+    <div class="module-divider"></div>
+    <div class="section-title">🔥 球赛激烈程度</div>
+    <div class="charts-grid">
+        <!-- 场均关键事件 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🥅 场均关键事件统计</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：goal_occur 事件 → user_info.kick_count / steal_count / shot_count / save_count 按 session_id 平均</div>
+            <div class="chart-container">
+                <canvas id="intensityBarChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- 近7日进球趋势 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">📈 近7日进球数趋势</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：goal_occur 事件 → user_info.is_goal=true · 按日统计总进球数</div>
+            <div class="chart-container">
+                <canvas id="goalTrendChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- 场均进球/射门转化率 -->
+        <div class="chart-card" style="padding:16px 18px;">
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🎯 场均射门转化率</h3>
+            <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：goal_occur 事件 → user_info.is_goal / shot_count · 按 session_id 计算射门转化率</div>
+            <div class="chart-container" style="max-width:240px;margin:0 auto;">
+                <canvas id="conversionDoughnutChart" height="220"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== 球队胜率排行榜 ======== -->
+    <div class="module-divider"></div>
+    <div class="section-title">📋 球队胜率排行榜</div>
+    <div class="table-card">
+        <h3>📋 比赛模式 - 球队选择、胜率与场均数据</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>排名</th>
+                    <th>球队</th>
+                    <th>选择次数</th>
+                    <th>胜率</th>
+                    <th>场均进球</th>
+                    <th>场均失球</th>
+                    <th>场均射门</th>
+                    <th>控球率</th>
+                    <th>触发点球率</th>
+                    <th>场均点球进球</th>
+                </tr>
+            </thead>
+            <tbody id="teamRankMatchTbody">
+                <!-- 由 JS 渲染 -->
+            </tbody>
+        </table>
+    </div>
+    <div class="table-card">
+        <h3>📋 世界杯模式 - 球队选择、胜率与场均数据</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>排名</th>
+                    <th>球队</th>
+                    <th>选择次数</th>
+                    <th>胜率</th>
+                    <th>场均进球</th>
+                    <th>场均失球</th>
+                    <th>场均射门</th>
+                    <th>控球率</th>
+                    <th>触发点球率</th>
+                    <th>场均点球进球</th>
+                </tr>
+            </thead>
+            <tbody id="teamRankWorldcupTbody">
+                <!-- 由 JS 渲染 -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ======== 高激烈程度场次 TOP 10 ======== -->
+    <div class="module-divider"></div>
+    <div class="section-title">🔥 高激烈程度场次 TOP 10</div>
+    <div class="table-card">
+        <h3>🔥 比赛模式 - 高激烈程度场次 TOP 10（按总事件数排序）</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>排名</th>
+                    <th>时间</th>
+                    <th>对阵</th>
+                    <th>比分</th>
+                    <th>控球率</th>
+                    <th>射门</th>
+                    <th>抢断</th>
+                    <th>扑救</th>
+                    <th>踢人</th>
+                    <th>总事件数</th>
+                </tr>
+            </thead>
+            <tbody id="highIntensityMatchTbody">
+                <!-- 由 JS 渲染 -->
+            </tbody>
+        </table>
+    </div>
+    <div class="table-card">
+        <h3>🔥 世界杯模式 - 高激烈程度场次 TOP 10（按总事件数排序）</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>排名</th>
+                    <th>时间</th>
+                    <th>对阵</th>
+                    <th>比分</th>
+                    <th>控球率</th>
+                    <th>射门</th>
+                    <th>抢断</th>
+                    <th>扑救</th>
+                    <th>踢人</th>
+                    <th>总事件数</th>
+                </tr>
+            </thead>
+            <tbody id="highIntensityWorldcupTbody">
+                <!-- 由 JS 渲染 -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>⚽ 决战世界之巅 · 游戏数据统计看板 · 示例数据，待接入真实数据后替换</p>
+    </div>
+
+</div>
+
+<!-- ======== Chart.js 图表脚本 ======== -->
+<script>
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
+
+const PALETTE = {
+    primary: '#16a34a',
+    green: '#22c55e',
+    darkGreen: '#14532d',
+    blue: '#3b82f6',
+    red: '#ef4444',
+    orange: '#f97316',
+    yellow: '#eab308',
+    purple: '#8b5cf6',
+    gray: '#9ca3af',
+    multi: ['#16a34a','#22c55e','#3b82f6','#f97316','#8b5cf6','#ef4444','#eab308','#06b6d4','#f43f5e','#84cc16']
+};
+
+const days7 = ['7/13','7/14','7/15','7/16','7/17','7/18','7/19'];
+
+// 1. 热门模式分布
+new Chart(document.getElementById('modeDoughnutChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['比赛模式', '世界杯模式', '训练模式'],
+        datasets: [{
+            data: [5039, 2847, 756],
+            backgroundColor: [PALETTE.primary, PALETTE.blue, PALETTE.orange],
+            borderWidth: 0,
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'right', labels: { padding: 12, font: { size: 12 }, boxWidth: 12 } },
+            tooltip: {
+                callbacks: {
+                    label: function(ctx) {
+                        const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+                        const pct = ((ctx.raw/total)*100).toFixed(1);
+                        return ` ${ctx.label}: ${ctx.raw.toLocaleString()} 场 (${pct}%)`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// 2. 比赛时长选择分布
+new Chart(document.getElementById('durationBarChart'), {
+    type: 'bar',
+    data: {
+        labels: ['1.5分钟', '3分钟', '5分钟'],
+        datasets: [{
+            label: '选择次数',
+            data: [2156, 3892, 2594],
+            backgroundColor: [PALETTE.green, PALETTE.primary, PALETTE.darkGreen],
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+// 3. 近7日比赛场次趋势
+new Chart(document.getElementById('matchTrendChart'), {
+    type: 'line',
+    data: {
+        labels: days7,
+        datasets: [
+            { label: '比赛模式', data: [420, 458, 512, 489, 567, 612, 590], borderColor: PALETTE.primary, backgroundColor: PALETTE.primary + '15', fill: true, tension: 0.4, pointRadius: 4 },
+            { label: '世界杯模式', data: [234, 256, 289, 301, 334, 378, 356], borderColor: PALETTE.blue, backgroundColor: PALETTE.blue + '15', fill: true, tension: 0.4, pointRadius: 4 },
+            { label: '训练模式', data: [89, 92, 101, 98, 112, 125, 118], borderColor: PALETTE.orange, backgroundColor: PALETTE.orange + '15', fill: true, tension: 0.4, pointRadius: 4 }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+// 4. 热门球队 TOP 10
+new Chart(document.getElementById('teamBarChart'), {
+    type: 'bar',
+    data: {
+        labels: ['巴西', '阿根廷', '法国', '德国', '西班牙', '英格兰', '葡萄牙', '意大利', '荷兰', '比利时'],
+        datasets: [{
+            label: '选择次数',
+            data: [1245, 1189, 1123, 987, 876, 834, 756, 678, 612, 567],
+            backgroundColor: PALETTE.multi,
+            borderRadius: 6,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+// 5. 冷门球队 TOP 10
+new Chart(document.getElementById('coldTeamBarChart'), {
+    type: 'bar',
+    data: {
+        labels: ['沙特阿拉伯', '突尼斯', '厄瓜多尔', '卡塔尔', '加拿大', '威尔士', '喀麦隆', '塞尔维亚', '加纳', '伊朗'],
+        datasets: [{
+            label: '选择次数',
+            data: [89, 95, 112, 128, 145, 168, 189, 212, 245, 278],
+            backgroundColor: PALETTE.gray + '80',
+            borderRadius: 6,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+// 6. 比赛结果分布
+new Chart(document.getElementById('resultDoughnutChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['胜利', '失败', '平局', '未完成'],
+        datasets: [{
+            data: [3892, 2847, 756, 147],
+            backgroundColor: [PALETTE.green, PALETTE.red, PALETTE.yellow, PALETTE.gray],
+            borderWidth: 0,
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'right', labels: { padding: 10, font: { size: 11 }, boxWidth: 10 } },
+            tooltip: {
+                callbacks: {
+                    label: function(ctx) {
+                        const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+                        const pct = ((ctx.raw/total)*100).toFixed(1);
+                        return ` ${ctx.label}: ${ctx.raw.toLocaleString()} 场 (${pct}%)`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+// 7. 世界杯晋级漏斗
+new Chart(document.getElementById('worldcupFunnelChart'), {
+    type: 'bar',
+    data: {
+        labels: ['开始小组赛', '进入32强', '进入16强', '进入8强', '进入4强', '进入决赛', '获得冠军'],
+        datasets: [{
+            label: '留存人数',
+            data: [2847, 2432, 1896, 1245, 678, 356, 178],
+            backgroundColor: [
+                PALETTE.gray, PALETTE.blue, PALETTE.primary, PALETTE.green,
+                PALETTE.yellow, PALETTE.orange, PALETTE.red
+            ],
+            borderRadius: 6,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+// 8. 场均关键事件统计
+new Chart(document.getElementById('intensityBarChart'), {
+    type: 'bar',
+    data: {
+        labels: ['射门', '抢断', '扑救', '踢人'],
+        datasets: [{
+            label: '场均次数',
+            data: [12.4, 8.6, 5.2, 3.8],
+            backgroundColor: [PALETTE.green, PALETTE.blue, PALETTE.orange, PALETTE.red],
+            borderRadius: 8,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+// 9. 近7日进球趋势
+new Chart(document.getElementById('goalTrendChart'), {
+    type: 'line',
+    data: {
+        labels: days7,
+        datasets: [{
+            label: '总进球数',
+            data: [580, 642, 712, 689, 756, 823, 798],
+            borderColor: PALETTE.primary,
+            backgroundColor: PALETTE.primary + '15',
+            fill: true, tension: 0.4,
+            pointRadius: 5, pointBackgroundColor: PALETTE.primary
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+// 10. 场均射门转化率
+new Chart(document.getElementById('conversionDoughnutChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['进球', '未进球'],
+        datasets: [{
+            data: [22.4, 77.6],
+            backgroundColor: [PALETTE.green, PALETTE.gray + '60'],
+            borderWidth: 0,
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'right', labels: { padding: 10, font: { size: 11 }, boxWidth: 10 } },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}%` } }
+        }
+    }
+});
+
+// 球队排行榜数据 - 比赛模式
+const teamRankMatchData = [
+    { rank:1, team:'巴西', count:1245, winRate:'62.4%', avgGoal:3.2, avgLost:1.8, avgShot:13.5, possession:'58.5%', penaltyRate:'8.5%', penaltyGoal:0.4 },
+    { rank:2, team:'阿根廷', count:1189, winRate:'61.8%', avgGoal:3.1, avgLost:1.9, avgShot:12.8, possession:'57.8%', penaltyRate:'8.2%', penaltyGoal:0.4 },
+    { rank:3, team:'西班牙', count:876, winRate:'56.4%', avgGoal:2.7, avgLost:2.2, avgShot:11.8, possession:'56.8%', penaltyRate:'7.2%', penaltyGoal:0.3 },
+    { rank:4, team:'法国', count:1123, winRate:'59.6%', avgGoal:2.9, avgLost:2.0, avgShot:12.4, possession:'56.2%', penaltyRate:'7.8%', penaltyGoal:0.3 },
+    { rank:5, team:'德国', count:987, winRate:'58.2%', avgGoal:2.8, avgLost:2.1, avgShot:12.1, possession:'55.5%', penaltyRate:'7.5%', penaltyGoal:0.3 },
+    { rank:6, team:'英格兰', count:834, winRate:'55.8%', avgGoal:2.6, avgLost:2.2, avgShot:11.5, possession:'54.2%', penaltyRate:'7.0%', penaltyGoal:0.2 },
+    { rank:7, team:'葡萄牙', count:756, winRate:'54.3%', avgGoal:2.6, avgLost:2.3, avgShot:11.2, possession:'53.5%', penaltyRate:'6.8%', penaltyGoal:0.2 },
+    { rank:8, team:'意大利', count:678, winRate:'53.7%', avgGoal:2.5, avgLost:2.3, avgShot:11.0, possession:'53.0%', penaltyRate:'6.5%', penaltyGoal:0.2 },
+];
+
+// 球队排行榜数据 - 世界杯模式
+const teamRankWorldcupData = [
+    { rank:1, team:'法国', count:892, winRate:'64.2%', avgGoal:3.4, avgLost:1.6, avgShot:14.2, possession:'59.2%', penaltyRate:'9.2%', penaltyGoal:0.5 },
+    { rank:2, team:'巴西', count:856, winRate:'63.8%', avgGoal:3.3, avgLost:1.7, avgShot:13.8, possession:'58.8%', penaltyRate:'9.0%', penaltyGoal:0.5 },
+    { rank:3, team:'阿根廷', count:823, winRate:'62.5%', avgGoal:3.2, avgLost:1.8, avgShot:13.5, possession:'57.5%', penaltyRate:'8.8%', penaltyGoal:0.4 },
+    { rank:4, team:'西班牙', count:678, winRate:'58.6%', avgGoal:2.9, avgLost:2.0, avgShot:12.5, possession:'57.2%', penaltyRate:'8.0%', penaltyGoal:0.4 },
+    { rank:5, team:'德国', count:745, winRate:'60.1%', avgGoal:3.0, avgLost:1.9, avgShot:12.9, possession:'56.0%', penaltyRate:'8.4%', penaltyGoal:0.4 },
+    { rank:6, team:'英格兰', count:612, winRate:'57.2%', avgGoal:2.8, avgLost:2.1, avgShot:12.0, possession:'54.8%', penaltyRate:'7.6%', penaltyGoal:0.3 },
+    { rank:7, team:'葡萄牙', count:567, winRate:'55.9%', avgGoal:2.7, avgLost:2.2, avgShot:11.6, possession:'54.0%', penaltyRate:'7.3%', penaltyGoal:0.3 },
+    { rank:8, team:'荷兰', count:498, winRate:'54.1%', avgGoal:2.6, avgLost:2.2, avgShot:11.2, possession:'53.5%', penaltyRate:'7.0%', penaltyGoal:0.3 },
+];
+
+function renderTeamTable(data, tbodyId) {
+    const tbody = document.getElementById(tbodyId);
+    data.forEach(row => {
+        const winColor = parseFloat(row.winRate) >= 60 ? PALETTE.green : (parseFloat(row.winRate) >= 55 ? PALETTE.blue : PALETTE.orange);
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>#${row.rank}</strong></td>
+                <td><strong>${row.team}</strong></td>
+                <td>${row.count.toLocaleString()}</td>
+                <td><strong style="color:${winColor}">${row.winRate}</strong></td>
+                <td>${row.avgGoal}</td>
+                <td>${row.avgLost}</td>
+                <td>${row.avgShot}</td>
+                <td>${row.possession}</td>
+                <td>${row.penaltyRate}</td>
+                <td>${row.penaltyGoal}</td>
+            </tr>`;
+    });
+}
+renderTeamTable(teamRankMatchData, 'teamRankMatchTbody');
+renderTeamTable(teamRankWorldcupData, 'teamRankWorldcupTbody');
+
+// 高激烈程度场次数据 - 比赛模式（所有对抗数据以 xx:xx 展示）
+const highIntensityMatchData = [
+    { rank:1, time:'7/19 21:32', match:'巴西 vs 阿根廷', score:'5:4', possession:'55:45', shots:'28:24', steals:'18:16', saves:'12:10', kicks:'9:8', total:67 },
+    { rank:2, time:'7/19 20:15', match:'法国 vs 德国', score:'4:4', possession:'52:48', shots:'26:22', steals:'16:14', saves:'11:9', kicks:'8:7', total:61 },
+    { rank:3, time:'7/18 19:48', match:'西班牙 vs 葡萄牙', score:'3:3', possession:'53:47', shots:'25:21', steals:'15:13', saves:'10:8', kicks:'7:6', total:57 },
+    { rank:4, time:'7/18 18:22', match:'英格兰 vs 意大利', score:'3:3', possession:'51:49', shots:'24:20', steals:'14:12', saves:'10:8', kicks:'8:6', total:56 },
+    { rank:5, time:'7/17 21:05', match:'荷兰 vs 比利时', score:'4:2', possession:'54:46', shots:'23:19', steals:'13:11', saves:'9:7', kicks:'7:5', total:52 },
+    { rank:6, time:'7/17 19:30', match:'巴西 vs 法国', score:'3:2', possession:'54:46', shots:'22:18', steals:'13:11', saves:'9:7', kicks:'6:5', total:50 },
+    { rank:7, time:'7/16 20:45', match:'阿根廷 vs 德国', score:'2:2', possession:'53:47', shots:'21:17', steals:'12:10', saves:'8:7', kicks:'6:5', total:47 },
+    { rank:8, time:'7/16 18:10', match:'葡萄牙 vs 西班牙', score:'3:1', possession:'48:52', shots:'20:16', steals:'12:10', saves:'8:6', kicks:'5:4', total:45 },
+    { rank:9, time:'7/15 21:20', match:'意大利 vs 英格兰', score:'4:3', possession:'49:51', shots:'19:15', steals:'11:9', saves:'7:6', kicks:'5:4', total:42 },
+    { rank:10, time:'7/15 19:55', match:'德国 vs 荷兰', score:'2:2', possession:'50:50', shots:'18:14', steals:'11:9', saves:'7:6', kicks:'5:4', total:41 },
+];
+
+// 高激烈程度场次数据 - 世界杯模式（所有对抗数据以 xx:xx 展示）
+const highIntensityWorldcupData = [
+    { rank:1, time:'7/19 22:10', match:'法国 vs 巴西', score:'6:5', possession:'53:47', shots:'32:28', steals:'20:18', saves:'14:12', kicks:'10:9', total:73 },
+    { rank:2, time:'7/19 21:45', match:'阿根廷 vs 德国', score:'5:4', possession:'52:48', shots:'29:25', steals:'18:16', saves:'12:10', kicks:'9:8', total:65 },
+    { rank:3, time:'7/18 22:00', match:'西班牙 vs 英格兰', score:'4:4', possession:'54:46', shots:'27:23', steals:'17:15', saves:'11:9', kicks:'8:7', total:60 },
+    { rank:4, time:'7/18 20:30', match:'葡萄牙 vs 意大利', score:'3:3', possession:'51:49', shots:'26:22', steals:'16:14', saves:'10:8', kicks:'7:6', total:55 },
+    { rank:5, time:'7/17 22:15', match:'荷兰 vs 阿根廷', score:'4:3', possession:'49:51', shots:'24:20', steals:'15:13', saves:'9:8', kicks:'7:6', total:52 },
+    { rank:6, time:'7/17 21:00', match:'巴西 vs 西班牙', score:'3:2', possession:'53:47', shots:'23:19', steals:'14:12', saves:'9:7', kicks:'6:5', total:49 },
+    { rank:7, time:'7/16 21:30', match:'德国 vs 法国', score:'3:3', possession:'48:52', shots:'22:18', steals:'13:11', saves:'8:7', kicks:'6:5', total:46 },
+    { rank:8, time:'7/16 20:00', match:'英格兰 vs 葡萄牙', score:'2:2', possession:'52:48', shots:'21:17', steals:'13:11', saves:'8:6', kicks:'5:4', total:43 },
+    { rank:9, time:'7/15 22:05', match:'意大利 vs 荷兰', score:'5:4', possession:'50:50', shots:'20:16', steals:'12:10', saves:'7:6', kicks:'5:4', total:41 },
+    { rank:10, time:'7/15 20:45', match:'阿根廷 vs 法国', score:'4:3', possession:'51:49', shots:'19:15', steals:'11:9', saves:'7:5', kicks:'5:4', total:38 },
+];
+
+function renderIntensityTable(data, tbodyId) {
+    const tbody = document.getElementById(tbodyId);
+    data.forEach(row => {
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>#${row.rank}</strong></td>
+                <td>${row.time}</td>
+                <td><strong>${row.match}</strong></td>
+                <td><span class="badge badge-success">${row.score}</span></td>
+                <td>${row.possession}</td>
+                <td>${row.shots}</td>
+                <td>${row.steals}</td>
+                <td>${row.saves}</td>
+                <td>${row.kicks}</td>
+                <td><strong>${row.total}</strong></td>
+            </tr>`;
+    });
+}
+renderIntensityTable(highIntensityMatchData, 'highIntensityMatchTbody');
+renderIntensityTable(highIntensityWorldcupData, 'highIntensityWorldcupTbody');
+</script>
+
+</body>
+</html>

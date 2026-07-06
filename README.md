@@ -2,13 +2,14 @@
 
 游戏数据埋点统计看板与命名规范。
 
-## 访问入口
+## 访问地址
 
-- **首页**：https://nyq3316.github.io/databoard/
-- **数据统计看板**：https://nyq3316.github.io/databoard/dashboards/
-- **埋点命名规范**：https://nyq3316.github.io/databoard/naming/naming_standards_standalone.html
+- **首页**: https://nyq3316.github.io/databoard/
+- **命名规范总览（含跳转）**: https://nyq3316.github.io/databoard/naming_standards_standalone.html
 
-## 目录
+## 文件说明
 
-- `dashboards/` — 47 个项目的 Analytics Dashboard
-- `naming/` — 46 个项目的命名规范 + 规范总览
+- `index.html` — 首页，列出所有项目的数据看板入口
+- `naming_standards_standalone.html` — 埋点命名规范总览，可跳转到各项目命名页
+- `10XX_*_analytics_dashboard.html` — 47 个游戏的数据统计看板
+- `10XX_*_naming.html` — 46 个游戏的埋点命名规范

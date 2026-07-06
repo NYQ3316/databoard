@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1045《摇摆掘金车》数据埋点统计看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            text-align: center; margin-bottom: 24px;
+            padding: 20px; background: rgba(255,255,255,0.05);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .header h1 {
+            font-size: 2em; margin-bottom: 8px;
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .header .subtitle { color: #a0a0a0; font-size: 14px; }
+        .back-btn {
+            display: inline-block; margin-top: 12px; padding: 6px 16px;
+            background: rgba(255,215,0,0.15); color: #ffd700;
+            text-decoration: none; border-radius: 6px; font-size: 13px;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        .back-btn:hover { background: rgba(255,215,0,0.25); }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px; margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.08); border-radius: 10px;
+            padding: 18px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .stat-label { font-size: 13px; color: #a0a0a0; margin-bottom: 6px; }
+        .stat-value { font-size: 28px; font-weight: 700; color: #ffd700; }
+        .stat-unit { font-size: 13px; color: #808080; margin-left: 2px; }
+
+        .section {
+            background: rgba(255,255,255,0.05); border-radius: 12px;
+            padding: 20px; margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-title {
+            font-size: 16px; font-weight: 600; color: #ffd700;
+            margin-bottom: 16px; padding-bottom: 8px;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+        }
+        .chart-container { position: relative; height: 280px; }
+        .chart-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .chart-row { grid-template-columns: 1fr; }
+        }
+
+        .footer {
+            text-align: center; margin-top: 30px; padding: 16px;
+            color: #606060; font-size: 12px;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th {
+            text-align: left; padding: 12px 14px; font-weight: 600; color: #ffd700;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+        }
+        td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: #e0e0e0; }
+        tr:hover { background: rgba(255,215,0,0.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⛏️ 1045《摇摆掘金车》数据埋点统计看板</h1>
+            <p class="subtitle">埋点偏向：关卡进度 · 游戏人数</p>
+            <a class="back-btn" href="index.html">&larr; 返回汇总看板</a>
+        </div>
+
+        <!-- 核心指标 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">总游戏局数</div>
+                <div class="stat-value">12,456<span class="stat-unit">局</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">活跃角色</div>
+                <div class="stat-value">3,280<span class="stat-unit">人</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">整体通关率</div>
+                <div class="stat-value">68.5<span class="stat-unit">%</span></div>
+            </div>
+        </div>
+
+        <!-- 游戏人数分布 -->
+        <div class="section">
+            <div class="section-title">👥 游戏人数分布</div>
+            <div class="chart-container">
+                <canvas id="playerCountChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 各关卡详细数据 -->
+        <div class="section">
+            <div class="section-title">🏁 各关卡详细数据</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>关卡</th>
+                        <th>通关率</th>
+                        <th>平均通关时长</th>
+                        <th>单关收集金币</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LV1 初探晶洞</td>
+                        <td>85.2%</td>
+                        <td>98 秒</td>
+                        <td>2,340</td>
+                    </tr>
+                    <tr>
+                        <td>LV2 黄金隧道</td>
+                        <td>72.6%</td>
+                        <td>126 秒</td>
+                        <td>3,150</td>
+                    </tr>
+                    <tr>
+                        <td>LV3 深渊矿坑</td>
+                        <td>58.3%</td>
+                        <td>158 秒</td>
+                        <td>4,280</td>
+                    </tr>
+                    <tr>
+                        <td>LV4 熔岩矿脉</td>
+                        <td>45.1%</td>
+                        <td>182 秒</td>
+                        <td>5,670</td>
+                    </tr>
+                    <tr>
+                        <td>LV5 终极矿场</td>
+                        <td>32.8%</td>
+                        <td>215 秒</td>
+                        <td>7,120</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 7天趋势 -->
+        <div class="section">
+            <div class="section-title">📈 近7天对局数趋势</div>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>1045《摇摆掘金车》数据看板 | 事件：enter_game / end_game</p>
+        </div>
+    </div>
+
+    <script>
+        Chart.defaults.color = '#a0a0a0';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+
+        // 游戏人数分布
+        const pc = { labels: ['1人', '2人'], data: [6230, 6226], colors: ['#ffd700', '#ffed4e'] };
+        const pcTotal = pc.data.reduce((a,b)=>a+b,0);
+        new Chart(document.getElementById('playerCountChart'), {
+            type: 'doughnut',
+            data: {
+                labels: pc.labels,
+                datasets: [{ data: pc.data, backgroundColor: pc.colors, borderWidth: 2, borderColor: '#1a1a2e' }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '60%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#e0e0e0', padding: 20 } },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `${ctx.label}: ${ctx.parsed.toLocaleString()} 局 (${(ctx.parsed*100/pcTotal).toFixed(1)}%)`
+                        }
+                    }
+                }
+            }
+        });
+
+        // 近7天趋势
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [
+                    { label: '1人模式', data: [680, 720, 690, 750, 820, 950, 880], borderColor: '#ffd700', backgroundColor: 'rgba(255,215,0,0.1)', fill: true, tension: 0.4, pointRadius: 3 },
+                    { label: '2人模式', data: [620, 680, 710, 740, 810, 920, 850], borderColor: '#ffed4e', backgroundColor: 'rgba(255,237,78,0.1)', fill: true, tension: 0.4, pointRadius: 3 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { color: '#e0e0e0', padding: 20 } } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: '对局数' } } }
+            }
+        });
+    </script>
+</body>
+</html>

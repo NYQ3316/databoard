@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1083《决战世界之巅》事件与属性命名</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            padding: 30px 20px;
+            line-height: 1.5;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #2563eb; text-decoration: none; font-size: 14px; font-weight: 500;
+            margin-bottom: 16px;
+        }
+        .back-link:hover { color: #1d4ed8; }
+        .header {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(22,163,74,0.25);
+        }
+        .header h1 { font-size: 22px; color: #fff; margin-bottom: 6px; }
+        .header .meta { font-size: 13px; color: rgba(255,255,255,0.9); }
+
+        .event-block {
+            background: #fff; border-radius: 12px; padding: 24px 28px;
+            margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .event-title {
+            font-size: 16px; font-weight: 600; color: #1a1a2e;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 2px solid #16a34a; display: block;
+        }
+        .event-desc {
+            font-size: 13px; color: #666; margin-bottom: 14px;
+            background: #f0fdf4; padding: 10px 14px; border-radius: 8px;
+            border-left: 3px solid #16a34a;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        colgroup col:first-child { width: 170px; }
+        colgroup col:nth-child(2) { width: 110px; }
+        colgroup col:nth-child(3) { width: 80px; }
+        colgroup col:nth-child(5) { width: 170px; }
+        colgroup col:nth-child(6) { width: 100px; }
+        th {
+            text-align: left; padding: 10px 12px; font-weight: 600; color: #666;
+            border-bottom: 2px solid #e8e8e8; background: #fafafa;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        tr:hover { background: #fafafa; }
+        .field-name {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 12px; color: #0c4a6e; background: #e0f2fe;
+            padding: 2px 8px; border-radius: 4px; font-weight: 500;
+        }
+        .type-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .type-string { background: #e6f7ff; color: #096dd9; }
+        .type-int { background: #f6ffed; color: #389e0d; }
+        .type-float { background: #fff2f0; color: #cf1322; }
+        .type-time { background: #f9f0ff; color: #531dab; }
+        .type-list { background: #fff7e6; color: #d46b08; }
+        .type-bool { background: #e6fffb; color: #006d75; }
+        .type-object { background: #fce7f3; color: #be185d; }
+        .scope-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .scope-required { background: #fff1f0; color: #cf1322; }
+        .scope-common { background: #e6f7ff; color: #096dd9; }
+        .scope-project { background: #dcfce7; color: #166534; }
+        .example { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: #595959; word-break: break-all; }
+        .legend {
+            background: #fff; border-radius: 12px; padding: 18px 22px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06); font-size: 13px; color: #666;
+            margin-bottom: 24px;
+        }
+        .legend strong { color: #333; }
+        .legend-item { display: inline-flex; align-items: center; gap: 6px; margin-right: 20px; margin-bottom: 6px; }
+        .note-row {
+            background: #fffbeb;
+            font-size: 12px;
+            color: #92400e;
+        }
+        .note-row td { padding: 8px 12px; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 20px; }
+            th, td { padding: 8px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back-link" href="naming_standards_standalone.html">&larr; 返回命名规范</a>
+    <div class="header">
+        <h1>⚽ 1083《决战世界之巅》事件与属性命名</h1>
+        <div class="meta">足球竞技 · 1~2人 · 比赛模式 / 世界杯模式 / 训练模式</div>
+    </div>
+
+    <div class="legend">
+        <strong>图例说明</strong>
+        <div style="margin-top:8px;">
+            <span class="legend-item"><span class="scope-tag scope-required">必含</span> 基础字段必填</span>
+            <span class="legend-item"><span class="scope-tag scope-common">通用</span> naming_standards_standalone.html 中已有定义</span>
+            <span class="legend-item"><span class="scope-tag scope-project">项目</span> 1083 项目自定义字段</span>
+        </div>
+    </div>
+
+    <!-- Event 1: enter_game -->
+    <div class="event-block">
+        <div class="event-title">enter_game（进入比赛）</div>
+        <div class="event-desc">玩家确认进入一局比赛时触发。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次比赛唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO 8601 UTC）</td><td class="example">2026-05-26T09:30:00Z</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次比赛的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">match_duration</span></td><td>比赛时长</td><td><span class="type-tag type-string">文本</span></td><td>玩家选择的比赛时长（分钟）</td><td class="example">1.5 / 3 / 5</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">round_id</span></td><td>世界杯阶段</td><td><span class="type-tag type-string">文本</span></td><td>0=练模式/比赛模式、1=小组赛第1场、2=小组赛第2场、3=小组赛第3场、11=32强、12=16强、13=8强、14=4强、15=决赛/季军赛</td><td class="example">1</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>以下字段封装在 <code>user_info</code> 对象数组中，每个对象以 <code>user_id</code>（文本类型）标识角色，包含该角色的明细数据。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（文本）及 role_id</td><td class="example">[{"user_id":135,"role_id":1},{"user_id":136,"role_id":2}]</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.role_id</span></td><td>球队ID</td><td><span class="type-tag type-string">文本</span></td><td>玩家选择的球队标识</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 2: end_game -->
+    <div class="event-block">
+        <div class="event-title">end_game（比赛结束）</div>
+        <div class="event-desc">一局比赛自然结束时触发。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次比赛唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO 8601 UTC）</td><td class="example">2026-05-26T09:35:00Z</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次比赛的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>以下字段封装在 <code>user_info</code> 对象数组中，每个对象以 <code>user_id</code>（文本类型）标识角色，包含该角色的比赛结果数据。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色比赛结果</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（文本）、score、winner、possession</td><td class="example">[{"user_id":135,"score":5,"winner":1,"possession":55},{"user_id":136,"score":4,"winner":0,"possession":45}]</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.score</span></td><td>得分</td><td><span class="type-tag type-int">数值</span></td><td>该角色的最终进球数</td><td class="example">5</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.winner</span></td><td>胜利方</td><td><span class="type-tag type-string">文本</span></td><td>0=负 / 1=胜 / 2=平</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.possession</span></td><td>控球率</td><td><span class="type-tag type-int">数值</span></td><td>该角色的控球率百分比（0~100）</td><td class="example">55</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 3: pause_game -->
+    <div class="event-block">
+        <div class="event-title">pause_game（比赛暂停）</div>
+        <div class="event-desc">玩家在比赛中触发暂停时上报。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次比赛唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO 8601 UTC）</td><td class="example">2026-05-26T09:32:00Z</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次比赛的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 4: continue_game -->
+    <div class="event-block">
+        <div class="event-title">continue_game（回到比赛）</div>
+        <div class="event-desc">玩家从暂停状态恢复比赛时上报。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次比赛唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO 8601 UTC）</td><td class="example">2026-05-26T09:33:00Z</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次比赛的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 5: goal_occur -->
+    <div class="event-block">
+        <div class="event-title">goal_occur（入球发生）</div>
+        <div class="event-desc">触发时机：进球后、比赛结束时、点球大战每次射门结束。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次比赛唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO 8601 UTC）</td><td class="example">2026-05-26T09:31:00Z</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次比赛的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>以下字段封装在 <code>user_info</code> 对象数组中，每个对象以 <code>user_id</code>（文本类型）标识角色，包含该角色的入球统计数据。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色入球数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（文本）及射门/抢断/扑救/踢人/点球/进球数据</td><td class="example">[{"user_id":135,"shot_count":12,"steal_count":8,"save_count":5,"kick_count":4,"is_penalty":0,"is_goal":1}]</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.shot_count</span></td><td>射门次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色累计射门次数</td><td class="example">12</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">user_info.steal_count</span></td><td>抢断次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色累计抢断次数</td><td class="example">8</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">user_info.save_count</span></td><td>扑救次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色累计扑救次数</td><td class="example">5</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">user_info.kick_count</span></td><td>踢人次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色累计踢人次数</td><td class="example">4</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">user_info.is_penalty</span></td><td>是否点球</td><td><span class="type-tag type-string">文本</span></td><td>该次射门是否为点球，1=是，0=否</td><td class="example">0</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">user_info.is_goal</span></td><td>是否进球</td><td><span class="type-tag type-string">文本</span></td><td>该次射门是否进球，1=是，0=否</td><td class="example">1</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="text-align:center;color:#999;font-size:13px;padding:20px 0;">
+        1083《决战世界之巅》| 项目埋点规范 | 对齐跨项目统一标准
+    </div>
+</div>
+</body>
+</html>

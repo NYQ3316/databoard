@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光能守护者 - 数据埋点统计看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1500px; margin: 0 auto; }
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 16px;
+        }
+        .header h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 6px; }
+        .header .subtitle { color: #666; font-size: 14px; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; background: rgba(0,0,0,0.05);
+            color: #666; text-decoration: none; border-radius: 8px;
+            font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap;
+        }
+        .back-btn:hover { background: rgba(0,0,0,0.1); color: #333; }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px; margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px; padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease; position: relative; overflow: hidden;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 4px; height: 100%;
+        }
+        .stat-card:nth-child(1)::before { background: #3b82f6; }
+        .stat-card:nth-child(2)::before { background: #10b981; }
+        .stat-card:nth-child(3)::before { background: #f59e0b; }
+        .stat-card:nth-child(4)::before { background: #8b5cf6; }
+        .stat-card:hover { transform: translateY(-4px); }
+        .stat-card .label { font-size: 14px; color: #666; margin-bottom: 8px; }
+        .stat-card .value { font-size: 32px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+        .stat-card .sub { font-size: 13px; color: #999; }
+        .stat-card .sub .positive { color: #10b981; }
+        .stat-card .sub .negative { color: #ef4444; }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px; margin-bottom: 24px;
+        }
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px; padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .chart-card.full-width { grid-column: 1 / -1; }
+        .chart-card h3 {
+            font-size: 16px; color: #1a1a2e; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .chart-card .chart-note { font-size: 12px; color: #999; margin-bottom: 16px; }
+        .chart-card canvas { max-height: 380px; }
+
+        /* Table Card */
+        .table-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px; padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px; overflow-x: auto;
+        }
+        .table-card h3 { font-size: 16px; color: #1a1a2e; margin-bottom: 16px; }
+        .table-card .chart-note { font-size: 12px; color: #999; margin-bottom: 12px; }
+        table {
+            width: 100%; border-collapse: collapse; font-size: 13px;
+        }
+        th, td {
+            padding: 10px 12px; text-align: center;
+            border-bottom: 1px solid #f0f0f0; white-space: nowrap;
+        }
+        th {
+            background: #f8fafc; font-weight: 600; color: #1a1a2e;
+            position: sticky; top: 0; z-index: 1;
+        }
+        tr:hover td { background: #f8fafc; }
+        td:first-child, th:first-child { text-align: left; padding-left: 16px; }
+        .tag-1p { background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+        .tag-2p { background: #fce7f3; color: #be185d; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+        .highlight { color: #0ea5e9; font-weight: 600; }
+        .highlight-red { color: #ef4444; font-weight: 600; }
+
+        /* Section Title */
+        .section-title {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px; font-weight: 600;
+            margin: 32px 0 16px 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .section-title .badge {
+            font-size: 12px; background: rgba(255,255,255,0.2);
+            padding: 4px 12px; border-radius: 12px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center; color: rgba(255, 255, 255, 0.6);
+            font-size: 13px; margin-top: 40px; padding-bottom: 20px;
+        }
+
+        /* Tabs for detail table */
+        .tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .tab {
+            padding: 8px 16px; border-radius: 8px; font-size: 13px;
+            border: 1px solid #e2e8f0; cursor: pointer; background: #fff;
+            color: #666; transition: all 0.2s; font-weight: 500;
+        }
+        .tab:hover { border-color: #0ea5e9; color: #0ea5e9; }
+        .tab.active { background: #0ea5e9; color: #fff; border-color: #0ea5e9; }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 22px; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>⚡ 光能守护者 - 数据统计看板</h1>
+                <div class="subtitle">项目编号：1005 | 轨道射击 · 1~2人 · 科幻3D Low Poly | 更新于 2026-06-05</div>
+            </div>
+            <a class="back-btn" href="index.html">← 返回汇总看板</a>
+        </div>
+
+        <!-- ==================== 一、宏观数据 ==================== -->
+        <div class="section-title">📊 一、宏观数据 <span class="badge">近30天</span></div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label">总场次</div>
+                <div class="value">8,527</div>
+                <div class="sub"><span class="positive">↑ 12.3%</span> vs 上周</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">平均命中率</div>
+                <div class="value">48.5%</div>
+                <div class="sub"><span class="positive">↑ 2.1%</span> vs 上周</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">活跃玩家数</div>
+                <div class="value">1,203</div>
+                <div class="sub"><span class="positive">↑ 8.7%</span> vs 上周</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">平均游戏时长</div>
+                <div class="value">18.3 min</div>
+                <div class="sub">扣除挂机时间后 | <span class="positive">↑ 3.5%</span></div>
+            </div>
+        </div>
+
+        <!-- 游戏时长计算说明 -->
+        <div class="table-card" style="margin-bottom: 24px;">
+            <h3>⏱️ 平均游戏时长计算口径</h3>
+            <p style="font-size:13px;color:#666;line-height:1.8;">
+                <strong>公式：</strong>同次会话游戏时长 = (exit_game.timestamp − enter_game.timestamp) − Σ(continue_game.timestamp − pause_game.timestamp)<br>
+                <strong>说明：</strong>以玩家从「新游戏/继续游戏」进入，到「退出/返回主界面」为一次完整游戏会话；扣除所有暂停（含自动断联暂停）的累计时长，得到净游戏时间。<br>
+                <strong>当前数据：</strong>挂机占比约 12.7%（平均挂机 2.66 min/会话，原始时长 20.96 min/会话）
+            </p>
+        </div>
+
+        <!-- ==================== 二、关键指标 ==================== -->
+        <div class="section-title">📈 二、关键指标 <span class="badge">近30天</span></div>
+
+        <!-- Row 1: 开局关卡分布 + 游玩人数分布 -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>🎯 开局关卡分布</h3>
+                <div class="chart-note">从某一关开始新游戏/继续游戏的场次占比</div>
+                <canvas id="levelStartChart" height="300"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>👥 游玩人数分布</h3>
+                <div class="chart-note">以1人或2人开始游戏的场次占比</div>
+                <canvas id="playerCountChart" height="300"></canvas>
+            </div>
+        </div>
+
+        <!-- Row 2: 游玩人数关卡平均命中率 + 最高命中率 -->
+        <div class="charts-grid">
+            <div class="chart-card full-width">
+                <h3>📊 游玩人数 × 关卡命中率对比</h3>
+                <div class="chart-note">不同游玩人数（1P/2P）各关卡的平均命中率与最高命中率 | 实心条=平均命中率，边框条=最高命中率</div>
+                <canvas id="hitRateChart" height="320"></canvas>
+            </div>
+        </div>
+
+        <!-- Row 3: 游玩人数关卡平均数据表 -->
+        <div class="table-card" style="margin-bottom: 24px;">
+            <h3>📋 游玩人数 × 关卡平均数据</h3>
+            <div class="chart-note">不同游玩人数的同一关卡视为不同主键 | 数据口径：命中率=命中次数/射击次数，得分=单关结算分，时长=关卡净时长</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>关卡</th>
+                        <th>游玩人数</th>
+                        <th>场次数</th>
+                        <th>平均命中率</th>
+                        <th>平均得分</th>
+                        <th>平均单关时长</th>
+                        <th>通关率</th>
+                        <th>平均复活次数</th>
+                    </tr>
+                </thead>
+                <tbody id="avgDataBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Row 4: 退出小节分布 -->
+        <div class="charts-grid">
+            <div class="chart-card full-width">
+                <h3>🚪 游玩人数 × 关卡退出小节分布</h3>
+                <div class="chart-note">各关卡不同小节退出（死亡/主动退出）的场次占比 | 按游玩人数分面</div>
+                <canvas id="exitSectionChart" height="350"></canvas>
+            </div>
+        </div>
+
+        <!-- ==================== 三、游玩人数关卡详情 ==================== -->
+        <div class="section-title">🔍 三、游玩人数关卡详情 <span class="badge">近30天明细</span></div>
+        <div class="table-card">
+            <h3>游玩人数关卡详细数据（口径与平均数据一致）</h3>
+            <div class="chart-note">点击标签切换关卡 | 展开项：各小节命中率、得分、时长明细</div>
+            <div class="tabs" id="detailTabs"></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>关卡</th>
+                        <th>游玩人数</th>
+                        <th>场次数</th>
+                        <th>平均命中率</th>
+                        <th>命中率中位数</th>
+                        <th>最高命中率</th>
+                        <th>最低命中率</th>
+                        <th>平均得分</th>
+                        <th>得分中位数</th>
+                        <th>最高得分</th>
+                        <th>平均时长(min)</th>
+                        <th>通关率</th>
+                        <th>平均死亡次数</th>
+                        <th>平均复活消耗</th>
+                    </tr>
+                </thead>
+                <tbody id="detailBody"></tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>光能守护者 数据统计看板 | 项目编号：1005 | 本地 Git 仓库管理</p>
+        </div>
+    </div>
+
+    <script>
+    // ==================== 游戏时长计算口径 JS 函数 ====================
+    /**
+     * 净游戏时长计算公式：
+     * 同次会话净时长 = (exit_game.timestamp - enter_game.timestamp) - SUM(continue_game.timestamp - pause_game.timestamp)
+     * 口径说明：
+     *  - 以 enter_game → exit_game 为一次完整会话
+     *  - 扣除所有 pause_game 到 continue_game 的挂机时长
+     *  - 含遥控器断联自动暂停的时长
+     */
+    function calcNetSessionTime(enterTs, exitTs, pauseIntervals) {
+        const rawDuration = exitTs - enterTs;
+        const totalPause = pauseIntervals.reduce((sum, [start, end]) => sum + (end - start), 0);
+        return (rawDuration - totalPause) / 60000; // 转换为分钟
+    }
+
+    // ==================== 数据 ====================
+    const levels = ['Act 0', 'Act 1', 'Act 2', 'Act 3', 'Act 4', 'Act 5', 'Act 6'];
+    const sections = {
+        'Act 0': ['小节1', '小节2', '小节3'],
+        'Act 1': ['小节1', '小节2', '小节3', '小节4'],
+        'Act 2': ['小节1', '小节2', '小节3', '小节4', '小节5'],
+        'Act 3': ['小节1', '小节2', '小节3', '小节4', '小节5'],
+        'Act 4': ['小节1', '小节2', '小节3', '小节4', '小节5'],
+        'Act 5': ['小节1', '小节2', '小节3', '小节4', '小节5', '小节6'],
+        'Act 6': ['小节1', '小节2', '小节3', '小节4', '小节5', '小节6']
+    };
+
+    // 开局关卡分布（场次数）
+    const levelStartData = [5100, 1275, 680, 510, 425, 255, 255];
+
+    // 游玩人数分布
+    const playerCountData = [5525, 2975]; // 1P, 2P
+
+    // 游玩人数关卡数据 [1P, 2P] × 7 levels
+    const avgHitRate = {
+        '1P': [52.3, 50.1, 48.0, 45.2, 43.5, 40.8, 38.2],
+        '2P': [48.5, 45.3, 43.1, 40.5, 38.2, 35.6, 33.1]
+    };
+    const maxHitRate = {
+        '1P': [85.2, 82.5, 80.1, 78.3, 76.0, 74.5, 72.8],
+        '2P': [78.5, 75.3, 72.8, 70.1, 68.5, 65.2, 62.0]
+    };
+    const avgScore = {
+        '1P': [12500, 28000, 35000, 42000, 48000, 55000, 65000],
+        '2P': [23000, 49000, 59000, 70000, 79000, 89000, 105000]
+    };
+    const avgDuration = {
+        '1P': [3.2, 4.5, 5.8, 6.2, 6.8, 7.5, 8.5],
+        '2P': [3.8, 5.2, 6.5, 7.0, 7.5, 8.2, 9.5]
+    };
+    const clearRate = {
+        '1P': [95, 88, 82, 75, 68, 60, 52],
+        '2P': [92, 85, 78, 70, 62, 55, 45]
+    };
+    const avgRevive = {
+        '1P': [0.3, 0.8, 1.5, 2.2, 3.0, 3.8, 5.2],
+        '2P': [0.5, 1.2, 2.0, 3.0, 4.2, 5.5, 7.8]
+    };
+    const sessionCount = {
+        '1P': [3060, 765, 408, 306, 255, 153, 153],
+        '2P': [2040, 510, 272, 204, 170, 102, 102]
+    };
+
+    // 退出小节分布（百分比）：[1P Act0~6, 2P Act0~6]，每个level的sections + "通关"
+    const exitSection1P = [
+        [5, 15, 80],           // Act 0: 3 sections + 通关
+        [8, 12, 18, 62],       // Act 1: 4 sections + 通关
+        [6, 10, 15, 20, 49],   // Act 2: 5 sections + 通关
+        [5, 8, 12, 18, 57],    // Act 3: 5 sections + 通关
+        [4, 7, 10, 15, 64],    // Act 4: 5 sections + 通关
+        [3, 6, 8, 12, 18, 53], // Act 5: 6 sections + 通关
+        [2, 5, 7, 10, 15, 61]  // Act 6: 6 sections + 通关
+    ];
+    const exitSection2P = [
+        [6, 18, 76],
+        [10, 15, 20, 55],
+        [8, 12, 18, 22, 40],
+        [7, 10, 15, 20, 48],
+        [6, 9, 12, 18, 55],
+        [5, 8, 10, 15, 20, 42],
+        [4, 7, 9, 12, 18, 50]
+    ];
+    // 转换为实际百分比（组内归一）
+    function normalizeExit(data) {
+        return data.map(row => {
+            const sum = row.reduce((a, b) => a + b, 0);
+            return row.map(v => +(v / sum * 100).toFixed(1));
+        });
+    }
+    const exit1PNorm = normalizeExit(exitSection1P);
+    const exit2PNorm = normalizeExit(exitSection2P);
+
+    // ==================== 详细数据（第三部分） ====================
+    // 为每个关卡×游玩人数组合生成详细数据（已删除难度维度）
+    const detailData = [];
+    for (let li = 0; li < 7; li++) {
+        for (const pc of ['1P', '2P']) {
+            const count = sessionCount[pc][li];
+            const hit = avgHitRate[pc][li];
+            const maxH = maxHitRate[pc][li];
+            const minH = +(hit * 0.4).toFixed(1);
+            const medH = +(hit + (hit * 0.05)).toFixed(1);
+            const score = avgScore[pc][li];
+            const medScore = Math.round(score * 1.05);
+            const maxScore = Math.round(score * (pc === '1P' ? 1.8 : 1.6));
+            const dur = avgDuration[pc][li];
+            const clr = clearRate[pc][li];
+            const deaths = avgRevive[pc][li];
+            const revives = +(deaths * 0.65).toFixed(1);
+            detailData.push({
+                level: levels[li], playerCount: pc,
+                count, hit, medHit: medH, maxHit: maxH, minHit: minH,
+                score, medScore, maxScore, duration: dur,
+                clearRate: clr, deaths, revives
+            });
+        }
+    }
+
+    // ==================== Chart Rendering ====================
+
+    // Chart.js 全局配置
+    Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif";
+    Chart.defaults.font.size = 12;
+
+    // 1. 开局关卡分布
+    new Chart(document.getElementById('levelStartChart'), {
+        type: 'bar',
+        data: {
+            labels: levels,
+            datasets: [{
+                label: '场次数',
+                data: levelStartData,
+                backgroundColor: ['#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => ctx.raw + ' 场 (' + (ctx.raw/8527*100).toFixed(1) + '%)' } }
+            },
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: '场次' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // 2. 游玩人数分布
+    new Chart(document.getElementById('playerCountChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['单人 (1P)', '双人 (2P)'],
+            datasets: [{
+                data: playerCountData,
+                backgroundColor: ['rgba(59,130,246,0.8)', 'rgba(236,72,153,0.8)'],
+                borderWidth: 0,
+                hoverOffset: 8
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + ' 场 (' + (ctx.raw/8527*100).toFixed(1) + '%)' } }
+            }
+        }
+    });
+
+    // 3. 游玩人数关卡命中率对比（平均+最高）
+    new Chart(document.getElementById('hitRateChart'), {
+        type: 'bar',
+        data: {
+            labels: levels,
+            datasets: [
+                { label: '1P 平均命中率', data: avgHitRate['1P'], backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 6 },
+                { label: '1P 最高命中率', data: maxHitRate['1P'], backgroundColor: 'rgba(59,130,246,0.3)', borderColor: '#3b82f6', borderWidth: 2, borderDash: [6,3], borderRadius: 6 },
+                { label: '2P 平均命中率', data: avgHitRate['2P'], backgroundColor: 'rgba(236,72,153,0.7)', borderRadius: 6 },
+                { label: '2P 最高命中率', data: maxHitRate['2P'], backgroundColor: 'rgba(236,72,153,0.3)', borderColor: '#ec4899', borderWidth: 2, borderDash: [6,3], borderRadius: 6 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' } }
+            },
+            scales: {
+                y: { beginAtZero: false, min: 25, max: 90, title: { display: true, text: '命中率 (%)' }, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => v + '%' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // 4. 平均数据表
+    (function renderAvgTable() {
+        const tbody = document.getElementById('avgDataBody');
+        let html = '';
+        for (let li = 0; li < 7; li++) {
+            for (const pc of ['1P', '2P']) {
+                const tag = pc === '1P' ? '<span class="tag-1p">1P</span>' : '<span class="tag-2p">2P</span>';
+                const lvl = levels[li];
+                const rowspan = pc === '1P' ? 2 : 1;
+                const lvlCell = pc === '1P' ? `<td rowspan="2" style="font-weight:600;">${lvl}</td>` : '';
+                html += `<tr>
+                    ${lvlCell}
+                    <td>${tag}</td>
+                    <td>${sessionCount[pc][li]}</td>
+                    <td class="highlight">${avgHitRate[pc][li]}%</td>
+                    <td>${avgScore[pc][li].toLocaleString()}</td>
+                    <td>${avgDuration[pc][li]} min</td>
+                    <td>${clearRate[pc][li]}%</td>
+                    <td>${avgRevive[pc][li]} 次</td>
+                </tr>`;
+            }
+        }
+        tbody.innerHTML = html;
+    })();
+
+    // 5. 退出小节分布（堆叠柱状图 - 双面板：1P左, 2P右）
+    (function renderExitChart() {
+        const ctx = document.getElementById('exitSectionChart');
+        // 使用两个canvas分面
+        const container = ctx.parentElement;
+        container.innerHTML = '<h3>🚪 游玩人数 × 关卡退出小节分布</h3><div class="chart-note">各关卡不同小节退出（死亡/主动退出）的场次占比 | 按游玩人数分面 | 通关=已通关未在此关退出</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;"><div><div style="font-size:13px;font-weight:600;color:#3b82f6;margin-bottom:8px;text-align:center;">🎮 单人 (1P) 退出小节分布</div><canvas id="exit1P" height="300"></canvas></div><div><div style="font-size:13px;font-weight:600;color:#ec4899;margin-bottom:8px;text-align:center;">🎮 双人 (2P) 退出小节分布</div><canvas id="exit2P" height="300"></canvas></div></div>';
+
+        const colors = ['#ef4444','#f97316','#eab308','#22c55e','#06b6d4','#6366f1','#10b981'];
+
+        // 1P
+        const datasets1P = levels.map((lvl, i) => {
+            const secs = [...sections[lvl], '通关'];
+            const data = [...exit1PNorm[i]];
+            return { label: lvl, data, backgroundColor: colors[i] };
+        });
+        new Chart(document.getElementById('exit1P'), {
+            type: 'bar',
+            data: {
+                labels: levels,
+                datasets: datasets1P.map((ds, i) => ({
+                    ...ds,
+                    stack: 'stack1',
+                    backgroundColor: colors[i % colors.length] + 'cc'
+                }))
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' } } },
+                scales: {
+                    x: { stacked: true, grid: { display: false } },
+                    y: { stacked: true, max: 100, title: { display: true, text: '占比 (%)' }, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => v + '%' } }
+                }
+            }
+        });
+
+        // 2P
+        new Chart(document.getElementById('exit2P'), {
+            type: 'bar',
+            data: {
+                labels: levels,
+                datasets: levels.map((lvl, i) => ({
+                    label: lvl,
+                    data: exit2PNorm[i],
+                    stack: 'stack2',
+                    backgroundColor: colors[i % colors.length] + 'cc'
+                }))
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' } } },
+                scales: {
+                    x: { stacked: true, grid: { display: false } },
+                    y: { stacked: true, max: 100, title: { display: true, text: '占比 (%)' }, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => v + '%' } }
+                }
+            }
+        });
+
+        // 重命名legend为具体小节名
+        const exitLabels = ['小节1退出', '小节2退出', '小节3退出', '小节4退出', '小节5退出', '小节6退出', '通关(未退出)'];
+    })();
+
+    // 6. 详细数据表（第三部分）
+    (function renderDetail() {
+        // Tabs
+        const tabsDiv = document.getElementById('detailTabs');
+        let tabHtml = '<span class="tab active" data-level="all">全部关卡</span>';
+        for (const lvl of levels) {
+            tabHtml += `<span class="tab" data-level="${lvl}">${lvl}</span>`;
+        }
+        tabsDiv.innerHTML = tabHtml;
+
+        function renderTable(filterLevel) {
+            const tbody = document.getElementById('detailBody');
+            let html = '';
+            const filtered = filterLevel === 'all'
+                ? detailData
+                : detailData.filter(d => d.level === filterLevel);
+            for (const d of filtered) {
+                const tag = d.playerCount === '1P' ? '<span class="tag-1p">1P</span>' : '<span class="tag-2p">2P</span>';
+                html += `<tr>
+                    <td style="font-weight:600;">${d.level}</td>
+                    <td>${tag}</td>
+                    <td>${d.count}</td>
+                    <td class="highlight">${d.hit}%</td>
+                    <td>${d.medHit}%</td>
+                    <td style="color:#10b981;font-weight:500;">${d.maxHit}%</td>
+                    <td class="highlight-red">${d.minHit}%</td>
+                    <td>${d.score.toLocaleString()}</td>
+                    <td>${d.medScore.toLocaleString()}</td>
+                    <td style="color:#10b981;font-weight:500;">${d.maxScore.toLocaleString()}</td>
+                    <td>${d.duration}</td>
+                    <td>${d.clearRate}%</td>
+                    <td>${d.deaths} 次</td>
+                    <td>${d.revives} 次</td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+        }
+
+        renderTable('all');
+
+        // Tab click handler
+        document.querySelectorAll('#detailTabs .tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('#detailTabs .tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderTable(this.dataset.level);
+            });
+        });
+    })();
+
+    // 退出小节图例优化
+    setTimeout(() => {
+        const exitLabels = ['小节1退出', '小节2退出', '小节3退出', '小节4退出', '小节5退出', '小节6退出'];
+        // 更新1P和2P的legend（但stacked bars的legend显示的是level not section）
+        // 这里保留level作为图例是合理的
+    }, 100);
+    </script>
+</body>
+</html>
