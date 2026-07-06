@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1030《莱美-生来悦动》数据埋点统计看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #2d132c 0%, #1a0a1a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            text-align: center; margin-bottom: 24px;
+            padding: 20px; background: rgba(255,255,255,0.05);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .header h1 {
+            font-size: 2em; margin-bottom: 8px;
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .header .subtitle { color: #a0a0a0; font-size: 14px; }
+        .back-btn {
+            display: inline-block; margin-top: 12px; padding: 6px 16px;
+            background: rgba(255,107,107,0.15); color: #ff6b6b;
+            text-decoration: none; border-radius: 6px; font-size: 13px;
+            border: 1px solid rgba(255,107,107,0.3);
+        }
+        .back-btn:hover { background: rgba(255,107,107,0.25); }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px; margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.08); border-radius: 10px;
+            padding: 18px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .stat-label { font-size: 13px; color: #a0a0a0; margin-bottom: 6px; }
+        .stat-value { font-size: 28px; font-weight: 700; color: #ff6b6b; }
+        .stat-unit { font-size: 13px; color: #808080; margin-left: 2px; }
+
+        .section {
+            background: rgba(255,255,255,0.05); border-radius: 12px;
+            padding: 20px; margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-title {
+            font-size: 16px; font-weight: 600; color: #ff6b6b;
+            margin-bottom: 8px; padding-bottom: 8px;
+            border-bottom: 2px solid rgba(255,107,107,0.3);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+        }
+        .chart-container { position: relative; height: 300px; }
+        .chart-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .chart-row { grid-template-columns: 1fr; }
+        }
+
+        /* 年龄段 Tab 样式 */
+        .age-tabs {
+            display: flex; gap: 4px; margin-bottom: 12px;
+        }
+        .age-tab {
+            padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 500;
+            background: rgba(255,255,255,0.06); color: #a0a0a0;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .age-tab:hover { background: rgba(255,255,255,0.12); color: #e0e0e0; }
+        .age-tab.active { background: rgba(255,107,107,0.2); color: #ff6b6b; border-color: rgba(255,107,107,0.4); }
+
+        .footer {
+            text-align: center; margin-top: 30px; padding: 16px;
+            color: #606060; font-size: 12px;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th {
+            text-align: left; padding: 12px 14px; font-weight: 600; color: #ff6b6b;
+            border-bottom: 2px solid rgba(255,107,107,0.3);
+        }
+        td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: #e0e0e0; }
+        tr:hover { background: rgba(255,107,107,0.05); }
+
+        .rank { display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 6px; font-weight: 700; font-size: 13px; }
+        .rank-1 { background: #ff6b6b; color: #fff; }
+        .rank-2 { background: #ff8e53; color: #fff; }
+        .rank-3 { background: #ffd93d; color: #333; }
+        .rank-other { background: rgba(255,255,255,0.1); color: #a0a0a0; }
+
+        .bar-wrap { display: flex; align-items: center; gap: 8px; }
+        .bar { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+        .bar-fill { height: 100%; background: #ff6b6b; border-radius: 4px; }
+        .bar-val { font-size: 12px; color: #a0a0a0; min-width: 40px; text-align: right; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏋️ 1030《莱美-生来悦动》数据埋点统计看板</h1>
+            <p class="subtitle">埋点偏向：热门关卡 · 关卡平均得分 · 游戏人数 · 年龄段分布 | 支持人数：1~2人</p>
+            <a class="back-btn" href="index.html">&larr; 返回汇总看板</a>
+        </div>
+
+        <!-- 核心指标 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">总训练次数</div>
+                <div class="stat-value">18,520<span class="stat-unit">次</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">平均卡路里</div>
+                <div class="stat-value">186<span class="stat-unit">kcal</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">活跃角色</div>
+                <div class="stat-value">2,840<span class="stat-unit">人</span></div>
+            </div>
+        </div>
+
+        <!-- 图表行：游戏人数 + 年龄段分布 -->
+        <div class="chart-row">
+            <div class="section">
+                <div class="section-title">👥 游戏人数分布</div>
+                <div class="chart-container">
+                    <canvas id="playerCountChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">👶 年龄段参与次数分布</div>
+                <div class="chart-container">
+                    <canvas id="ageGroupChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 近7天趋势 -->
+        <div class="section">
+            <div class="section-title">📈 近7天训练次数趋势</div>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">🔥 课程详细数据（全量，按访问量排名）</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>课程名称</th>
+                        <th>访问量</th>
+                        <th>占比</th>
+                        <th>平均得分</th>
+                        <th>平均卡路里</th>
+                        <th>完成率</th>
+                    </tr>
+                </thead>
+                <tbody id="courseTable"></tbody>
+            </table>
+        </div>
+
+        <!-- 图表行：热门课程Top10 + 平均得分Bottom10（含年龄段Tab） -->
+        <div class="chart-row">
+            <div class="section">
+                <div class="section-title">
+                    <span>🔥 热门课程Top10（按访问量）</span>
+                </div>
+                <div class="age-tabs" id="tabsVisits">
+                    <span class="age-tab active" data-age="all">全部</span>
+                    <span class="age-tab" data-age="a4-5">4-5岁</span>
+                    <span class="age-tab" data-age="a6-7">6-7岁</span>
+                    <span class="age-tab" data-age="a8-12">8-12岁</span>
+                    <span class="age-tab" data-age="a13-16">13-16岁</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="top10VisitsChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">
+                    <span>📉 平均得分Bottom10（得分最低）</span>
+                </div>
+                <div class="age-tabs" id="tabsScore">
+                    <span class="age-tab active" data-age="all">全部</span>
+                    <span class="age-tab" data-age="a4-5">4-5岁</span>
+                    <span class="age-tab" data-age="a6-7">6-7岁</span>
+                    <span class="age-tab" data-age="a8-12">8-12岁</span>
+                    <span class="age-tab" data-age="a13-16">13-16岁</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="bottom10ScoreChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表行：卡路里消耗 + 重复参与次数（含年龄段Tab） -->
+        <div class="chart-row">
+            <div class="section">
+                <div class="section-title">
+                    <span>🔥 课程卡路里消耗Top10</span>
+                </div>
+                <div class="age-tabs" id="tabsCalories">
+                    <span class="age-tab active" data-age="all">全部</span>
+                    <span class="age-tab" data-age="a4-5">4-5岁</span>
+                    <span class="age-tab" data-age="a6-7">6-7岁</span>
+                    <span class="age-tab" data-age="a8-12">8-12岁</span>
+                    <span class="age-tab" data-age="a13-16">13-16岁</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="top10CaloriesChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">
+                    <span>🔄 课程重复参与次数Top10</span>
+                </div>
+                <div class="age-tabs" id="tabsRepeat">
+                    <span class="age-tab active" data-age="all">全部</span>
+                    <span class="age-tab" data-age="a4-5">4-5岁</span>
+                    <span class="age-tab" data-age="a6-7">6-7岁</span>
+                    <span class="age-tab" data-age="a8-12">8-12岁</span>
+                    <span class="age-tab" data-age="a13-16">13-16岁</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="top10RepeatChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>1030《莱美-生来悦动》数据看板 | 事件：enter_game / end_game / pause_game / continue_game</p>
+        </div>
+    </div>
+
+    <script>
+        Chart.defaults.color = '#a0a0a0';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+
+        // ---- 年龄段维度key ----
+        const ageKeys = ['all', 'a4-5', 'a6-7', 'a8-12', 'a13-16'];
+        const ageLabels = { 'all': '全部', 'a4-5': '4-5岁', 'a6-7': '6-7岁', 'a8-12': '8-12岁', 'a13-16': '13-16岁' };
+
+        // ====== 按年龄段分组的课程数据 ======
+        // 全部（汇总）
+        const dataAll = [
+            { name: 'BodyPump 杠铃训练', visits: 2150, avgScore: 9200, avgCalories: 240, completion: 88.5, repeatCount: 972 },
+            { name: 'BodyCombat 搏击操', visits: 1860, avgScore: 8500, avgCalories: 280, completion: 82.3, repeatCount: 720 },
+            { name: 'RPM 动感单车', visits: 1520, avgScore: 7800, avgCalories: 320, completion: 75.6, repeatCount: 792 },
+            { name: 'BodyBalance 身心平衡', visits: 1280, avgScore: 7200, avgCalories: 150, completion: 91.2, repeatCount: 618 },
+            { name: 'BodyAttack 有氧挑战', visits: 980, avgScore: 6800, avgCalories: 350, completion: 68.4, repeatCount: 251 },
+            { name: "Sh'bam 舞蹈派对", visits: 850, avgScore: 6500, avgCalories: 200, completion: 85.7, repeatCount: 474 },
+            { name: 'GRIT 高强度间歇', visits: 720, avgScore: 5800, avgCalories: 400, completion: 55.3, repeatCount: 136 },
+            { name: 'CXWORX 核心训练', visits: 650, avgScore: 7000, avgCalories: 180, completion: 78.9, repeatCount: 211 },
+            { name: 'BodyStep 踏板操', visits: 580, avgScore: 7400, avgCalories: 260, completion: 72.1, repeatCount: 165 },
+            { name: 'Tone 力量塑形', visits: 520, avgScore: 6900, avgCalories: 210, completion: 80.5, repeatCount: 183 },
+            { name: 'Sprint 极速骑行', visits: 480, avgScore: 6200, avgCalories: 380, completion: 62.7, repeatCount: 107 },
+            { name: 'Trip 沉浸式骑行', visits: 420, avgScore: 7100, avgCalories: 300, completion: 76.4, repeatCount: 129 },
+            { name: 'Born To Move 少儿', visits: 350, avgScore: 5500, avgCalories: 120, completion: 92.1, repeatCount: 212 },
+            { name: 'Dance 舞蹈健身', visits: 280, avgScore: 6400, avgCalories: 190, completion: 83.6, repeatCount: 118 },
+            { name: 'Flow 瑜伽流', visits: 180, avgScore: 5900, avgCalories: 110, completion: 88.2, repeatCount: 91 },
+        ];
+
+        // 4-5岁
+        const dataA45 = [
+            { name: 'BodyPump 杠铃训练', visits: 120, avgScore: 5200, avgCalories: 140, completion: 72.3, repeatCount: 38 },
+            { name: 'BodyCombat 搏击操', visits: 180, avgScore: 4800, avgCalories: 160, completion: 65.8, repeatCount: 56 },
+            { name: 'RPM 动感单车', visits: 80, avgScore: 4200, avgCalories: 200, completion: 58.2, repeatCount: 22 },
+            { name: 'BodyBalance 身心平衡', visits: 220, avgScore: 5500, avgCalories: 90, completion: 85.4, repeatCount: 105 },
+            { name: 'BodyAttack 有氧挑战', visits: 60, avgScore: 3800, avgCalories: 210, completion: 45.1, repeatCount: 10 },
+            { name: "Sh'bam 舞蹈派对", visits: 310, avgScore: 6200, avgCalories: 120, completion: 88.9, repeatCount: 172 },
+            { name: 'GRIT 高强度间歇', visits: 30, avgScore: 3200, avgCalories: 260, completion: 30.5, repeatCount: 5 },
+            { name: 'CXWORX 核心训练', visits: 90, avgScore: 4800, avgCalories: 110, completion: 68.2, repeatCount: 25 },
+            { name: 'BodyStep 踏板操', visits: 50, avgScore: 4400, avgCalories: 160, completion: 55.3, repeatCount: 10 },
+            { name: 'Tone 力量塑形', visits: 40, avgScore: 4100, avgCalories: 130, completion: 62.1, repeatCount: 8 },
+            { name: 'Sprint 极速骑行', visits: 25, avgScore: 3600, avgCalories: 250, completion: 40.2, repeatCount: 3 },
+            { name: 'Trip 沉浸式骑行', visits: 35, avgScore: 4000, avgCalories: 190, completion: 55.8, repeatCount: 7 },
+            { name: 'Born To Move 少儿', visits: 520, avgScore: 7200, avgCalories: 80, completion: 95.2, repeatCount: 316 },
+            { name: 'Dance 舞蹈健身', visits: 250, avgScore: 5800, avgCalories: 110, completion: 86.3, repeatCount: 106 },
+            { name: 'Flow 瑜伽流', visits: 150, avgScore: 5000, avgCalories: 70, completion: 82.5, repeatCount: 64 },
+        ];
+
+        // 6-7岁
+        const dataA67 = [
+            { name: 'BodyPump 杠铃训练', visits: 280, avgScore: 6500, avgCalories: 170, completion: 78.5, repeatCount: 98 },
+            { name: 'BodyCombat 搏击操', visits: 380, avgScore: 6200, avgCalories: 200, completion: 74.2, repeatCount: 148 },
+            { name: 'RPM 动感单车', visits: 180, avgScore: 5500, avgCalories: 240, completion: 65.8, repeatCount: 62 },
+            { name: 'BodyBalance 身心平衡', visits: 310, avgScore: 6800, avgCalories: 110, completion: 88.3, repeatCount: 152 },
+            { name: 'BodyAttack 有氧挑战', visits: 150, avgScore: 4800, avgCalories: 260, completion: 52.3, repeatCount: 38 },
+            { name: "Sh'bam 舞蹈派对", visits: 420, avgScore: 7000, avgCalories: 150, completion: 90.5, repeatCount: 248 },
+            { name: 'GRIT 高强度间歇', visits: 50, avgScore: 3800, avgCalories: 300, completion: 38.2, repeatCount: 10 },
+            { name: 'CXWORX 核心训练', visits: 180, avgScore: 5800, avgCalories: 130, completion: 74.5, repeatCount: 58 },
+            { name: 'BodyStep 踏板操', visits: 120, avgScore: 5600, avgCalories: 190, completion: 62.3, repeatCount: 32 },
+            { name: 'Tone 力量塑形', visits: 90, avgScore: 5200, avgCalories: 150, completion: 70.2, repeatCount: 22 },
+            { name: 'Sprint 极速骑行', visits: 60, avgScore: 4500, avgCalories: 290, completion: 48.5, repeatCount: 12 },
+            { name: 'Trip 沉浸式骑行', visits: 100, avgScore: 5200, avgCalories: 230, completion: 65.5, repeatCount: 28 },
+            { name: 'Born To Move 少儿', visits: 580, avgScore: 7800, avgCalories: 100, completion: 93.8, repeatCount: 354 },
+            { name: 'Dance 舞蹈健身', visits: 350, avgScore: 6500, avgCalories: 140, completion: 85.2, repeatCount: 152 },
+            { name: 'Flow 瑜伽流', visits: 200, avgScore: 6200, avgCalories: 90, completion: 84.5, repeatCount: 86 },
+        ];
+
+        // 8-12岁
+        const dataA812 = [
+            { name: 'BodyPump 杠铃训练', visits: 780, avgScore: 8800, avgCalories: 220, completion: 90.2, repeatCount: 382 },
+            { name: 'BodyCombat 搏击操', visits: 650, avgScore: 8200, avgCalories: 260, completion: 84.5, repeatCount: 286 },
+            { name: 'RPM 动感单车', visits: 550, avgScore: 7600, avgCalories: 300, completion: 78.2, repeatCount: 302 },
+            { name: 'BodyBalance 身心平衡', visits: 420, avgScore: 7200, avgCalories: 140, completion: 92.5, repeatCount: 207 },
+            { name: 'BodyAttack 有氧挑战', visits: 380, avgScore: 6600, avgCalories: 330, completion: 70.2, repeatCount: 118 },
+            { name: "Sh'bam 舞蹈派对", visits: 320, avgScore: 6400, avgCalories: 190, completion: 86.8, repeatCount: 136 },
+            { name: 'GRIT 高强度间歇', visits: 280, avgScore: 5600, avgCalories: 380, completion: 58.5, repeatCount: 68 },
+            { name: 'CXWORX 核心训练', visits: 250, avgScore: 7000, avgCalories: 170, completion: 80.2, repeatCount: 82 },
+            { name: 'BodyStep 踏板操', visits: 220, avgScore: 7200, avgCalories: 250, completion: 74.5, repeatCount: 72 },
+            { name: 'Tone 力量塑形', visits: 200, avgScore: 6800, avgCalories: 200, completion: 82.3, repeatCount: 78 },
+            { name: 'Sprint 极速骑行', visits: 180, avgScore: 6000, avgCalories: 360, completion: 64.2, repeatCount: 50 },
+            { name: 'Trip 沉浸式骑行', visits: 160, avgScore: 6900, avgCalories: 280, completion: 78.5, repeatCount: 56 },
+            { name: 'Born To Move 少儿', visits: 60, avgScore: 4800, avgCalories: 100, completion: 80.5, repeatCount: 18 },
+            { name: 'Dance 舞蹈健身', visits: 120, avgScore: 6200, avgCalories: 180, completion: 82.5, repeatCount: 42 },
+            { name: 'Flow 瑜伽流', visits: 80, avgScore: 5800, avgCalories: 100, completion: 86.2, repeatCount: 28 },
+        ];
+
+        // 13-16岁
+        const dataA1316 = [
+            { name: 'BodyPump 杠铃训练', visits: 970, avgScore: 9500, avgCalories: 260, completion: 92.5, repeatCount: 455 },
+            { name: 'BodyCombat 搏击操', visits: 650, avgScore: 8800, avgCalories: 310, completion: 86.3, repeatCount: 230 },
+            { name: 'RPM 动感单车', visits: 710, avgScore: 8200, avgCalories: 340, completion: 78.5, repeatCount: 307 },
+            { name: 'BodyBalance 身心平衡', visits: 330, avgScore: 7400, avgCalories: 160, completion: 93.2, repeatCount: 154 },
+            { name: 'BodyAttack 有氧挑战', visits: 390, avgScore: 7200, avgCalories: 380, completion: 72.5, repeatCount: 85 },
+            { name: "Sh'bam 舞蹈派对", visits: 200, avgScore: 6500, avgCalories: 220, completion: 84.2, repeatCount: 66 },
+            { name: 'GRIT 高强度间歇', visits: 360, avgScore: 6200, avgCalories: 420, completion: 60.5, repeatCount: 53 },
+            { name: 'CXWORX 核心训练', visits: 130, avgScore: 7200, avgCalories: 200, completion: 82.8, repeatCount: 46 },
+            { name: 'BodyStep 踏板操', visits: 190, avgScore: 7500, avgCalories: 280, completion: 76.5, repeatCount: 51 },
+            { name: 'Tone 力量塑形', visits: 190, avgScore: 7100, avgCalories: 230, completion: 83.5, repeatCount: 75 },
+            { name: 'Sprint 极速骑行', visits: 215, avgScore: 6400, avgCalories: 400, completion: 65.2, repeatCount: 42 },
+            { name: 'Trip 沉浸式骑行', visits: 125, avgScore: 7300, avgCalories: 320, completion: 79.2, repeatCount: 38 },
+            { name: 'Born To Move 少儿', visits: 30, avgScore: 4200, avgCalories: 100, completion: 75.2, repeatCount: 6 },
+            { name: 'Dance 舞蹈健身', visits: 80, avgScore: 6500, avgCalories: 210, completion: 82.5, repeatCount: 25 },
+            { name: 'Flow 瑜伽流', visits: 50, avgScore: 6000, avgCalories: 120, completion: 90.2, repeatCount: 16 },
+        ];
+
+        // 年龄段数据映射(不含all，all单独处理)——汇总数据也放进去方便遍历
+        const ageDatasets = { 'all': dataAll, 'a4-5': dataA45, 'a6-7': dataA67, 'a8-12': dataA812, 'a13-16': dataA1316 };
+
+        // 统一排序：按访问量降序
+        const sortedAll = [...dataAll].sort((a,b) => b.visits - a.visits);
+        const sortedA45 = [...dataA45].sort((a,b) => b.visits - a.visits);
+        const sortedA67 = [...dataA67].sort((a,b) => b.visits - a.visits);
+        const sortedA812 = [...dataA812].sort((a,b) => b.visits - a.visits);
+        const sortedA1316 = [...dataA1316].sort((a,b) => b.visits - a.visits);
+        const sortedMap = { 'all': sortedAll, 'a4-5': sortedA45, 'a6-7': sortedA67, 'a8-12': sortedA812, 'a13-16': sortedA1316 };
+
+        // 总访问量
+        const totalVisits = dataAll.reduce((a, b) => a + b.visits, 0);
+
+        // ====== 渲染全量课程表格（全部汇总） ======
+        const tbody = document.getElementById('courseTable');
+        sortedAll.forEach((c, i) => {
+            const rank = i + 1;
+            const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
+            const pct = (c.visits / totalVisits * 100).toFixed(1);
+            const barPct = (c.visits / sortedAll[0].visits * 100).toFixed(1);
+            const compColor = c.completion >= 80 ? '#52c41a' : c.completion >= 60 ? '#ffd93d' : '#ff6b6b';
+            tbody.innerHTML += `
+                <tr>
+                    <td><span class="rank ${rankClass}">${rank}</span></td>
+                    <td><strong>${c.name}</strong></td>
+                    <td>${c.visits.toLocaleString()}</td>
+                    <td>
+                        <div class="bar-wrap"><div class="bar"><div class="bar-fill" style="width:${barPct}%"></div></div><span class="bar-val">${pct}%</span></div>
+                    </td>
+                    <td><strong>${c.avgScore.toLocaleString()}</strong></td>
+                    <td>${c.avgCalories} kcal</td>
+                    <td><strong style="color:${compColor}">${c.completion}%</strong></td>
+                </tr>`;
+        });
+
+        // ====== 游戏人数分布（1~2人） ======
+        const pc = { labels: ['1人', '2人'], data: [5120, 3400], colors: ['#ff6b6b', '#ff8e53'] };
+        const pcTotal = pc.data.reduce((a,b)=>a+b,0);
+        new Chart(document.getElementById('playerCountChart'), {
+            type: 'doughnut', data: { labels: pc.labels, datasets: [{ data: pc.data, backgroundColor: pc.colors, borderWidth: 2, borderColor: '#2d132c' }] },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '60%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#e0e0e0', padding: 20 } },
+                    tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.parsed.toLocaleString()} 次 (${(ctx.parsed*100/pcTotal).toFixed(1)}%)` } }
+                }
+            }
+        });
+
+        // ====== 近7天趋势（不分年龄段） ======
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [{ label: '总训练次数', data: [980, 1050, 1120, 1080, 1250, 1520, 1380], borderColor: '#ff6b6b', backgroundColor: 'rgba(255,107,107,0.1)', fill: true, tension: 0.4, pointRadius: 3 }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { color: '#e0e0e0', padding: 20 } } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: '训练次数' } } }
+            }
+        });
+
+        // ====== 年龄段参与次数分布 ======
+        const ageGroupData = [
+            { age: '4-5岁', count: 2520, color: '#52c41a' },
+            { age: '6-7岁', count: 2470, color: '#ffd93d' },
+            { age: '8-12岁', count: 3450, color: '#ff8e53' },
+            { age: '13-16岁', count: 1910, color: '#ff6b6b' },
+        ];
+        new Chart(document.getElementById('ageGroupChart'), {
+            type: 'bar',
+            data: {
+                labels: ageGroupData.map(d => d.age),
+                datasets: [{
+                    label: '参与次数',
+                    data: ageGroupData.map(d => d.count),
+                    backgroundColor: ageGroupData.map(d => d.color),
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: (ctx) => `参与次数: ${ctx.parsed.toLocaleString()} 次` } }
+                },
+                scales: { y: { beginAtZero: true, title: { display: true, text: '参与次数' } } }
+            }
+        });
+
+        // ====== 可复用的 Tab+Chart 管理函数 ======
+        const chartInstances = {}; // 存储已创建的Chart实例
+
+        /* 短名称映射（用于图表标签） */
+        function shortName(name) { return name.split(' ')[0]; }
+
+        /* 获取某年龄段排序后的Top10 */
+        function getTop10(age, sortKey, asc) {
+            const data = sortedMap[age];
+            const sorted = [...data].sort((a,b) => asc ? a[sortKey] - b[sortKey] : b[sortKey] - a[sortKey]);
+            return sorted.slice(0, 10);
+        }
+
+        /* 创建/更新柱状图 */
+        function renderBarChart(canvasId, age, sortKey, asc, colors, label, yLabel) {
+            const top10 = getTop10(age, sortKey, asc);
+            const key = canvasId;
+            if (chartInstances[key]) { chartInstances[key].destroy(); }
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            chartInstances[key] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: top10.map(c => shortName(c.name)),
+                    datasets: [{
+                        label: label,
+                        data: top10.map(c => c[sortKey]),
+                        backgroundColor: top10.map((_, i) => i < 3 ? colors[0] : colors[1]),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: yLabel } } }
+                }
+            });
+        }
+
+        /* 绑定Tab切换事件 */
+        function bindTabs(tabsContainerId, canvasId, sortKey, asc, colors, label, yLabel) {
+            const tabs = document.getElementById(tabsContainerId);
+            tabs.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('age-tab') || e.target.classList.contains('active')) return;
+                tabs.querySelectorAll('.age-tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                const age = e.target.dataset.age;
+                renderBarChart(canvasId, age, sortKey, asc, colors, label, yLabel);
+            });
+        }
+
+        // ====== 初始化4个排名图表 + 绑定Tab ======
+        bindTabs('tabsVisits', 'top10VisitsChart', 'visits', false, ['#ff6b6b', '#ff8e53'], '访问量', '访问量');
+        bindTabs('tabsScore', 'bottom10ScoreChart', 'avgScore', true, ['#f5222d', '#fa8c16'], '平均得分', '得分');
+        bindTabs('tabsCalories', 'top10CaloriesChart', 'avgCalories', false, ['#ff8e53', '#ffd93d'], '平均卡路里 (kcal)', '卡路里 (kcal)');
+        bindTabs('tabsRepeat', 'top10RepeatChart', 'repeatCount', false, ['#52c41a', '#6bcb77'], '重复参与次数', '重复次数');
+
+        // 默认渲染全部（all）
+        renderBarChart('top10VisitsChart', 'all', 'visits', false, ['#ff6b6b', '#ff8e53'], '访问量', '访问量');
+        renderBarChart('bottom10ScoreChart', 'all', 'avgScore', true, ['#f5222d', '#fa8c16'], '平均得分', '得分');
+        renderBarChart('top10CaloriesChart', 'all', 'avgCalories', false, ['#ff8e53', '#ffd93d'], '平均卡路里 (kcal)', '卡路里 (kcal)');
+        renderBarChart('top10RepeatChart', 'all', 'repeatCount', false, ['#52c41a', '#6bcb77'], '重复参与次数', '重复次数');
+    </script>
+</body>
+</html>

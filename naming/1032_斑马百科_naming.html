@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1032《斑马百科》事件与属性命名</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa; padding: 30px 20px; line-height: 1.5;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #1a1a2e; text-decoration: none; font-size: 14px; font-weight: 500; margin-bottom: 16px;
+        }
+        .back-link:hover { color: #333; }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(26,26,46,0.35);
+        }
+        .header h1 { font-size: 22px; color: #fff; margin-bottom: 6px; }
+        .header .meta { font-size: 13px; color: rgba(255,255,255,0.8); }
+        .event-block {
+            background: #fff; border-radius: 12px; padding: 24px 28px;
+            margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .event-title {
+            font-size: 16px; font-weight: 600; color: #1a1a2e;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 2px solid #1a1a2e; display: inline-block;
+        }
+        .event-desc {
+            font-size: 13px; color: #666; margin-bottom: 14px;
+            background: #f0f0f5; padding: 10px 14px; border-radius: 8px;
+            border-left: 3px solid #1a1a2e;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        colgroup col:first-child { width: 160px; }
+        colgroup col:nth-child(2) { width: 110px; }
+        colgroup col:nth-child(3) { width: 80px; }
+        colgroup col:nth-child(5) { width: 170px; }
+        colgroup col:nth-child(6) { width: 100px; }
+        th {
+            text-align: left; padding: 10px 12px; font-weight: 600; color: #666;
+            border-bottom: 2px solid #e8e8e8; background: #fafafa;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        tr:hover { background: #fafafa; }
+        .field-name {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 12px; color: #0c4a6e; background: #e0f2fe;
+            padding: 2px 8px; border-radius: 4px; font-weight: 500;
+        }
+        .type-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .type-string { background: #e6f7ff; color: #096dd9; }
+        .type-int { background: #f6ffed; color: #389e0d; }
+        .type-time { background: #f9f0ff; color: #531dab; }
+        .type-list { background: #fff7e6; color: #d46b08; }
+        .type-bool { background: #e6fffb; color: #006d75; }
+        .scope-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .scope-required { background: #fff1f0; color: #cf1322; }
+        .scope-common { background: #e6f7ff; color: #096dd9; }
+        .scope-project { background: #f6ffed; color: #389e0d; }
+        .example { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: #595959; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back-link" href="naming_standards.html">&larr; 返回命名规范</a>
+    <div class="header">
+        <h1>🦓 1032《斑马百科》事件与属性命名</h1>
+        <div class="meta">百科知识问答 · 单人 · 知识主题浏览 + 答题模块</div>
+    </div>
+
+    <!-- Event 1: enter_game -->
+    <div class="event-block">
+        <div class="event-title">enter_game（进入关卡）</div>
+        <div class="event-desc">玩家点击进入一个课程（知识主题 + 关卡）时触发，用于统计各主题访问量</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1032</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>参与角色ID，元素为文本类型</td>
+                    <td class="example">["135"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>知识主题</td><td><span class="type-tag type-string">文本</span></td><td>当前课程的知识主题</td><td class="example">1（哺乳动物）/ 2（海洋生物）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>课程下的关卡标识</td><td class="example">1 / 2 / 3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 2: end_game -->
+    <div class="event-block">
+        <div class="event-title">end_game（退出关卡）</div>
+        <div class="event-desc">玩家完整完成一个课程并正常退出时触发，收到此事件即视为通关。通过 enter_game 与 end_game 的事件数对比计算通关率。</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1032</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>参与角色ID，元素为文本类型</td>
+                    <td class="example">["135"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>知识主题</td><td><span class="type-tag type-string">文本</span></td><td>当前课程的知识主题</td><td class="example">1（哺乳动物）/ 2（海洋生物）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>课程下的关卡标识</td><td class="example">1 / 2 / 3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 3: quiz_start -->
+    <div class="event-block">
+        <div class="event-title">quiz_start（答题回合开始）</div>
+        <div class="event-desc">一个答题回合开始时触发。一个课程可包含多个答题回合。</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1032</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>参与角色ID，元素为文本类型</td>
+                    <td class="example">["135"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>知识主题</td><td><span class="type-tag type-string">文本</span></td><td>答题回合所属的知识主题</td><td class="example">1（哺乳动物）/ 2（海洋生物）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>答题回合所属的关卡</td><td class="example">1 / 2 / 3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 4: single_answer -->
+    <div class="event-block">
+        <div class="event-title">single_answer（单题作答结束）</div>
+        <div class="event-desc">每道题作答结束时逐题上报，用于汇总各知识主题下各关卡的答题正确率</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1032</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>参与角色ID，元素为文本类型</td>
+                    <td class="example">["135"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>知识主题</td><td><span class="type-tag type-string">文本</span></td><td>题目所属的知识主题</td><td class="example">1（哺乳动物）/ 2（海洋生物）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>题目所属的关卡</td><td class="example">1 / 2 / 3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">question_id</span></td><td>题目ID</td><td><span class="type-tag type-string">文本</span></td><td>单题唯一标识</td><td class="example">Q-2047</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">question_type</span></td><td>题目类型</td><td><span class="type-tag type-string">文本</span></td><td>题目所属类型</td><td class="example">记忆翻牌 / 逻辑排序</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">is_correct</span></td><td>是否正确</td><td><span class="type-tag type-int">数值</span></td><td>本次作答判定结果，1为对，0为错</td><td class="example">1 / 0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">answer_count</span></td><td>答错次数</td><td><span class="type-tag type-int">数值</span></td><td>本回合截至当前题为止累计答错次数（答错时 +1，答对不累计）</td><td class="example">0 / 1 / 2 / 3</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 5: pause_game -->
+    <div class="event-block">
+        <div class="event-title">pause_game（暂停游戏）</div>
+        <div class="event-desc">玩家触发暂停时上报</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1032</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>参与角色ID，元素为文本类型</td>
+                    <td class="example">["135"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">—</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 6: continue_game -->
+    <div class="event-block">
+        <div class="event-title">continue_game（回到游戏）</div>
+        <div class="event-desc">玩家从暂停状态恢复时上报</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1032</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>参与角色ID，元素为文本类型</td>
+                    <td class="example">["135"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">—</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

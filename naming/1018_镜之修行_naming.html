@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1018《镜之修行》事件与属性命名</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            padding: 30px 20px;
+            line-height: 1.5;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #2563eb; text-decoration: none; font-size: 14px; font-weight: 500;
+            margin-bottom: 16px;
+        }
+        .back-link:hover { color: #1d4ed8; }
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(99,102,241,0.25);
+        }
+        .header h1 { font-size: 22px; color: #fff; margin-bottom: 6px; }
+        .header .meta { font-size: 13px; color: rgba(255,255,255,0.9); }
+
+        .event-block {
+            background: #fff; border-radius: 12px; padding: 24px 28px;
+            margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .event-title {
+            font-size: 16px; font-weight: 600; color: #1a1a2e;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 2px solid #8b5cf6; display: inline-block;
+        }
+        .event-desc {
+            font-size: 13px; color: #666; margin-bottom: 14px;
+            background: #f5f3ff; padding: 10px 14px; border-radius: 8px;
+            border-left: 3px solid #8b5cf6;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        colgroup col:first-child { width: 170px; }
+        colgroup col:nth-child(2) { width: 110px; }
+        colgroup col:nth-child(3) { width: 80px; }
+        colgroup col:nth-child(5) { width: 170px; }
+        colgroup col:nth-child(6) { width: 100px; }
+        th {
+            text-align: left; padding: 10px 12px; font-weight: 600; color: #666;
+            border-bottom: 2px solid #e8e8e8; background: #fafafa;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        tr:hover { background: #fafafa; }
+        .field-name {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 12px; color: #0c4a6e; background: #e0f2fe;
+            padding: 2px 8px; border-radius: 4px; font-weight: 500;
+        }
+        .field-project {
+            color: #166534; background: #dcfce7;
+        }
+        .type-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .type-string { background: #e6f7ff; color: #096dd9; }
+        .type-int { background: #f6ffed; color: #389e0d; }
+        .type-float { background: #fff2f0; color: #cf1322; }
+        .type-time { background: #f9f0ff; color: #531dab; }
+        .type-list { background: #fff7e6; color: #d46b08; }
+        .type-bool { background: #e6fffb; color: #006d75; }
+        .type-object { background: #fce7f3; color: #be185d; }
+        .scope-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .scope-required { background: #fff1f0; color: #cf1322; }
+        .scope-common { background: #e6f7ff; color: #096dd9; }
+        .scope-project { background: #dcfce7; color: #166534; }
+        .example { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: #595959; }
+        .legend {
+            background: #fff; border-radius: 12px; padding: 18px 22px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06); font-size: 13px; color: #666;
+            margin-bottom: 24px;
+        }
+        .legend strong { color: #333; }
+        .legend-item { display: inline-flex; align-items: center; gap: 6px; margin-right: 20px; margin-bottom: 6px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back-link" href="naming_standards.html">&larr; 返回命名规范</a>
+    <div class="header">
+        <h1>🧘 1018《镜之修行》事件与属性命名</h1>
+        <div class="meta">瑜伽 / 普拉提 / 冥想 · 体式训练 · 冥想</div>
+    </div>
+
+    <div class="legend">
+        <strong>图例说明</strong>
+        <div style="margin-top:8px;">
+            <span class="legend-item"><span class="scope-tag scope-required">必含</span> 基础字段必填</span>
+            <span class="legend-item"><span class="scope-tag scope-common">通用</span> naming_standards.html 中已有定义</span>
+            <span class="legend-item"><span class="scope-tag scope-project">项目</span> 1018 项目自定义字段</span>
+        </div>
+    </div>
+
+    <!-- Event 1: enter_game -->
+    <div class="event-block">
+        <div class="event-title">enter_game（进入游戏/关卡）</div>
+        <div class="event-desc">玩家确认进入一次训练（串联课程/体式/冥想）时触发。串联课程与冥想的具体内容在此事件中记录。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>训练ID</td><td><span class="type-tag type-string">文本</span></td><td>串联课程/体式训练/冥想课程唯一标识</td><td class="example">course_01</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">difficulty</span></td><td>训练难度</td><td><span class="type-tag type-string">文本</span></td><td>0=简单 / 1=普通 / 2=困难</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name field-project">meditation_type</span></td><td>冥想类型ID</td><td><span class="type-tag type-string">文本</span></td><td>冥想类型自增ID（game_type=2 时有效）</td><td class="example">1</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name field-project">background_id</span></td><td>冥想背景ID</td><td><span class="type-tag type-string">文本</span></td><td>冥想背景自增ID（game_type=2 时有效）</td><td class="example">2</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name field-project">audio_id</span></td><td>冥想音频ID</td><td><span class="type-tag type-string">文本</span></td><td>冥想音频自增ID（game_type=2 时有效）</td><td class="example">3</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 2: end_game -->
+    <div class="event-block">
+        <div class="event-title">end_game（退出游戏/关卡）</div>
+        <div class="event-desc">一次训练自然结束时触发（串联课程/体式/冥想）。通过 session_id 关联成功状态，不单独记录 result 与 calories。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">score</span></td><td>总得分</td><td><span class="type-tag type-int">数值</span></td><td>本次训练累计得分（体式/串联课程有效，冥想无）</td><td class="example">88</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 3: pause_game -->
+    <div class="event-block">
+        <div class="event-title">pause_game（游戏暂停）</div>
+        <div class="event-desc">玩家在训练过程中触发暂停时上报</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 4: continue_game -->
+    <div class="event-block">
+        <div class="event-title">continue_game（回到游戏）</div>
+        <div class="event-desc">玩家从暂停状态恢复训练时上报</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 5: mini_game_start -->
+    <div class="event-block">
+        <div class="event-title">mini_game_start（体式开始）</div>
+        <div class="event-desc">一次体式训练单元开始时触发。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>固定为 1=体式</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">difficulty</span></td><td>训练难度</td><td><span class="type-tag type-string">文本</span></td><td>0=简单 / 1=普通 / 2=困难</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name field-project">act_id</span></td><td>动作ID</td><td><span class="type-tag type-string">文本</span></td><td>1~1000=瑜伽动作 / 1001~2000=普拉提动作</td><td class="example">56</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 6: mini_game_end -->
+    <div class="event-block">
+        <div class="event-title">mini_game_end（体式结束）</div>
+        <div class="event-desc">一次体式训练单元完成，进入总结界面时触发。仅保留得分，不记录动作ID、卡路里、评级等。如需关联具体体式，通过 session_id 关联 mini_game_start。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>固定为 1=体式</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">score</span></td><td>体式得分</td><td><span class="type-tag type-int">数值</span></td><td>本次体式训练总得分</td><td class="example">88</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1043《森林树乐园》事件与属性命名</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa; padding: 30px 20px; line-height: 1.5;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #2d6a4f; text-decoration: none; font-size: 14px; font-weight: 500; margin-bottom: 16px;
+        }
+        .back-link:hover { color: #40916c; }
+        .header {
+            background: linear-gradient(135deg, #0f1a0f 0%, #2d6a4f 50%, #52b788 100%);
+            border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(45,106,79,0.3);
+        }
+        .header h1 { font-size: 22px; color: #fff; margin-bottom: 6px; }
+        .header .meta { font-size: 13px; color: rgba(255,255,255,0.8); }
+        .event-block {
+            background: #fff; border-radius: 12px; padding: 24px 28px;
+            margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .event-title {
+            font-size: 16px; font-weight: 600; color: #1a1a2e;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 2px solid #2d6a4f; display: inline-block;
+        }
+        .event-desc {
+            font-size: 13px; color: #666; margin-bottom: 14px;
+            background: #d8f3dc; padding: 10px 14px; border-radius: 8px;
+            border-left: 3px solid #2d6a4f;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        colgroup col:first-child { width: 160px; }
+        colgroup col:nth-child(2) { width: 110px; }
+        colgroup col:nth-child(3) { width: 80px; }
+        colgroup col:nth-child(5) { width: 170px; }
+        colgroup col:nth-child(6) { width: 100px; }
+        th {
+            text-align: left; padding: 10px 12px; font-weight: 600; color: #666;
+            border-bottom: 2px solid #e8e8e8; background: #fafafa;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        tr:hover { background: #fafafa; }
+        .field-name {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 12px; color: #0c4a6e; background: #e0f2fe;
+            padding: 2px 8px; border-radius: 4px; font-weight: 500;
+        }
+        .type-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .type-string { background: #e6f7ff; color: #096dd9; }
+        .type-int { background: #f6ffed; color: #389e0d; }
+        .type-time { background: #f9f0ff; color: #531dab; }
+        .type-list { background: #fff7e6; color: #d46b08; }
+        .type-object { background: #fef9c3; color: #854d0e; }
+        .scope-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .scope-required { background: #fff1f0; color: #cf1322; }
+        .scope-common { background: #e6f7ff; color: #096dd9; }
+        .scope-project { background: #f6ffed; color: #389e0d; }
+        .example { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: #595959; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back-link" href="naming_standards.html">&larr; 返回命名规范</a>
+    <div class="header">
+        <h1>🌳 1043《森林树乐园》事件与属性命名</h1>
+        <div class="meta">双人协作 · 4种玩法 + 家园建造 · 支持 1~2 人</div>
+    </div>
+
+    <!-- Event 1: enter_game -->
+    <div class="event-block">
+        <div class="event-title">enter_game（进入游戏/关卡）</div>
+        <div class="event-desc">玩家确认进入一局游戏时触发。用于分析热门模式分布、单人/双人参与占比和各模式参与趋势。</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1043</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>所有参与角色ID，元素为文本类型</td>
+                    <td class="example">["135","136"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式（4种玩法之一）</td><td class="example">0=果蔬合合 / 1=砖块弹弹 / 2=钓鱼达人 / 3=长颈鹿之歌</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1~2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 2: end_game -->
+    <div class="event-block">
+        <div class="event-title">end_game（退出游戏/关卡）</div>
+        <div class="event-desc">一局对局自然结束时触发。用于分析各模式平均得分、A/B玩家得分对比。得分通过 user_info 对象组按角色上报。</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1043</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>所有参与角色ID，元素为文本类型</td>
+                    <td class="example">["135","136"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=果蔬合合 / 1=砖块弹弹 / 2=钓鱼达人 / 3=长颈鹿之歌</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1~2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+
+                <!-- 对象组说明行 -->
+                <tr>
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>以下字段为封装在 <code>user_info</code> 对象组中的各角色明细数据，
+                        <code>user_info</code> 为对象数组，每个对象以 <code>user_id</code>（文本类型）标识角色，
+                        包含该角色的得分。
+                    </td>
+                </tr>
+                <!-- 对象组字段 -->
+                <tr>
+                    <td><span class="field-name">user_info</span></td>
+                    <td>各角色明细数据</td>
+                    <td><span class="type-tag type-object">对象组</span></td>
+                    <td>对象数组，每个对象包含 user_id（文本）及各角色的 score</td>
+                    <td class="example">[{"user_id":135,"score":9200},{"user_id":136,"score":8500}]</td>
+                    <td><span class="scope-tag scope-project">项目特有</span></td>
+                </tr>
+                <tr>
+                    <td><span class="field-name">user_info.user_id</span></td>
+                    <td>角色ID</td>
+                    <td><span class="type-tag type-string">文本</span></td>
+                    <td>参与对局的角色ID</td>
+                    <td class="example">135</td>
+                    <td><span class="scope-tag scope-project">项目特有</span></td>
+                </tr>
+                <tr>
+                    <td><span class="field-name">user_info.score</span></td>
+                    <td>游戏得分</td>
+                    <td><span class="type-tag type-int">数值</span></td>
+                    <td>单个角色本次对局得分</td>
+                    <td class="example">9200</td>
+                    <td><span class="scope-tag scope-project">项目特有</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 3: pause_game -->
+    <div class="event-block">
+        <div class="event-title">pause_game（暂停游戏）</div>
+        <div class="event-desc">玩家触发暂停时上报</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1043</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>所有参与角色ID，元素为文本类型</td>
+                    <td class="example">["135","136"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=果蔬合合 / 1=砖块弹弹 / 2=钓鱼达人 / 3=长颈鹿之歌</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1~2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 4: continue_game -->
+    <div class="event-block">
+        <div class="event-title">continue_game（回到游戏）</div>
+        <div class="event-desc">从暂停状态恢复游戏时上报</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1043</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr>
+                    <td><span class="field-name">user_id</span></td>
+                    <td>人脸角色ID</td>
+                    <td><span class="type-tag type-list">列表</span></td>
+                    <td>所有参与角色ID，元素为文本类型</td>
+                    <td class="example">["135","136"]</td>
+                    <td><span class="scope-tag scope-required">必含</span></td>
+                </tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=果蔬合合 / 1=砖块弹弹 / 2=钓鱼达人 / 3=长颈鹿之歌</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1~2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 5: item_buy -->
+    <div class="event-block">
+        <div class="event-title">item_buy（道具/物品购买）🆕</div>
+        <div class="event-desc">玩家在家园建造界面成功购买一件家具/物品时触发。用于统计各物品的购买分布。</div>
+        <table>
+            <colgroup>
+                <col><col><col><col><col><col>
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1043</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">item_id</span></td><td>物品ID</td><td><span class="type-tag type-string">文本</span></td><td>购买物品的唯一标识</td><td class="example">floor_01 / chair_tree_02</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr><td><span class="field-name">price</span></td><td>价格</td><td><span class="type-tag type-int">数值</span></td><td>物品的购买价格</td><td class="example">500</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">coin_type</span></td><td>货币类型</td><td><span class="type-tag type-string">文本</span></td><td>使用的货币</td><td class="example">0=金币 / 1=经验 / 2=钻石</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

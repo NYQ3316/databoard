@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1024《蟹蟹大冒险》数据埋点统计看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 { font-size: 26px; color: #0c4a6e; margin-bottom: 8px; }
+        .header .subtitle { color: #666; font-size: 14px; }
+        .header .subtitle span { margin-right: 20px; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; background: rgba(14,165,233,0.1);
+            color: #0284c7; text-decoration: none; border-radius: 8px;
+            font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap;
+        }
+        .back-btn:hover { background: rgba(14,165,233,0.2); color: #0369a1; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-4px); }
+        .stat-card .label { font-size: 13px; color: #666; margin-bottom: 6px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; color: #0c4a6e; margin-bottom: 6px; }
+        .stat-card .change { font-size: 12px; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+        .stat-card .change.positive { background: #e6f7ed; color: #52c41a; }
+        .stat-card .change.negative { background: #fff1f0; color: #f5222d; }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .chart-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .chart-card h3 {
+            font-size: 17px; color: #0c4a6e; margin-bottom: 16px;
+            padding-bottom: 10px; border-bottom: 2px solid #e0f2fe;
+        }
+        .chart-container { position: relative; height: 280px; }
+        .table-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+        .table-card h3 {
+            font-size: 17px; color: #0c4a6e; margin-bottom: 16px;
+            padding-bottom: 10px; border-bottom: 2px solid #e0f2fe;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { padding: 10px 12px; text-align: center; border-bottom: 1px solid #f0f0f0; }
+        th { font-weight: 600; color: #666; font-size: 12px; text-transform: uppercase; background: #f8fafc; }
+        td { color: #333; }
+        tr:hover { background: #fafafa; }
+        .badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+        .badge-success { background: #e6f7ed; color: #52c41a; }
+        .badge-warning { background: #fff7e6; color: #fa8c16; }
+        .badge-info { background: #e6f4ff; color: #1890ff; }
+        .badge-danger { background: #fff1f0; color: #f5222d; }
+        .progress-bar { width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #0ea5e9, #0284c7); border-radius: 4px; transition: width 0.5s ease; }
+        .chapter-tag { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .chapter-1 { background: #fef3c7; color: #d97706; }
+        .chapter-2 { background: #dbeafe; color: #2563eb; }
+        .chapter-3 { background: #ede9fe; color: #7c3aed; }
+        .chapter-4 { background: #fce7f3; color: #db2777; }
+        .star-display { color: #f59e0b; letter-spacing: 1px; }
+        .footer { text-align: center; color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 40px; }
+        .section-title {
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 18px;
+            font-weight: 600;
+            color: #0c4a6e;
+        }
+        .section-title .desc { font-size: 13px; color: #666; font-weight: 400; margin-left: 12px; }
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>🦀 蟹蟹大冒险 - 数据埋点统计看板</h1>
+            <div class="subtitle">
+                <span>📅 统计周期：2026-05-01 至 2026-05-18</span>
+                <span>🎮 产品编号：1024</span>
+                <span>👥 支持人数：1~2人</span>
+                <span>📊 总关卡数：50关（主线30 + 合作20）</span>
+            </div>
+        </div>
+        <a class="back-btn" href="index.html">&larr; 返回汇总看板</a>
+    </div>
+
+    <!-- 核心指标 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="label">总活跃角色</div>
+            <div class="value">18,420</div>
+            <div class="change positive">↑ 15.2% 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">活跃账号</div>
+            <div class="value">4,560</div>
+            <div class="change positive">↑ 9.8% 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">平均通关率</div>
+            <div class="value">58.3%</div>
+            <div class="change positive">↑ 4.1% 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">平均星级</div>
+            <div class="value">1.8★</div>
+            <div class="change positive">↑ 0.3★ 较上周</div>
+        </div>
+    </div>
+
+    <!-- 图表区 -->
+    <div class="charts-grid">
+        <!-- 模式分布 -->
+        <div class="chart-card">
+            <h3>🎮 游戏模式分布</h3>
+            <div class="chart-container">
+                <canvas id="modePieChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 单人关卡通关率 -->
+        <div class="chart-card">
+            <h3>🏖️ 单人关卡通关率</h3>
+            <div class="chart-container">
+                <canvas id="singlePassChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 星级评价分布 -->
+        <div class="chart-card">
+            <h3>⭐ 星级评价分布</h3>
+            <div class="chart-container">
+                <canvas id="starChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 换装使用率 -->
+        <div class="chart-card">
+            <h3>👕 换装使用率</h3>
+            <div class="chart-container">
+                <canvas id="skinChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 收集率趋势 -->
+        <div class="chart-card">
+            <h3>💰 各关卡金币收集率</h3>
+            <div class="chart-container">
+                <canvas id="collectChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 近7天趋势 -->
+        <div class="chart-card">
+            <h3>📈 近7天活跃角色趋势</h3>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 热门金币外观排行 -->
+        <div class="chart-card">
+            <h3>💎 热门金币外观排行</h3>
+            <div class="chart-container">
+                <canvas id="skinRankChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 关卡详细数据 -->
+    <div class="section-title">
+        📋 主线关卡详细数据
+        <span class="desc">第一关 海滩（第1~10关）</span>
+    </div>
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>关卡</th>
+                    <th>活跃角色</th>
+                    <th>通关率</th>
+                    <th>平均星级</th>
+                    <th>平均耗时</th>
+                    <th>金币收集率</th>
+                    <th>死亡次数均值</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="chapter-tag chapter-1">1-1</span></td><td>2,845</td><td>82%</td><td class="star-display">★★☆</td><td>1分52秒</td><td>78%</td><td>0.3</td><td><span class="badge badge-success">热门</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-2</span></td><td>2,620</td><td>76%</td><td class="star-display">★★☆</td><td>2分08秒</td><td>72%</td><td>0.5</td><td><span class="badge badge-success">热门</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-3</span></td><td>2,410</td><td>71%</td><td class="star-display">★★☆</td><td>2分15秒</td><td>68%</td><td>0.6</td><td><span class="badge badge-success">热门</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-4</span></td><td>2,180</td><td>65%</td><td class="star-display">★★☆</td><td>2分28秒</td><td>62%</td><td>0.8</td><td><span class="badge badge-info">正常</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-5</span></td><td>2,050</td><td>62%</td><td class="star-display">★★☆</td><td>2分35秒</td><td>58%</td><td>0.9</td><td><span class="badge badge-info">正常</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-6</span></td><td>1,890</td><td>58%</td><td class="star-display">★☆☆</td><td>2分48秒</td><td>54%</td><td>1.1</td><td><span class="badge badge-info">正常</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-7</span></td><td>1,750</td><td>54%</td><td class="star-display">★☆☆</td><td>3分02秒</td><td>50%</td><td>1.3</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-8</span></td><td>1,620</td><td>50%</td><td class="star-display">★☆☆</td><td>3分18秒</td><td>46%</td><td>1.5</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-9</span></td><td>1,480</td><td>47%</td><td class="star-display">★☆☆</td><td>3分28秒</td><td>43%</td><td>1.7</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-1">1-10</span></td><td>1,350</td><td>44%</td><td class="star-display">★☆☆</td><td>3分42秒</td><td>40%</td><td>1.9</td><td><span class="badge badge-warning">偏难</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title">
+        📋 主线关卡详细数据
+        <span class="desc">第二关 浅海（第11~20关）</span>
+    </div>
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>关卡</th>
+                    <th>活跃角色</th>
+                    <th>通关率</th>
+                    <th>平均星级</th>
+                    <th>平均耗时</th>
+                    <th>金币收集率</th>
+                    <th>死亡次数均值</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="chapter-tag chapter-2">2-1</span></td><td>1,280</td><td>56%</td><td class="star-display">★★☆</td><td>2分55秒</td><td>52%</td><td>1.2</td><td><span class="badge badge-info">正常</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-2</span></td><td>1,190</td><td>53%</td><td class="star-display">★☆☆</td><td>3分05秒</td><td>49%</td><td>1.3</td><td><span class="badge badge-info">正常</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-3</span></td><td>1,120</td><td>51%</td><td class="star-display">★☆☆</td><td>3分12秒</td><td>47%</td><td>1.4</td><td><span class="badge badge-info">正常</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-4</span></td><td>1,050</td><td>49%</td><td class="star-display">★☆☆</td><td>3分22秒</td><td>45%</td><td>1.5</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-5</span></td><td>980</td><td>47%</td><td class="star-display">★☆☆</td><td>3分32秒</td><td>43%</td><td>1.6</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-6</span></td><td>920</td><td>45%</td><td class="star-display">★☆☆</td><td>3分42秒</td><td>41%</td><td>1.8</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-7</span></td><td>860</td><td>43%</td><td class="star-display">★☆☆</td><td>3分52秒</td><td>39%</td><td>1.9</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-8</span></td><td>790</td><td>41%</td><td class="star-display">★☆☆</td><td>4分02秒</td><td>37%</td><td>2.1</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-9</span></td><td>740</td><td>39%</td><td class="star-display">☆☆☆</td><td>4分12秒</td><td>35%</td><td>2.3</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-2">2-10</span></td><td>680</td><td>37%</td><td class="star-display">☆☆☆</td><td>4分22秒</td><td>33%</td><td>2.5</td><td><span class="badge badge-danger">困难</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title">
+        📋 主线关卡详细数据
+        <span class="desc">第三关 深海（第21~30关）</span>
+    </div>
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>关卡</th>
+                    <th>活跃角色</th>
+                    <th>通关率</th>
+                    <th>平均星级</th>
+                    <th>平均耗时</th>
+                    <th>金币收集率</th>
+                    <th>死亡次数均值</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="chapter-tag chapter-3">3-1</span></td><td>620</td><td>42%</td><td class="star-display">★☆☆</td><td>3分48秒</td><td>38%</td><td>2.0</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-2</span></td><td>580</td><td>40%</td><td class="star-display">★☆☆</td><td>3分58秒</td><td>36%</td><td>2.2</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-3</span></td><td>540</td><td>38%</td><td class="star-display">☆☆☆</td><td>4分08秒</td><td>34%</td><td>2.4</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-4</span></td><td>500</td><td>36%</td><td class="star-display">☆☆☆</td><td>4分18秒</td><td>32%</td><td>2.6</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-5</span></td><td>460</td><td>34%</td><td class="star-display">☆☆☆</td><td>4分28秒</td><td>30%</td><td>2.8</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-6</span></td><td>430</td><td>33%</td><td class="star-display">☆☆☆</td><td>4分38秒</td><td>29%</td><td>3.0</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-7</span></td><td>390</td><td>31%</td><td class="star-display">☆☆☆</td><td>4分48秒</td><td>27%</td><td>3.2</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-8</span></td><td>360</td><td>30%</td><td class="star-display">☆☆☆</td><td>4分58秒</td><td>26%</td><td>3.4</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-9</span></td><td>330</td><td>28%</td><td class="star-display">☆☆☆</td><td>5分08秒</td><td>25%</td><td>3.6</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-3">3-10</span></td><td>300</td><td>27%</td><td class="star-display">☆☆☆</td><td>5分18秒</td><td>24%</td><td>3.8</td><td><span class="badge badge-danger">困难</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title">
+        📋 合作关卡详细数据
+        <span class="desc">双人合作模式（第1~20关）</span>
+    </div>
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>关卡</th>
+                    <th>活跃角色</th>
+                    <th>通关率</th>
+                    <th>平均星级</th>
+                    <th>平均耗时</th>
+                    <th>金币收集率</th>
+                    <th>死亡次数均值</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="chapter-tag chapter-4">C-1</span></td><td>890</td><td>48%</td><td class="star-display">★☆☆</td><td>3分15秒</td><td>45%</td><td>1.5</td><td><span class="badge badge-info">正常</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-2</span></td><td>820</td><td>46%</td><td class="star-display">★☆☆</td><td>3分25秒</td><td>43%</td><td>1.6</td><td><span class="badge badge-info">正常</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-3</span></td><td>760</td><td>44%</td><td class="star-display">★☆☆</td><td>3分35秒</td><td>41%</td><td>1.7</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-4</span></td><td>710</td><td>42%</td><td class="star-display">★☆☆</td><td>3分45秒</td><td>39%</td><td>1.8</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-5</span></td><td>650</td><td>40%</td><td class="star-display">☆☆☆</td><td>3分55秒</td><td>37%</td><td>2.0</td><td><span class="badge badge-warning">偏难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-6</span></td><td>600</td><td>38%</td><td class="star-display">☆☆☆</td><td>4分05秒</td><td>35%</td><td>2.2</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-7</span></td><td>550</td><td>36%</td><td class="star-display">☆☆☆</td><td>4分15秒</td><td>33%</td><td>2.4</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-8</span></td><td>500</td><td>35%</td><td class="star-display">☆☆☆</td><td>4分25秒</td><td>32%</td><td>2.5</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-9</span></td><td>460</td><td>33%</td><td class="star-display">☆☆☆</td><td>4分35秒</td><td>30%</td><td>2.7</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-10</span></td><td>420</td><td>32%</td><td class="star-display">☆☆☆</td><td>4分45秒</td><td>29%</td><td>2.9</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-11</span></td><td>380</td><td>31%</td><td class="star-display">☆☆☆</td><td>4分52秒</td><td>28%</td><td>3.0</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-12</span></td><td>350</td><td>30%</td><td class="star-display">☆☆☆</td><td>5分02秒</td><td>27%</td><td>3.2</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-13</span></td><td>320</td><td>29%</td><td class="star-display">☆☆☆</td><td>5分10秒</td><td>26%</td><td>3.3</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-14</span></td><td>290</td><td>28%</td><td class="star-display">☆☆☆</td><td>5分18秒</td><td>25%</td><td>3.5</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-15</span></td><td>260</td><td>27%</td><td class="star-display">☆☆☆</td><td>5分25秒</td><td>24%</td><td>3.6</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-16</span></td><td>240</td><td>26%</td><td class="star-display">☆☆☆</td><td>5分32秒</td><td>23%</td><td>3.8</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-17</span></td><td>220</td><td>25%</td><td class="star-display">☆☆☆</td><td>5分40秒</td><td>22%</td><td>4.0</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-18</span></td><td>200</td><td>24%</td><td class="star-display">☆☆☆</td><td>5分48秒</td><td>21%</td><td>4.2</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-19</span></td><td>180</td><td>23%</td><td class="star-display">☆☆☆</td><td>5分55秒</td><td>20%</td><td>4.3</td><td><span class="badge badge-danger">困难</span></td></tr>
+                <tr><td><span class="chapter-tag chapter-4">C-20</span></td><td>160</td><td>22%</td><td class="star-display">☆☆☆</td><td>6分02秒</td><td>19%</td><td>4.5</td><td><span class="badge badge-danger">困难</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>游戏数据埋点统计看板 | 本地 Git 仓库管理</p>
+    </div>
+</div>
+
+<script>
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
+
+// 游戏模式分布饼图
+new Chart(document.getElementById('modePieChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['单人模式', '双人合作模式'],
+        datasets: [{
+            data: [13200, 5220],
+            backgroundColor: ['#0ea5e9', '#f43f5e'],
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: {
+                    font: { size: 13 },
+                    generateLabels: function(chart) {
+                        const data = chart.data;
+                        const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        return data.labels.map((label, i) => ({
+                            text: label + '  ' + data.datasets[0].data[i].toLocaleString() + '，' + (data.datasets[0].data[i] * 100 / total).toFixed(1) + '%',
+                            fillStyle: data.datasets[0].backgroundColor[i],
+                            hidden: false,
+                            index: i
+                        }));
+                    }
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const val = context.parsed;
+                        const pct = (val * 100 / total).toFixed(1);
+                        return context.label + ': ' + val.toLocaleString() + '，' + pct + '%';
+                    }
+                }
+            }
+        }
+    }
+});
+
+// 单人关卡通关率
+new Chart(document.getElementById('singlePassChart'), {
+    type: 'bar',
+    data: {
+        labels: ['第一关 海滩', '第二关 浅海', '第三关 深海'],
+        datasets: [{
+            label: '通关率(%)',
+            data: [58.2, 42.5, 33.0],
+            backgroundColor: ['#f59e0b', '#3b82f6', '#8b5cf6'],
+            borderRadius: 8,
+            barPercentage: 0.6
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, max: 100, title: { display: true, text: '通关率 (%)' } }
+        }
+    }
+});
+
+// 星级评价分布
+new Chart(document.getElementById('starChart'), {
+    type: 'bar',
+    data: {
+        labels: ['第一关 海滩', '第二关 浅海', '第三关 深海', '合作关卡'],
+        datasets: [
+            { label: '3星', data: [22, 15, 10, 9], backgroundColor: '#f59e0b', borderRadius: 4 },
+            { label: '2星', data: [35, 28, 22, 20], backgroundColor: '#84cc16', borderRadius: 4 },
+            { label: '1星', data: [28, 25, 20, 18], backgroundColor: '#0ea5e9', borderRadius: 4 }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+            x: { stacked: true },
+            y: { stacked: true, beginAtZero: true, title: { display: true, text: '占比 (%)' } }
+        }
+    }
+});
+
+// 换装使用率
+new Chart(document.getElementById('skinChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['默认外观', '外观套装1', '外观套装2', '外观套装3'],
+        datasets: [{
+            data: [45.2, 22.8, 18.5, 13.5],
+            backgroundColor: ['#94a3b8', '#f59e0b', '#ec4899', '#8b5cf6'],
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'right' },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ': ' + context.parsed + '%';
+                    }
+                }
+            }
+        }
+    }
+});
+
+// 各关卡金币收集率
+new Chart(document.getElementById('collectChart'), {
+    type: 'bar',
+    data: {
+        labels: ['第一关 海滩', '第二关 浅海', '第三关 深海', '合作关卡'],
+        datasets: [{
+            label: '金币收集率(%)',
+            data: [56.0, 38.0, 29.0, 28.0],
+            backgroundColor: ['#f59e0b', '#3b82f6', '#8b5cf6', '#ec4899'],
+            borderRadius: 8,
+            barPercentage: 0.5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, max: 100, title: { display: true, text: '收集率 (%)' } }
+        }
+    }
+});
+
+// 近7天活跃角色趋势
+new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+        labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+        datasets: [
+            {
+                label: '单人模式',
+                data: [1850, 1720, 1980, 1650, 2100, 2350, 1980],
+                borderColor: '#0ea5e9',
+                backgroundColor: 'rgba(14,165,233,0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4
+            },
+            {
+                label: '双人模式',
+                data: [620, 580, 720, 540, 780, 920, 680],
+                borderColor: '#f43f5e',
+                backgroundColor: 'rgba(244,63,94,0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+            y: { beginAtZero: true, title: { display: true, text: '活跃角色' } }
+        }
+    }
+});
+
+// 热门金币外观排行
+new Chart(document.getElementById('skinRankChart'), {
+    type: 'bar',
+    data: {
+        labels: ['外观套装2', '外观套装1', '外观套装3'],
+        datasets: [{
+            label: '购买量',
+            data: [1865, 1420, 1085],
+            backgroundColor: ['#f59e0b', '#ec4899', '#8b5cf6'],
+            borderRadius: 8,
+            barPercentage: 0.5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const val = context.parsed.y;
+                        const pct = (val * 100 / total).toFixed(1);
+                        return '购买量: ' + val.toLocaleString() + '（' + pct + '%）';
+                    }
+                }
+            }
+        },
+        scales: {
+            y: { beginAtZero: true, title: { display: true, text: '购买量' } }
+        }
+    }
+});
+</script>
+
+</body>
+</html>
