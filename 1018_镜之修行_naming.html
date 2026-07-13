@@ -101,7 +101,7 @@
         <strong>图例说明</strong>
         <div style="margin-top:8px;">
             <span class="legend-item"><span class="scope-tag scope-required">必含</span> 基础字段必填</span>
-            <span class="legend-item"><span class="scope-tag scope-common">通用</span> naming_standards_standalone.html 中已有定义</span>
+            <span class="legend-item"><span class="scope-tag scope-common">通用</span> naming_standards.html 中已有定义</span>
             <span class="legend-item"><span class="scope-tag scope-project">项目</span> 1018 项目自定义字段</span>
         </div>
     </div>
@@ -119,7 +119,7 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">level_id</span></td><td>训练ID</td><td><span class="type-tag type-string">文本</span></td><td>串联课程/体式训练/冥想课程唯一标识</td><td class="example">course_01</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -144,7 +144,7 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">score</span></td><td>总得分</td><td><span class="type-tag type-int">数值</span></td><td>本次训练累计得分（体式/串联课程有效，冥想无）</td><td class="example">88</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -165,7 +165,7 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
@@ -185,7 +185,7 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
@@ -205,7 +205,7 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>固定为 1=体式</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">difficulty</span></td><td>训练难度</td><td><span class="type-tag type-string">文本</span></td><td>0=简单 / 1=普通 / 2=困难</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -227,7 +227,7 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>固定为 1=体式</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">score</span></td><td>体式得分</td><td><span class="type-tag type-int">数值</span></td><td>本次体式训练总得分</td><td class="example">88</td><td><span class="scope-tag scope-common">通用</span></td></tr>

@@ -146,8 +146,8 @@
   <td><span class="scope-tag scope-required">必含</span></td>
 </tr>
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">ISO 8601</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>玩家选择的比拼模式</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 </tbody>
             </table>
@@ -184,9 +184,9 @@
   <td><span class="scope-tag scope-required">必含</span></td>
 </tr>
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">ISO 8601</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">mini_game_id</span></td><td>小游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>10个小游戏的编号</td><td class="example">1=拔萝卜，2=砸西瓜，…，10=嘶！地板好烫！</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前赛制模式</td><td class="example">0=五项全能</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">mini_game_id</span></td><td>小游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>小游戏编号</td><td class="example">0=举杠铃 / 1=拔萝卜 / 2=放烟花 / 3=杂技平衡大师 / 4=直冲云梯 / 5=打鼓 / 6=嘶！地板好烫！ / 7=全速出拳 / 8=拉绳子 / 9=砸西瓜 / 10=呼啦圈 / 11=拉面大师 / 12=自己喂自己</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 </tbody>
             </table>
         </div>
@@ -214,11 +214,11 @@
                 <tbody>
                     <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                                         <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-string">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">ISO 8601</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">mini_game_id</span></td><td>小游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>本环节小游戏编号</td><td class="example">3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-string">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">mini_game_id</span></td><td>小游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>小游戏编号</td><td class="example">3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     
                     
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前赛制模式</td><td class="example">0=五项全能</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <!-- 对象组说明行 -->
                     <tr class="note-row">
                         <td colspan="6">
@@ -289,8 +289,8 @@
                 <tbody>
                     <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                                         <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-string">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">ISO 8601</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏模式</td><td class="example">0=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-string">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     
                     <!-- 对象组说明行 -->
@@ -355,7 +355,7 @@
                 <tbody>
                     <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">—</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr>
   <td><span class="field-name">user_id</span></td>
@@ -365,7 +365,7 @@
   <td class="example">["135", "136"]</td>
   <td><span class="scope-tag scope-required">必含</span></td>
 </tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">"ISO 8601"</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 </tbody>
             </table>
         </div>
@@ -393,7 +393,7 @@
                 <tbody>
                     <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">—</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr>
   <td><span class="field-name">user_id</span></td>
@@ -403,7 +403,7 @@
   <td class="example">["135", "136"]</td>
   <td><span class="scope-tag scope-required">必含</span></td>
 </tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">"ISO 8601"</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 </tbody>
             </table>
         </div>
@@ -411,9 +411,8 @@
         <div class="note-box">
             <strong>📝 补充说明：</strong><br>
             • 完成率统计：通过同一 <code>session_id</code> 收到的 <code>mini_game_end</code> 事件数量 ÷ 该赛制应包含的小游戏总数计算，无需上报 <code>result</code> 字段。<br>
-            • <code>game_type</code> 取值：小游戏列表 / 三项全能 / 五项全能 / 七项全能 / 十项全能 / 2v2团队战。<br>
-            • <code>mini_game_id</code> 取值：1=拔萝卜，2=砸西瓜，3=全速出拳，4=举杠铃，5=打鼓，6=拉绳子，7=杂技平衡大师，8=液压榨汁机，9=直冲云梯，10=嘶！地板好烫！
-        </div>
+            • <code>game_type</code> 取值：0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战<br>
+            • <code>mini_game_id</code> 取值：0=举杠铃 / 1=拔萝卜 / 2=放烟花 / 3=杂技平衡大师 / 4=直冲云梯 / 5=打鼓 / 6=嘶！地板好烫！ / 7=全速出拳 / 8=拉绳子 / 9=砸西瓜 / 10=呼啦圈 / 11=拉面大师 / 12=自己喂自己</div>
 
         <div style="text-align: center; color: #999; font-size: 13px; padding: 20px 0;">
             1019 客厅运动会 | 项目埋点规范 | 对齐跨项目统一标准

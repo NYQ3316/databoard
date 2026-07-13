@@ -94,10 +94,10 @@
 </head>
 <body>
 <div class="container">
-    <a class="back-link" href="naming_standards.html">&larr; 返回命名规范</a>
+    <a class="back-link" href="naming_standards_standalone.html">&larr; 返回命名规范</a>
     <div class="header">
         <h1>🧱 1044《啪叽啪叽叠塔对决》事件与属性命名</h1>
-        <div class="meta">体感物理叠塔 · 1~4人 · 单人闯关/无尽竞速/无尽生存/多人竞速/多人生存/多人限高 · 事件共 4 个</div>
+        <div class="meta">体感物理叠塔 · 1~4人 · 竞速/无尽(单人)/生存/闯关/限高 · 事件共 4 个</div>
     </div>
 
     <!-- ===== Event 1: enter_game ===== -->
@@ -120,8 +120,8 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1044</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>单人闯关/无尽竞速/无尽生存/多人竞速/多人生存/多人限高</td><td class="example">0=单人闯关 / 1=无尽竞速（单人） / 2=无尽生存（单人） / 3=多人竞速 / 4=多人生存 / 5=多人限高</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>竞速/无尽(单人)/生存/闯关/限高</td><td class="example">0=竞速 / 1=无尽 / 2=生存 / 3=闯关 / 4=限高</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1~4 人</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>闯关模式所选关卡ID，其他模式为空</td><td class="example">level_01</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 <tr><td><span class="field-name">role_id</span></td><td>角色ID</td><td><span class="type-tag type-list">列表</span></td><td>各玩家选择的角色ID，元素为文本类型</td><td class="example">["role_01","role_03"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -148,8 +148,8 @@
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1044</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>与 enter_game 同一 session</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748315100000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>单人闯关/无尽竞速/无尽生存/多人竞速/多人生存/多人限高</td><td class="example">0=单人闯关 / 1=无尽竞速（单人） / 2=无尽生存（单人） / 3=多人竞速 / 4=多人生存 / 5=多人限高</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>竞速/无尽(单人)/生存/闯关/限高</td><td class="example">0=竞速 / 1=无尽 / 2=生存 / 3=闯关 / 4=限高</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1~4 人</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>闯关模式关卡ID，其他模式为空</td><td class="example">level_01</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 <tr class="note-row">
@@ -194,8 +194,8 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1044</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314850000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=单人闯关 / 1=无尽竞速（单人） / 2=无尽生存（单人） / 3=多人竞速 / 4=多人生存 / 5=多人限高</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=竞速 / 1=无尽 / 2=生存 / 3=闯关 / 4=限高</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1~4 人</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
@@ -221,8 +221,8 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1044</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314870000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=单人闯关 / 1=无尽竞速（单人） / 2=无尽生存（单人） / 3=多人竞速 / 4=多人生存 / 5=多人限高</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=竞速 / 1=无尽 / 2=生存 / 3=闯关 / 4=限高</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1~4 人</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
