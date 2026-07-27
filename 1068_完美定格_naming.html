@@ -107,7 +107,7 @@
         <div><strong>项目编号：</strong>1068</div>
         <div><strong>游戏模式：</strong>0=对战模式 / 1=挑战模式（1~2人）</div>
         <div><strong>埋点偏向：</strong>题目难度（动作通过率）</div>
-        <div><strong>当前事件数：</strong>5</div>
+        <div><strong>当前事件数：</strong>6</div>
         <div><strong>最后更新：</strong>2026-06-21</div>
     </div>
 
@@ -253,11 +253,39 @@
         </table>
     </div>
 
-    <!-- ======== 事件五：single_answer ======== -->
+    <!-- ======== 事件五：quiz_start ======== -->
     <div class="event-section">
         <div class="event-header">
             <div class="left">
-                <h2>事件五：<span class="ename">single_answer</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">单次动作判定</span></h2>
+                <h2>事件五：<span class="ename">quiz_start</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">题目开始</span></h2>
+                <div class="edesc">一道题目/动作序列开始时触发，记录题目ID、游戏人数与游戏模式，标记单次题目判定的开始</div>
+            </div>
+            <span class="tag-badge-pose">题目开始</span>
+        </div>
+        <table>
+            <colgroup>
+                <col style="width:160px"><col style="width:110px"><col style="width:80px">
+                <col style="width:auto"><col style="width:200px"><col style="width:100px">
+            </colgroup>
+            <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1068</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"] / ["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识，串联同一局所有事件</td><td class="example">s_987654321</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前选择的游戏模式：0=对战模式，1=挑战模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">question_id</span></td><td>动作题目ID</td><td><span class="type-tag type-string">文本</span></td><td>本次开始的题目唯一标识</td><td class="example">N_017 / T_SB_006</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ======== 事件六：single_answer ======== -->
+    <div class="event-section">
+        <div class="event-header">
+            <div class="left">
+                <h2>事件六：<span class="ename">single_answer</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">单次动作判定</span></h2>
                 <div class="edesc">
                     每次动作判定完成后触发。同一关卡内的多道题目通过 session_id 串联，无需 action_index。
                 </div>
