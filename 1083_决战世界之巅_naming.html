@@ -98,7 +98,7 @@
 </head>
 <body>
 <div class="container">
-    <a class="back-link" href="naming_standards_standalone.html">&larr; 返回命名规范</a>
+    <a class="back-link" href="naming_standards.html">&larr; 返回命名规范</a>
     <div class="header">
         <h1>⚽ 1083《决战世界之巅》事件与属性命名</h1>
         <div class="meta">足球竞技 · 1~2人 · 比赛模式 / 世界杯模式 / 训练模式</div>
@@ -124,12 +124,10 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次比赛唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次比赛的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">role_id</span></td><td>球队ID</td><td><span class="type-tag type-string">文本</span></td><td>本方（本地玩家）选择的球队标识</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">match_duration</span></td><td>比赛时长</td><td><span class="type-tag type-string">文本</span></td><td>玩家选择的比赛时长（分钟）</td><td class="example">1.5 / 3 / 5</td><td><span class="scope-tag scope-project">项目</span></td></tr>
                 <tr><td><span class="field-name">round_id</span></td><td>世界杯阶段</td><td><span class="type-tag type-string">文本</span></td><td>0=练模式/比赛模式、1=小组赛第1场、2=小组赛第2场、3=小组赛第3场、11=32强、12=16强、13=8强、14=4强、15=决赛、16=季军赛</td><td class="example">1</td><td><span class="scope-tag scope-project">项目</span></td></tr>
                 <tr class="note-row">
@@ -155,23 +153,13 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次比赛唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次比赛的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">role_id</span></td><td>球队ID</td><td><span class="type-tag type-string">文本</span></td><td>本方选择的球队标识</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">score</span></td><td>得分</td><td><span class="type-tag type-int">数值</span></td><td>本方角色最终进球数</td><td class="example">5</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">winner</span></td><td>胜利方</td><td><span class="type-tag type-string">文本</span></td><td>本方胜负：0=负 / 1=胜 / 2=平</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">possession</span></td><td>控球率</td><td><span class="type-tag type-int">数值</span></td><td>本方控球率百分比（0~100）</td><td class="example">55</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name">shot_count</span></td><td>射门次数</td><td><span class="type-tag type-int">数值</span></td><td>本方累计射门次数</td><td class="example">12</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name">steal_count</span></td><td>抢断次数</td><td><span class="type-tag type-int">数值</span></td><td>本方累计抢断次数</td><td class="example">8</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name">save_count</span></td><td>扑救次数</td><td><span class="type-tag type-int">数值</span></td><td>本方累计扑救次数</td><td class="example">5</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name">kick_count</span></td><td>踢人次数</td><td><span class="type-tag type-int">数值</span></td><td>本方累计踢人次数</td><td class="example">4</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name">penalty</span></td><td>点球进球数</td><td><span class="type-tag type-int">数值</span></td><td>本方本局点球进球数</td><td class="example">1</td><td><span class="scope-tag scope-project">项目</span></td></tr>
                 <tr class="note-row">
                     <td colspan="6">
-                        <strong>📦 对象组字段：</strong>以下字段封装在 <code>user_info</code> 对象数组中，各字段已在事件顶层保留（见上方独立行），每个对象以 <code>user_id</code>（文本类型）标识角色，包含该角色（含 role_id）的比赛结果数据。
+                        <strong>📦 对象组字段：</strong>以下字段封装在 <code>user_info</code> 对象数组中，每个对象以 <code>user_id</code>（文本类型）标识角色，包含该角色（含 role_id）的比赛结果数据。
                     </td>
                 </tr>
                 <tr><td><span class="field-name">user_info</span></td><td>各角色比赛结果</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（文本）、role_id（文本）及 score、winner、possession 与射门/抢断/扑救/踢人/点球进球数据</td><td class="example">[{"user_id":135,"role_id":1,"score":5,"winner":1,"possession":55,"shot_count":12,"steal_count":8,"save_count":5,"kick_count":4,"penalty":1},{"user_id":136,"role_id":2,"score":4,"winner":0,"possession":45,"shot_count":10,"steal_count":6,"save_count":3,"kick_count":2,"penalty":0}]</td><td><span class="scope-tag scope-project">项目</span></td></tr>
