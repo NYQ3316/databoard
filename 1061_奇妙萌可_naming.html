@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1061《奇妙萌可之闪耀流星》事件与属性命名</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            padding: 30px 20px;
+            line-height: 1.5;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: #2563eb; text-decoration: none; font-size: 14px; font-weight: 500;
+            margin-bottom: 16px;
+        }
+        .back-link:hover { color: #1d4ed8; }
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a21caf 100%);
+            border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(124,58,237,0.25);
+        }
+        .header h1 { font-size: 22px; color: #fff; margin-bottom: 6px; }
+        .header .meta { font-size: 13px; color: rgba(255,255,255,0.9); }
+
+        .event-block {
+            background: #fff; border-radius: 12px; padding: 24px 28px;
+            margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .event-title {
+            font-size: 16px; font-weight: 600; color: #1a1a2e;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 2px solid #7c3aed; display: block;
+        }
+        .event-desc {
+            font-size: 13px; color: #666; margin-bottom: 14px;
+            background: #faf5ff; padding: 10px 14px; border-radius: 8px;
+            border-left: 3px solid #7c3aed;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        colgroup col:first-child { width: 180px; }
+        colgroup col:nth-child(2) { width: 110px; }
+        colgroup col:nth-child(3) { width: 80px; }
+        colgroup col:nth-child(5) { width: 200px; }
+        colgroup col:nth-child(6) { width: 100px; }
+        th {
+            text-align: left; padding: 10px 12px; font-weight: 600; color: #666;
+            border-bottom: 2px solid #e8e8e8; background: #fafafa;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        tr:hover { background: #fafafa; }
+        .field-name {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 12px; color: #0c4a6e; background: #e0f2fe;
+            padding: 2px 8px; border-radius: 4px; font-weight: 500;
+        }
+        .type-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .type-string { background: #e6f7ff; color: #096dd9; }
+        .type-int { background: #f6ffed; color: #389e0d; }
+        .type-float { background: #fff2f0; color: #cf1322; }
+        .type-time { background: #f9f0ff; color: #531dab; }
+        .type-list { background: #fff7e6; color: #d46b08; }
+        .type-bool { background: #e6fffb; color: #006d75; }
+        .type-object { background: #fce7f3; color: #be185d; }
+        .scope-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .scope-required { background: #fff1f0; color: #cf1322; }
+        .scope-common { background: #e6f7ff; color: #096dd9; }
+        .scope-project { background: #dcfce7; color: #166534; }
+        .example { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: #595959; word-break: break-all; }
+        .note-row {
+            background: #fffbeb;
+            font-size: 12px;
+            color: #92400e;
+        }
+        .note-row td { padding: 8px 12px; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 20px; }
+            th, td { padding: 8px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back-link" href="naming_standards_standalone.html">&larr; 返回命名规范</a>
+    <div class="header">
+        <h1>🌟 1061《奇妙萌可之闪耀流星》事件与属性命名</h1>
+        <div class="meta">体感闯关 · 1~2人 · 故事 / 挑战(简单·普通·困难) · 18 关（关底萌可）</div>
+    </div>
+
+    <!-- Event 1: enter_game -->
+    <div class="event-block">
+        <div class="event-title">enter_game（进入关卡）</div>
+        <div class="event-desc">玩家确认进入某一关时上报。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1061</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次游玩唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>通用 game_type 字段，本项目重定义枚举：0=故事 / 1=挑战（数字型文本）</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数，1=单人 / 2=双人（数字型文本，复用通用 player_number）</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>具体关卡标识，1~18（数字型文本，复用通用 level_id；关底萌可：1兔兔/2呼啦/3光明/4叮咚/5流浪/6动动/7贴贴/8熊熊/9缤缤·纷纷/10绵羊/11透明/12共共/13跳舞/14狐狐/15歌谣/16悄悄/17亲亲/18黑洞Boss）</td><td class="example">3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">difficulty</span></td><td>游戏难度</td><td><span class="type-tag type-string">文本</span></td><td>通用 difficulty 字段，本项目重定义编码：0=简单 / 1=普通 / 2=困难（数字型文本）；仅挑战模式（game_type=1）有效，故事模式不上报</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>封装在 <code>user_info</code> 对象数组中，每个对象以 <code>user_id</code>（数值，裸数字，如 135，对齐示例）标识角色，并含该角色选用的皇室萌可（role_id，数字型文本）。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（数值，裸数字）与 role_id（皇室萌可，数字型文本）</td><td class="example">[{"user_id":135,"role_id":"0"},{"user_id":136,"role_id":"2"}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-int">数值</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135，对齐示例）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.role_id</span></td><td>皇室萌可</td><td><span class="type-tag type-string">文本</span></td><td>玩家选用的皇室萌可（数字型文本），5 类：0=爱心 / 1=银光 / 2=星光 / 3=月光 / 4=极光（极光仅 18 关 + 挑战模式可用）。复用通用 role_id 字段，本项目重定义为皇室萌可</td><td class="example">0 / 1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 2: end_game -->
+    <div class="event-block">
+        <div class="event-title">end_game（关卡结束）</div>
+        <div class="event-desc">一关自然结束时上报。通关结果不建独立字段，由 hp 推导（hp&gt;0 通关 / hp==0 未通关）。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1061</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次游玩唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>通用 game_type 字段，0=故事 / 1=挑战（数字型文本）</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数，1=单人 / 2=双人（数字型文本）</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>具体关卡标识，1~18（数字型文本；关底萌可：1兔兔/2呼啦/3光明/4叮咚/5流浪/6动动/7贴贴/8熊熊/9缤缤·纷纷/10绵羊/11透明/12共共/13跳舞/14狐狐/15歌谣/16悄悄/17亲亲/18黑洞Boss）</td><td class="example">3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">difficulty</span></td><td>游戏难度</td><td><span class="type-tag type-string">文本</span></td><td>通用 difficulty 字段，0=简单 / 1=普通 / 2=困难（数字型文本）；仅挑战模式（game_type=1）有效</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">collecting</span></td><td>星尘瓶数量</td><td><span class="type-tag type-int">数值</span></td><td>本局收集星尘瓶总数（可求平均），复用通用 collecting「收集物数量」字段承载星尘瓶</td><td class="example">8</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">hp</span></td><td>剩余生命点数</td><td><span class="type-tag type-int">数值</span></td><td>通关时剩余生命点数（可求平均）。本页唯一标准外自定义字段；通关结果由此派生：hp&gt;0 通关(成功)，hp==0 未通关(失败)</td><td class="example">3 / 0</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>user_info 每个对象含 <code>user_id</code>（数值，裸数字）与 <code>score</code>（每名玩家得分，双人时分别看）；collecting / hp 为整局级，置于事件顶层。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（数值，裸数字）与 score（本局得分，数值）</td><td class="example">[{"user_id":135,"score":48},{"user_id":136,"score":35}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-int">数值</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135，对齐示例）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.score</span></td><td>本局得分</td><td><span class="type-tag type-int">数值</span></td><td>该玩家本局累计得分（可求平均），双人时按 user_id 分别看</td><td class="example">48 / 35</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 3: pause_game -->
+    <div class="event-block">
+        <div class="event-title">pause_game（游戏暂停）</div>
+        <div class="event-desc">玩家在关卡中触发暂停时上报（无 user_info，沿用顶层 user_id 列表）。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1061</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次游玩唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=故事 / 1=挑战（数字型文本）</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1=单人 / 2=双人（数字型文本）</td><td class="example">2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 4: continue_game -->
+    <div class="event-block">
+        <div class="event-title">continue_game（回到游戏）</div>
+        <div class="event-desc">玩家从暂停状态恢复游戏时上报（无 user_info，沿用顶层 user_id 列表）。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1061</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次游玩唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=故事 / 1=挑战（数字型文本）</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1=单人 / 2=双人（数字型文本）</td><td class="example">2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="text-align:center;color:#999;font-size:13px;padding:20px 0;">
+        1061《奇妙萌可之闪耀流星》| 项目埋点规范 | 对齐跨项目统一标准（naming_standards.html）
+    </div>
+</div>
+</body>
+</html>
