@@ -67,6 +67,8 @@
         .type-time { background: #f9f0ff; color: #531dab; }
         .type-list { background: #fff7e6; color: #d46b08; }
         .type-bool { background: #e6fffb; color: #006d75; }
+        .type-object { background: #f0f5ff; color: #2f54eb; }
+        .note-row td { background: #f6ffed; padding: 10px 14px; color: #555; font-size: 12.5px; border-left: 3px solid #56ab2f; border-bottom: 1px solid #f0f0f0; }
         .scope-tag {
             display: inline-block; padding: 2px 10px; border-radius: 4px;
             font-size: 12px; font-weight: 500;
@@ -82,7 +84,7 @@
     <a class="back-link" href="naming_standards_standalone.html">&larr; 返回命名规范</a>
     <div class="header">
         <h1>🥕 1041《萝卜蹲》事件与属性命名</h1>
-        <div class="meta">体感指令反应游戏 · 多人互动 · 2~6人</div>
+        <div class="meta">体感指令反应游戏 · 多人互动 · 2~4人</div>
     </div>
 
     <!-- Event 1: enter_game -->
@@ -98,18 +100,18 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1041</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr>
-                    <td><span class="field-name">user_id</span></td>
-                    <td>人脸角色ID</td>
-                    <td><span class="type-tag type-list">列表</span></td>
-                    <td>所有参与角色ID，元素为文本类型</td>
-                    <td class="example">["135","136","137"]</td>
-                    <td><span class="scope-tag scope-required">必含</span></td>
-                </tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">2~6</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">round_count</span></td><td>回合总数</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏设定的总回合数</td><td class="example">10 / 15 / 20</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">2~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>回合总数</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏设定的总回合数</td><td class="example">10 / 15 / 20</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>封装在 <code>user_info</code> 对象数组中，每个对象以 <code>user_id</code>（人脸角色ID，裸数字，如 135）标识角色，并含该角色随机到的游戏角色（role_id，数字型文本；具体定义由研发组提供，此处仅提供格式参考）。含 user_info 时顶层不重复出现 user_id。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（人脸角色ID，裸数字）与 role_id（人脸角色随机到的游戏角色，数字型文本；具体定义由研发组提供，此处仅提供格式参考）</td><td class="example">[{"user_id":135,"role_id":0},{"user_id":136,"role_id":1}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.role_id</span></td><td>游戏角色ID</td><td><span class="type-tag type-string">文本</span></td><td>人脸角色随机到的游戏角色（数字型文本，值存数字编码，不可求平均）；具体定义由研发组提供，此处仅提供格式参考</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
     </div>
@@ -117,7 +119,7 @@
     <!-- Event 2: single_answer -->
     <div class="event-block">
         <div class="event-title">single_answer（动作判定）</div>
-        <div class="event-desc">每回合系统发出指令后，对玩家做出的蹲下动作进行判定并上报。通过多回合汇总统计各动作指令的正确率。</div>
+        <div class="event-desc">每回合系统发出指令后，对指令玩家做出的蹲下动作进行判定并上报。</div>
         <table>
             <colgroup>
                 <col><col><col><col><col><col>
@@ -132,15 +134,17 @@
                     <td>人脸角色ID</td>
                     <td><span class="type-tag type-list">列表</span></td>
                     <td>所有参与角色ID，元素为文本类型</td>
-                    <td class="example">["135","136","137"]</td>
+                    <td class="example">["135"]</td>
                     <td><span class="scope-tag scope-required">必含</span></td>
                 </tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>回合总数</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏设定的总回合数</td><td class="example">10 / 15 / 20</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">2~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">question_id</span></td><td>回合序号</td><td><span class="type-tag type-string">文本</span></td><td>当前回合序号（第几回合）</td><td class="example">1 / 2 / 3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">action_id</span></td><td>动作指令ID</td><td><span class="type-tag type-string">文本</span></td><td>本回合动作指令的标识</td><td class="example">radish_squat / cabbage_squat</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 <tr><td><span class="field-name">action_name</span></td><td>动作指令名称</td><td><span class="type-tag type-string">文本</span></td><td>本回合动作指令的中文名称</td><td class="example">萝卜蹲 / 白菜蹲</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
-                <tr><td><span class="field-name">is_correct</span></td><td>是否正确</td><td><span class="type-tag type-bool">布尔</span></td><td>玩家动作判定结果，正确为true，错误/超时为false</td><td class="example">true / false</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr><td><span class="field-name">hit_rate</span></td><td>动作正确率</td><td><span class="type-tag type-float">浮点</span></td><td>该指令回合中，玩家做对动作的比例，正确动作数/指令总数，取值范围 0~1</td><td class="example">0.85 / 0.6 / 1.0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
     </div>
@@ -158,17 +162,19 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1041</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr>
-                    <td><span class="field-name">user_id</span></td>
-                    <td>人脸角色ID</td>
-                    <td><span class="type-tag type-list">列表</span></td>
-                    <td>所有参与角色ID，元素为文本类型</td>
-                    <td class="example">["135","136","137"]</td>
-                    <td><span class="scope-tag scope-required">必含</span></td>
-                </tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">score</span></td><td>总得分</td><td><span class="type-tag type-int">数值</span></td><td>本局累计总得分</td><td class="example">48 / 72 / 15</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">2~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>回合总数</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏设定的总回合数</td><td class="example">10 / 15 / 20</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>封装在 <code>user_info</code> 对象数组中，每个对象以 <code>user_id</code>（人脸角色ID，裸数字，如 135）标识角色，并含该角色随机到的游戏角色（role_id，数字型文本；具体定义由研发组提供，此处仅提供格式参考）与 本局得分（score）。含 user_info 时顶层不重复出现 user_id。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（人脸角色ID，裸数字）、role_id（游戏角色ID，数字型文本；具体定义由研发组提供，此处仅提供格式参考）与 score（本局得分，数值，per-player）</td><td class="example">[{"user_id":135,"role_id":0,"score":48},{"user_id":136,"role_id":1,"score":35}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.role_id</span></td><td>游戏角色ID</td><td><span class="type-tag type-string">文本</span></td><td>人脸角色随机到的游戏角色（数字型文本，值存数字编码，不可求平均）；具体定义由研发组提供，此处仅提供格式参考</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.score</span></td><td>本局得分</td><td><span class="type-tag type-int">数值</span></td><td>该玩家本局累计得分（per-player，可求平均）</td><td class="example">48 / 35</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
     </div>
@@ -196,8 +202,8 @@
                 </tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">—</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">2~6</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>回合总数</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏设定的总回合数</td><td class="example">10 / 15 / 20</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">2~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
     </div>
@@ -225,8 +231,8 @@
                 </tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">—</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">2~6</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>回合总数</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏设定的总回合数</td><td class="example">10 / 15 / 20</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">2~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
     </div>
