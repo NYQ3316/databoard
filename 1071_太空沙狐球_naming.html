@@ -254,7 +254,17 @@
                 <tr><td><span class="field-name">round_count</span></td><td>当前轮次</td><td><span class="type-tag type-string">文本</span></td><td>本回合在整局中的序号（5回合模式为1~5，10回合模式为1~10）</td><td class="example">3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">score</span></td><td>本轮得分</td><td><span class="type-tag type-int">数值</span></td><td>本次出手落点得分：-1=跌落出界，0~5=命中得分分区（分数越高区域越小）</td><td class="example">-1 / 0 / 3 / 5</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">hit_count</span></td><td>碰撞次数</td><td><span class="type-tag type-int">数值</span></td><td>本回合沙狐球碰撞障碍物（机关/边界）的次数</td><td class="example">2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">knock</span></td><td>回合结果</td><td><span class="type-tag type-list">列表</span></td><td>本回合受击记录，元素为 [受击对手id, 沙狐球id, 受击情况, 分值变化]，沙狐球id=局内回合序号，受击情况 0=击落 / 1=碰撞；同一对手碰撞多次记多条；无受击时为空数组 []</td><td class="example">[["136",2,0,-3],["136",3,1,0],["137",4,1,-2]] / []</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>以下字段封装在 <code>knock_info</code> 对象数组中，每个对象记录本次出手对对手球的一次受击；对象组格式下所有字段值均为裸值（无引号），类型由标签承载。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">knock_info</span></td><td>回合结果</td><td><span class="type-tag type-object">对象组</span></td><td>本次出手的受击记录数组，每个对象记录一次受击（knock_id 为本次出手内碰撞编号）；无受击时为空数组 []</td><td class="example">[{"knock_id":1,"user_id":136,"ball_id":2,"hit_type":0,"score_change":-3},{"knock_id":2,"user_id":136,"ball_id":3,"hit_type":1,"score_change":0},{"knock_id":3,"user_id":137,"ball_id":4,"hit_type":1,"score_change":-2}] / []</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">knock_info.knock_id</span></td><td>碰撞记录编号</td><td><span class="type-tag type-string">文本</span></td><td>本次出手内碰撞记录编号（数字型文本，从 1 开始自增）</td><td class="example">1 / 2 / 3</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">knock_info.user_id</span></td><td>受击对手</td><td><span class="type-tag type-string">文本</span></td><td>被撞球主人的人脸角色ID（数字型文本，裸值）</td><td class="example">136</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">knock_info.ball_id</span></td><td>沙狐球id</td><td><span class="type-tag type-string">文本</span></td><td>被撞的沙狐球（局内自增id，非资源id，第N回合生成的沙狐球id=N）</td><td class="example">2 / 3 / 4</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">knock_info.hit_type</span></td><td>受击情况</td><td><span class="type-tag type-string">文本</span></td><td>0=击落 / 1=碰撞</td><td class="example">0 / 1</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+                <tr><td><span class="field-name">knock_info.score_change</span></td><td>分值变化</td><td><span class="type-tag type-int">数值</span></td><td>该受击导致的对手分值变动，可为负</td><td class="example">-3 / 0 / -2</td><td><span class="scope-tag scope-project">项目</span></td></tr>
             </tbody>
         </table>
     </div>
