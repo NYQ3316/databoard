@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据埋点统计看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            color: #1a1a2e;
+            background:
+                radial-gradient(circle at 15% 22%, rgba(255,255,255,0.55) 0 1.5px, transparent 2.2px),
+                radial-gradient(circle at 72% 14%, rgba(255,255,255,0.45) 0 1.2px, transparent 1.8px),
+                radial-gradient(circle at 88% 58%, rgba(255,255,255,0.50) 0 2px, transparent 2.8px),
+                radial-gradient(circle at 30% 78%, rgba(255,255,255,0.45) 0 1.5px, transparent 2.2px),
+                radial-gradient(circle at 55% 38%, rgba(255,255,255,0.40) 0 1.2px, transparent 1.8px),
+                radial-gradient(circle at 8% 55%, rgba(255,255,255,0.38) 0 1.2px, transparent 1.8px),
+                radial-gradient(circle at 62% 82%, rgba(255,255,255,0.45) 0 1.8px, transparent 2.6px),
+                radial-gradient(circle at 92% 30%, rgba(255,255,255,0.40) 0 1.4px, transparent 2px),
+                linear-gradient(160deg, #0a1440 0%, #1a237e 45%, #5e35b1 78%, #7b1fa2 100%);
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: rgba(255,255,255,0.96);
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 16px;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #29b6f6, #7c4dff, #ff6b9d) 1;
+        }
+        .header h1 { font-size: 26px; color: #1a1a2e; margin-bottom: 8px; }
+        .header .subtitle { color: #666; font-size: 14px; }
+        .header .subtitle span { margin-right: 20px; }
+        .header .subtitle .project-name { color: #4a148c; font-weight: 600; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; background: rgba(28,39,120,0.08);
+            color: #1a237e; text-decoration: none; border-radius: 8px;
+            font-size: 14px; font-weight: 600; transition: all 0.3s; white-space: nowrap;
+        }
+        .back-btn:hover { background: rgba(28,39,120,0.16); color: #0d47a1; }
+        /* 场景筛选：页卡 tab 栏（浏览器式），选中 tab 与下方内容区同底色相连 */
+        .scene-tabs {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            padding: 8px 8px 0;
+            background: rgba(255,255,255,0.10);
+            border-radius: 12px;
+            margin-bottom: 6px;
+        }
+        .scene-tab {
+            padding: 10px 22px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255,255,255,0.16);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 12px 12px 0 0;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+            line-height: 1.2;
+        }
+        .scene-tab:hover { background: rgba(255,255,255,0.28); }
+        .scene-tab.active {
+            background: #fff;
+            color: #1a1a2e;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -3px 10px rgba(0,0,0,0.10);
+        }
+        .scene-filter-hint {
+            font-size: 12px;
+            color: rgba(255,255,255,0.78);
+            margin: 2px 4px 16px;
+        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 24px; }
+        .stat-card { background: rgba(255,255,255,0.96); border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.22); transition: transform 0.3s ease; }
+        .stat-card:hover { transform: translateY(-4px); }
+        .stat-card .label { font-size: 14px; color: #666; margin-bottom: 8px; }
+        .stat-card .value { font-size: 30px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+        .stat-card .change { font-size: 13px; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+        .stat-card .change.positive { background: #e6f7ed; color: #52c41a; }
+        .stat-card .change.negative { background: #fff1f0; color: #f5222d; }
+        .stat-card .change.info { background: #eef0ff; color: #5b8ff9; }
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-bottom: 24px; }
+        .chart-card { background: rgba(255,255,255,0.96); border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.22); }
+        .chart-card h3 { font-size: 18px; color: #1a1a2e; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #f0f0f0; }
+        .chart-container { position: relative; height: 320px; }
+        .chart-container.tall { height: 340px; }
+        .note { font-size: 12px; color: #888; margin-top: 8px; line-height: 1.7; }
+        .legend { margin-top: 12px; font-size: 13px; color: #444; line-height: 2; }
+        .legend .dot { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; vertical-align: middle; }
+        .section-title { color: rgba(255,255,255,0.95); font-size: 16px; margin: 32px 0 12px; padding-left: 4px; font-weight: 500; }
+        .footer { text-align: center; color: rgba(255,255,255,0.9); font-size: 13px; margin-top: 40px; line-height: 1.8; }
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>数据埋点统计看板</h1>
+            <div class="subtitle">
+                <span class="project-name">🛸 项目名称：太空沙狐球</span>
+                <span>🎮 产品编号：1071</span>
+                <span>📆 上线日期：2026-09-16</span>
+                <span>👥 支持人数：1~4 人</span>
+                <span>🎯 数据统计偏向：比赛情况</span>
+                <span>🔄 数据更新：示例数据</span>
+            </div>
+        </div>
+        <a class="back-btn" href="index.html">&larr; 返回汇总看板</a>
+    </div>
+
+    <!-- 顶部统计卡片（总览 KPI：全局值，不随场景筛选变化） -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="label">总比赛场次</div>
+            <div class="value">12,843</div>
+            <div class="change positive">↑ 15.2% 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">活跃玩家数</div>
+            <div class="value">3,852</div>
+            <div class="change positive">↑ 12.7% 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">平均游戏人数</div>
+            <div class="value">2.8 人</div>
+            <div class="change positive">↑ 0.1 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">热门模式 Top1</div>
+            <div class="value">5回合</div>
+            <div class="change info">占比 63.3%</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">热门角色 Top1</div>
+            <div class="value">大鹅</div>
+            <div class="change info">占比 25.2%</div>
+        </div>
+    </div>
+
+    <!-- 场景筛选：页卡 tab 栏（浏览器式），控制下方图表区（map_id 维度，3 个场景主题，真实名称待定） -->
+    <div class="scene-tabs" id="sceneFilterButtons" role="tablist" aria-label="场景筛选">
+        <button type="button" class="scene-tab active" data-scene="0" role="tab" aria-selected="true">全部场景</button>
+        <button type="button" class="scene-tab" data-scene="1" role="tab" aria-selected="false">场景1</button>
+        <button type="button" class="scene-tab" data-scene="2" role="tab" aria-selected="false">场景2</button>
+        <button type="button" class="scene-tab" data-scene="3" role="tab" aria-selected="false">场景3</button>
+    </div>
+    <div class="scene-filter-hint" id="sceneFilterHint">当前展示：全部场景</div>
+
+    <div class="section-title">🎯 核心指标 — 热门模式 / 回合总分</div>
+
+    <!-- ROW1：热门模式 + 回合总分 -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>🛸 热门模式分布（模式选择次数）</h3>
+            <div class="chart-container">
+                <canvas id="modeChart"></canvas>
+            </div>
+            <div id="modeLegend" class="legend"></div>
+            <p class="note">对比 5 回合与 10 回合两种模式的选择热度，反映玩家对单局时长/节奏的偏好，可用于引导模式排期与新手引导。</p>
+        </div>
+        <div class="chart-card">
+            <h3>📈 回合总分增长（累计）</h3>
+            <div class="chart-container">
+                <canvas id="roundScoreChart"></canvas>
+            </div>
+            <div id="roundScoreLegend" class="legend"></div>
+            <p class="note">对比不同模式中每回合累计总分增长曲线，观察玩家越到后回合得分越高的熟练度趋势；5回合模式在第5回合后中断。</p>
+        </div>
+    </div>
+
+    <div class="section-title">👾 角色表现 — 选择热度 / 胜率 / 对抗</div>
+
+    <!-- ROW2：热门角色 + 角色胜率 -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>🐼 热门角色分布（选择次数）</h3>
+            <div class="chart-container">
+                <canvas id="roleChart"></canvas>
+            </div>
+            <p class="note">横轴为选择次数，反映各角色的受欢迎程度；可用于角色皮肤投放与订阅角色推广决策。</p>
+        </div>
+        <div class="chart-card">
+            <h3>🏆 角色胜率（%）</h3>
+            <div class="chart-container">
+                <canvas id="winRateChart"></canvas>
+            </div>
+            <p class="note">各角色对局结算后的胜率，用于评估角色强度平衡性；若胜率明显偏离 50% 需关注角色数值差异。</p>
+        </div>
+    </div>
+
+    <!-- ROW3：场均击落对手次数 -->
+    <div class="charts-grid" style="grid-template-columns: 1fr;">
+        <div class="chart-card">
+            <h3>💥 场均击落对手次数（按角色）</h3>
+            <div class="chart-container tall">
+                <canvas id="knockChart"></canvas>
+            </div>
+            <p class="note">统计每局比赛中各角色击落对手沙狐球的平均次数，反映角色的进攻/干扰能力，可与胜率联动分析对抗表现。</p>
+        </div>
+    </div>
+
+    <div class="section-title">🥌 每轮出手结果 — 按回合分布</div>
+
+    <!-- ROW4：5回合出手结果 + 10回合出手结果 -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>🥌 5回合模式 · 每回合出手结果分布</h3>
+            <div class="chart-container tall">
+                <canvas id="throw5Chart"></canvas>
+            </div>
+            <div id="throw5Legend" class="legend"></div>
+            <p class="note">5回合模式下每个回合的出手结果细分（0~5分得分区 + 跌落出界），观察越到后回合高分略升、跌落略降的熟练度趋势。</p>
+        </div>
+        <div class="chart-card">
+            <h3>🥌 10回合模式 · 每回合出手结果分布</h3>
+            <div class="chart-container tall">
+                <canvas id="throw10Chart"></canvas>
+            </div>
+            <div id="throw10Legend" class="legend"></div>
+            <p class="note">10回合模式下每个回合的出手结果细分（0~5分得分区 + 跌落出界），长对局下玩家熟练度提升带来高分占比逐步上升。</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>游戏数据埋点统计看板 | 本地 Git 仓库管理 | 依据 1071《太空沙狐球》策划大纲</p>
+        <p>⚠️ 当前为示例数据，待接入真实数据后替换；统计偏向：比赛情况。</p>
+    </div>
+</div>
+
+<script>
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
+
+const SPACE_PALETTE = ['#5B8FF9', '#7C4DFF', '#00C4CC', '#FFB300', '#FF6B9D', '#4CD964', '#FF7043', '#29B6F6'];
+const ROLE_COLORS = ['#5B8FF9', '#7C4DFF', '#00C4CC', '#FFB300', '#FF6B9D', '#4CD964'];
+
+// === 示例数据，待接入真实数据 ===
+// 场景定义（map_id=1/2/3，占位名「场景1/场景2/场景3」，真实名称待定）
+const SCENES = [
+    { id: 0, name: '全部场景' },
+    { id: 1, name: '场景1' },
+    { id: 2, name: '场景2' },
+    { id: 3, name: '场景3' }
+];
+
+// === 示例数据，待接入真实数据 ===
+const THROW_CATEGORIES = ['0分', '1分', '2分', '3分', '4分', '5分', '跌落'];
+const THROW_CATEGORY_COLORS = ['#B0BEC5', '#5B8FF9', '#00C4CC', '#4CD964', '#FFB300', '#FF6B9D', '#FF7043'];
+const THROW_CATEGORY_DESC = ['未得分', '得分区 1分', '得分区 2分', '得分区 3分', '得分区 4分', '得分区 5分', '跌落出界'];
+const throw5Rounds = ['第1回合', '第2回合', '第3回合', '第4回合', '第5回合'];
+const throw10Rounds = ['第1回合', '第2回合', '第3回合', '第4回合', '第5回合', '第6回合', '第7回合', '第8回合', '第9回合', '第10回合'];
+const roundScoreRounds = ['第1回合', '第2回合', '第3回合', '第4回合', '第5回合', '第6回合', '第7回合', '第8回合', '第9回合', '第10回合'];
+
+// === 示例数据（全部场景基准，保持现有数值不变），待接入真实数据 ===
+const BASE_MODES = [
+    { name: '5回合', count: 8124 },
+    { name: '10回合', count: 4719 }
+];
+const BASE_ROLES = [
+    { name: '大鹅', count: 2860, winRate: 52.3, knock: 1.8 },
+    { name: '星空猫', count: 2210, winRate: 49.8, knock: 1.4 },
+    { name: '蜥蜴', count: 1950, winRate: 51.1, knock: 1.6 },
+    { name: '河马', count: 1730, winRate: 47.6, knock: 2.1 },
+    { name: '兔子', count: 1420, winRate: 50.4, knock: 1.3 },
+    { name: '水豚', count: 1180, winRate: 48.2, knock: 1.5 }
+];
+const BASE_ROUND5 = [6.5, 13.8, 21.2, 28.6, 32.5, null, null, null, null, null];
+const BASE_ROUND10 = [6.2, 12.9, 19.8, 26.4, 33.0, 39.5, 45.8, 52.0, 58.1, 64.2];
+const BASE_THROW5 = {
+    '0分': [3200, 2800, 2500, 2400, 2300],
+    '1分': [1500, 1700, 1800, 1900, 2000],
+    '2分': [1200, 1400, 1600, 1700, 1800],
+    '3分': [900, 1100, 1300, 1400, 1500],
+    '4分': [500, 600, 700, 800, 900],
+    '5分': [300, 350, 400, 450, 500],
+    '跌落': [2400, 2100, 1900, 1800, 1700]
+};
+const BASE_THROW10 = {
+    '0分': [3200, 2800, 2500, 2400, 2300, 2200, 2150, 2100, 2050, 2000],
+    '1分': [1500, 1700, 1800, 1900, 2000, 2050, 2100, 2150, 2200, 2250],
+    '2分': [1200, 1400, 1600, 1700, 1800, 1850, 1900, 1950, 2000, 2050],
+    '3分': [900, 1100, 1300, 1400, 1500, 1550, 1600, 1650, 1700, 1750],
+    '4分': [500, 600, 700, 800, 900, 950, 1000, 1050, 1100, 1150],
+    '5分': [300, 350, 400, 450, 500, 520, 550, 580, 600, 620],
+    '跌落': [2400, 2100, 1900, 1800, 1700, 1650, 1600, 1550, 1500, 1450]
+};
+
+// === 示例数据（各场景拆分比例，各场景数据之和≈全部场景，允许轻微取整差异），待接入真实数据 ===
+// 场景1 ≈ 45%、场景2 ≈ 32%、场景3 ≈ 23%
+const SCENE_RATIOS = { 1: 0.45, 2: 0.32, 3: 0.23 };
+// 各场景角色 winRate/knock 波动量（基准值附近 ±10% 内小幅波动，体现场景差异）、回合累计总分缩放系数
+const SCENE_VAR = {
+    1: { winRate: [0.8, 0.9, -0.7, 0.8, -0.5, 0.6], knock: [0.1, -0.1, 0.1, 0.1, 0.1, -0.1], scoreFactor: 1.02 },
+    2: { winRate: [-0.6, -0.5, 0.6, -0.8, 0.4, 0.3], knock: [-0.1, 0.1, -0.1, -0.1, -0.1, 0.1], scoreFactor: 0.97 },
+    3: { winRate: [0.4, -0.7, 0.8, -0.3, -0.6, 0.5], knock: [0, 0, -0.1, 0, 0, 0.1], scoreFactor: 1.04 }
+};
+
+// 生成一份基准深拷贝（每场景独立，避免引用共享）
+function buildSceneData() {
+    const copyThrow = (t) => {
+        const out = {};
+        THROW_CATEGORIES.forEach(cat => { out[cat] = t[cat].slice(); });
+        return out;
+    };
+    return {
+        modes: BASE_MODES.map(m => ({ name: m.name, count: m.count })),
+        roles: BASE_ROLES.map(r => ({ name: r.name, count: r.count, winRate: r.winRate, knock: r.knock })),
+        roundScore5: BASE_ROUND5.slice(),
+        roundScore10: BASE_ROUND10.slice(),
+        throw5: copyThrow(BASE_THROW5),
+        throw10: copyThrow(BASE_THROW10)
+    };
+}
+
+// 按比例缩放 + 小幅波动生成某场景数据（示例）
+function scaleSceneData(sceneId) {
+    const ratio = SCENE_RATIOS[sceneId];
+    const v = SCENE_VAR[sceneId];
+    const d = buildSceneData();
+    d.modes = d.modes.map(m => ({ name: m.name, count: Math.round(m.count * ratio) }));
+    d.roles = d.roles.map((r, i) => ({
+        name: r.name,
+        count: Math.round(r.count * ratio),
+        winRate: +(r.winRate + v.winRate[i]).toFixed(1),
+        knock: +(r.knock + v.knock[i]).toFixed(1)
+    }));
+    d.roundScore5 = d.roundScore5.map(x => x == null ? null : +(x * v.scoreFactor).toFixed(1));
+    d.roundScore10 = d.roundScore10.map(x => +(x * v.scoreFactor).toFixed(1));
+    THROW_CATEGORIES.forEach(cat => {
+        d.throw5[cat] = d.throw5[cat].map(x => Math.round(x * ratio));
+        d.throw10[cat] = d.throw10[cat].map(x => Math.round(x * ratio));
+    });
+    return d;
+}
+
+// === 示例数据（按场景组织：0=全部场景合计，1/2/3=各场景），待接入真实数据 ===
+const sceneData = {
+    0: buildSceneData(),  // 全部场景合计（保持现有数值不变）
+    1: scaleSceneData(1), // 场景1（≈45%）
+    2: scaleSceneData(2), // 场景2（≈32%）
+    3: scaleSceneData(3)  // 场景3（≈23%）
+};
+
+// 当前选中场景 & 各图表实例（切换时用 if(inst) 防御，未初始化则不抛错）
+let currentSceneId = 0;
+let modeChartInst = null;
+let roundScoreChartInst = null;
+let throw5ChartInst = null;
+let throw10ChartInst = null;
+let roleChartInst = null;
+let winRateChartInst = null;
+let knockChartInst = null;
+
+// === 1. 热门模式分布（环形图，按场景切换） ===
+function renderModeChart() {
+    const sc = sceneData[currentSceneId];
+    const total = sc.modes.reduce((s, m) => s + m.count, 0);
+    const labels = sc.modes.map(m => m.name);
+    const data = sc.modes.map(m => m.count);
+    if (modeChartInst) {
+        modeChartInst.data.labels = labels;
+        modeChartInst.data.datasets[0].data = data;
+        modeChartInst.update();
+    } else {
+        try {
+            modeChartInst = new Chart(document.getElementById('modeChart'), {
+                type: 'doughnut',
+                data: { labels, datasets: [{ data, backgroundColor: ['#5B8FF9', '#7C4DFF'], borderWidth: 2, borderColor: '#fff' }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '58%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const sc0 = sceneData[currentSceneId];
+                                    const t = sc0.modes.reduce((s, m) => s + m.count, 0);
+                                    return `${ctx.label}: ${ctx.parsed.toLocaleString()} 次 (${(ctx.parsed * 100 / t).toFixed(1)}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (e) { console.error('modeChart failed', e); }
+    }
+    document.getElementById('modeLegend').innerHTML = sc.modes.map((m, i) => {
+        const pct = (m.count * 100 / total).toFixed(1);
+        return `<div><span class="dot" style="background:${['#5B8FF9', '#7C4DFF'][i]}"></span><strong>${m.name}</strong>　${m.count.toLocaleString()} 次，${pct}%</div>`;
+    }).join('');
+}
+
+// === 2. 回合总分增长（折线图，按场景切换） ===
+function renderRoundScoreChart() {
+    const sc = sceneData[currentSceneId];
+    if (roundScoreChartInst) {
+        roundScoreChartInst.data.datasets[0].data = sc.roundScore5;
+        roundScoreChartInst.data.datasets[1].data = sc.roundScore10;
+        roundScoreChartInst.update();
+    } else {
+        try {
+            roundScoreChartInst = new Chart(document.getElementById('roundScoreChart'), {
+                type: 'line',
+                data: {
+                    labels: roundScoreRounds,
+                    datasets: [
+                        {
+                            label: '5回合模式',
+                            data: sc.roundScore5,
+                            borderColor: '#5B8FF9',
+                            backgroundColor: '#5B8FF9',
+                            spanGaps: false,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#5B8FF9',
+                            borderWidth: 2
+                        },
+                        {
+                            label: '10回合模式',
+                            data: sc.roundScore10,
+                            borderColor: '#7C4DFF',
+                            backgroundColor: '#7C4DFF',
+                            spanGaps: false,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#7C4DFF',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}：${ctx.parsed.y == null ? '无数据' : ctx.parsed.y.toFixed(1) + ' 分'}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: '回合' } },
+                        y: { beginAtZero: true, title: { display: true, text: '累计总分（分）' } }
+                    }
+                }
+            });
+        } catch (e) { console.error('roundScoreChart failed', e); }
+    }
+    document.getElementById('roundScoreLegend').innerHTML = [
+        '<div><span class="dot" style="background:#5B8FF9"></span><strong>5回合模式</strong>　累计总分（第6回合起无数据）</div>',
+        '<div><span class="dot" style="background:#7C4DFF"></span><strong>10回合模式</strong>　累计总分（完整10回合）</div>'
+    ].join('');
+}
+
+// === 每回合出手结果分布（5回合模式，堆叠柱状图，按场景切换） ===
+function renderThrow5Chart() {
+    const sc = sceneData[currentSceneId];
+    if (throw5ChartInst) {
+        throw5ChartInst.data.labels = throw5Rounds;
+        THROW_CATEGORIES.forEach((cat, i) => { throw5ChartInst.data.datasets[i].data = sc.throw5[cat]; });
+        throw5ChartInst.update();
+    } else {
+        try {
+            throw5ChartInst = new Chart(document.getElementById('throw5Chart'), {
+                type: 'bar',
+                data: {
+                    labels: throw5Rounds,
+                    datasets: THROW_CATEGORIES.map((cat, i) => ({
+                        label: cat,
+                        data: sc.throw5[cat],
+                        backgroundColor: THROW_CATEGORY_COLORS[i],
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }))
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}：${ctx.parsed.y.toLocaleString()} 次` } }
+                    },
+                    scales: {
+                        x: { stacked: true, title: { display: true, text: '回合' } },
+                        y: { stacked: true, beginAtZero: true, title: { display: true, text: '出手次数' } }
+                    }
+                }
+            });
+        } catch (e) { console.error('throw5Chart failed', e); }
+    }
+    document.getElementById('throw5Legend').innerHTML = THROW_CATEGORIES.map((cat, i) =>
+        `<div><span class="dot" style="background:${THROW_CATEGORY_COLORS[i]}"></span><strong>${cat}</strong>　${THROW_CATEGORY_DESC[i]}</div>`
+    ).join('');
+}
+
+// === 每回合出手结果分布（10回合模式，堆叠柱状图，按场景切换） ===
+function renderThrow10Chart() {
+    const sc = sceneData[currentSceneId];
+    if (throw10ChartInst) {
+        throw10ChartInst.data.labels = throw10Rounds;
+        THROW_CATEGORIES.forEach((cat, i) => { throw10ChartInst.data.datasets[i].data = sc.throw10[cat]; });
+        throw10ChartInst.update();
+    } else {
+        try {
+            throw10ChartInst = new Chart(document.getElementById('throw10Chart'), {
+                type: 'bar',
+                data: {
+                    labels: throw10Rounds,
+                    datasets: THROW_CATEGORIES.map((cat, i) => ({
+                        label: cat,
+                        data: sc.throw10[cat],
+                        backgroundColor: THROW_CATEGORY_COLORS[i],
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }))
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}：${ctx.parsed.y.toLocaleString()} 次` } }
+                    },
+                    scales: {
+                        x: { stacked: true, title: { display: true, text: '回合' } },
+                        y: { stacked: true, beginAtZero: true, title: { display: true, text: '出手次数' } }
+                    }
+                }
+            });
+        } catch (e) { console.error('throw10Chart failed', e); }
+    }
+    document.getElementById('throw10Legend').innerHTML = THROW_CATEGORIES.map((cat, i) =>
+        `<div><span class="dot" style="background:${THROW_CATEGORY_COLORS[i]}"></span><strong>${cat}</strong>　${THROW_CATEGORY_DESC[i]}</div>`
+    ).join('');
+}
+
+// === 3. 热门角色分布（水平柱状，按场景切换） ===
+function renderRoleChart() {
+    const sc = sceneData[currentSceneId];
+    if (roleChartInst) {
+        roleChartInst.data.labels = sc.roles.map(r => r.name);
+        roleChartInst.data.datasets[0].data = sc.roles.map(r => r.count);
+        roleChartInst.update();
+    } else {
+        try {
+            roleChartInst = new Chart(document.getElementById('roleChart'), {
+                type: 'bar',
+                data: {
+                    labels: sc.roles.map(r => r.name),
+                    datasets: [{
+                        label: '选择次数',
+                        data: sc.roles.map(r => r.count),
+                        backgroundColor: ROLE_COLORS,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.label}：${ctx.parsed.x.toLocaleString()} 次` } }
+                    },
+                    scales: { x: { beginAtZero: true, title: { display: true, text: '选择次数' } } }
+                }
+            });
+        } catch (e) { console.error('roleChart failed', e); }
+    }
+}
+
+// === 4. 角色胜率（水平柱状，按场景切换） ===
+function renderWinRateChart() {
+    const sc = sceneData[currentSceneId];
+    if (winRateChartInst) {
+        winRateChartInst.data.labels = sc.roles.map(r => r.name);
+        winRateChartInst.data.datasets[0].data = sc.roles.map(r => r.winRate);
+        winRateChartInst.update();
+    } else {
+        try {
+            winRateChartInst = new Chart(document.getElementById('winRateChart'), {
+                type: 'bar',
+                data: {
+                    labels: sc.roles.map(r => r.name),
+                    datasets: [{
+                        label: '胜率',
+                        data: sc.roles.map(r => r.winRate),
+                        backgroundColor: ROLE_COLORS,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.label}：${ctx.parsed.x}%` } }
+                    },
+                    scales: { x: { beginAtZero: true, max: 60, title: { display: true, text: '胜率 (%)' } } }
+                }
+            });
+        } catch (e) { console.error('winRateChart failed', e); }
+    }
+}
+
+// === 5. 场均击落对手次数（水平柱状，按场景切换） ===
+function renderKnockChart() {
+    const sc = sceneData[currentSceneId];
+    if (knockChartInst) {
+        knockChartInst.data.labels = sc.roles.map(r => r.name);
+        knockChartInst.data.datasets[0].data = sc.roles.map(r => r.knock);
+        knockChartInst.update();
+    } else {
+        try {
+            knockChartInst = new Chart(document.getElementById('knockChart'), {
+                type: 'bar',
+                data: {
+                    labels: sc.roles.map(r => r.name),
+                    datasets: [{
+                        label: '场均击落对手次数',
+                        data: sc.roles.map(r => r.knock),
+                        backgroundColor: ROLE_COLORS,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.label}：${ctx.parsed.x} 次` } }
+                    },
+                    scales: { x: { beginAtZero: true, title: { display: true, text: '场均击落次数' } } }
+                }
+            });
+        } catch (e) { console.error('knockChart failed', e); }
+    }
+}
+
+// === 场景切换：更新 7 张图 + tab 高亮 + 提示文字（总览 KPI 为全局值，不随场景变化） ===
+function applyScene(sceneId) {
+    currentSceneId = sceneId;
+    renderModeChart();
+    renderRoundScoreChart();
+    renderThrow5Chart();
+    renderThrow10Chart();
+    renderRoleChart();
+    renderWinRateChart();
+    renderKnockChart();
+    document.querySelectorAll('.scene-tab').forEach(btn => {
+        const on = parseInt(btn.dataset.scene, 10) === sceneId;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    const scName = (SCENES.find(s => s.id === sceneId) || SCENES[0]).name;
+    document.getElementById('sceneFilterHint').textContent = '当前展示：' + scName;
+}
+
+// 初始化：默认展示「全部场景」
+applyScene(0);
+
+// 场景按钮点击（事件委托绑定在按钮容器上，始终可点；切换逻辑内全部用 if(chart) 防御，未初始化不抛错）
+document.getElementById('sceneFilterButtons').addEventListener('click', function (e) {
+    const btn = e.target.closest('.scene-tab');
+    if (!btn) return;
+    applyScene(parseInt(btn.dataset.scene, 10));
+});
+</script>
+</body>
+</html>
