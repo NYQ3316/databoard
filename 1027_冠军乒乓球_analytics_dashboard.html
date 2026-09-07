@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="FzhESUfCKVA0rOcCyWOGT4">
+<head data-page-node-id="HfgxqP8eRBmtHO0MtD8UZh">
+    <meta charset="UTF-8" data-page-node-id="hggz3v4f8youRk91esMwHW">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="K6KjCscJsS0IGEJoIs4gcs">
+    <title>1027《冠军乒乓球》数据统计看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ff8c00 0%, #1565c0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        /* ======== Header ======== */
+        .header {
+            background: rgba(255,255,255,0.96);
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #fa8c16, #1565c0, #52c41a) 1;
+        }
+        .header h1 { font-size: 26px; color: #12263f; }
+        .header .subtitle { color: #5b6b82; font-size: 14px; margin-top: 6px; line-height: 1.7; }
+        .header .subtitle span { margin-right: 18px; white-space: nowrap; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; background: rgba(21,101,192,0.10);
+            color: #1565c0; text-decoration: none; border-radius: 8px;
+            font-size: 14px; font-weight: 600; transition: all 0.3s; white-space: nowrap;
+        }
+        .back-btn:hover { background: rgba(21,101,192,0.20); color: #0d47a1; }
+
+        /* 数据说明 */
+        .data-notice {
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.95);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.6;
+        }
+
+        /* ======== KPI 卡片 ======== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.14);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-4px); }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+            background: linear-gradient(180deg, #fa8c16, #1565c0);
+        }
+        .stat-card .label { font-size: 13px; color: #5b6b82; margin-bottom: 6px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; color: #12263f; line-height: 1.1; }
+        .stat-card .change {
+            font-size: 12px; margin-top: 8px; padding: 3px 8px;
+            border-radius: 6px; display: inline-block;
+        }
+        .change.positive { background: #e6f7ed; color: #52c41a; }
+        .change.neutral  { background: #f3f3f3; color: #8c8c8c; }
+        .change.info     { background: #e8f1fc; color: #1565c0; }
+        .change.danger   { background: #fff1f0; color: #f5222d; }
+
+        /* ======== 图表区 ======== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .chart-card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.14);
+        }
+        .chart-card.wide { grid-column: 1 / -1; }
+        .chart-card h3 {
+            font-size: 16px; color: #12263f; margin-bottom: 6px;
+            padding-bottom: 10px; border-bottom: 2px solid #e3ebf6;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .chart-card h3 .badge { margin-left: auto; }
+        .chart-card .chart-desc {
+            font-size: 12px; color: #7a8aa0; margin-bottom: 12px; line-height: 1.6;
+        }
+        .chart-container { position: relative; height: 320px; }
+        .chart-container.tall { height: 360px; }
+        .note { font-size: 12px; color: #8a98ab; margin-top: 10px; line-height: 1.7; }
+
+        /* ======== 表格 ======== */
+        .detail-table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+        .detail-table th, .detail-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #e3ebf6; }
+        .detail-table th { font-weight: 600; color: #5b6b82; font-size: 12px; background: #f4f8fd; }
+        .detail-table td { color: #2b3a4f; font-size: 13px; }
+        .detail-table tr:hover td { background: #f4f8fd; }
+        .detail-table tr:last-child td { border-bottom: none; }
+        .detail-table td.num, .detail-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+        .badge {
+            display: inline-block; padding: 2px 8px;
+            border-radius: 10px; font-size: 11px; font-weight: 500;
+        }
+        .badge-danger  { background: #fde0e0; color: #c62828; }
+        .badge-warning { background: #fdf0cf; color: #b8860b; }
+        .badge-success { background: #e4f5e0; color: #2e7d32; }
+        .badge-info    { background: #e3eefb; color: #1565c0; }
+        .badge-gold    { background: #fff3e0; color: #d46b08; }
+
+        /* ======== 区段标题 ======== */
+        .section-title {
+            color: rgba(255,255,255,0.95);
+            font-size: 16px;
+            font-weight: 600;
+            margin: 8px 0 16px 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .module-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.28);
+            margin: 28px 0 18px 0;
+        }
+        .block-hint {
+            color: rgba(255,255,255,0.88);
+            font-size: 13px;
+            margin: 0 0 18px 4px;
+            line-height: 1.7;
+        }
+        .cup-detail { margin-bottom: 20px; }
+        .cup-detail:last-child { margin-bottom: 0; }
+        .cup-title {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            margin: 4px 0 12px 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        /* 热门角色区：每杯赛一组，两列并排 */
+        .cup-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+            gap: 20px;
+            margin-bottom: 8px;
+        }
+        .cup-2col .cup-detail { margin-bottom: 0; }
+
+        /* ======== Footer ======== */
+        .footer {
+            text-align: center; color: rgba(255,255,255,0.85);
+            font-size: 13px; margin-top: 40px; padding-bottom: 20px; line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .header { padding: 16px 20px; }
+            .header h1 { font-size: 20px; }
+            .charts-grid, .cup-2col { grid-template-columns: 1fr; }
+            .stat-card .value { font-size: 24px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body data-page-node-id="KR52XWyDBJfDhZQ6CGhEh9">
+<div class="container" data-page-node-id="BnPU3vbGNFtAJjYfkApWQY">
+
+    <!-- ======== Header ======== -->
+    <div class="header" data-page-node-id="cVBZk41KleTDwSLqlnRHmB">
+        <div data-page-node-id="4SdEUNMjjzdJZtemnRvNpP">
+            <h1 data-page-node-id="4XyEbnmwk3jeYRWFP6uain">🏓 冠军乒乓球 - 数据统计看板</h1>
+            <div class="subtitle" data-page-node-id="agOzjMVQEMz19htH2BnV8p">
+                项目编号：1027 ｜ 统计偏向：杯赛进度 · 杯赛失败率 · 热门角色 · 对局数 · 启动数 ｜ 单打 + 双打 ｜ 6大杯赛 ｜ 计划上线：2026-09-26
+            </div>
+        </div>
+        <a class="back-btn" href="index.html" data-page-node-id="GqpqxfBu3zYBpYY9jAHb0w">← 返回汇总看板</a>
+    </div>
+
+    <!-- 数据说明 -->
+    <div class="data-notice" data-page-node-id="H5pxUFnxypojbj06iu8Hc0">
+        ℹ️ 以下数据均为<strong data-page-node-id="DsN7Kj3F2ni0mZKl6l2cnB">示例数据</strong>，用于说明看板结构与指标设计，待接入真实数据后替换。本页仅展示统计结果，不展示埋点采集细节。
+    </div>
+
+    <!-- ======== 核心指标概览 ======== -->
+    <div class="section-title" data-page-node-id="VZuItbSa6rh0suAVl1zt5N">📌 核心指标概览</div>
+    <div class="stats-grid" data-page-node-id="NPG3foMXvKmKD1hXE4RA0u">
+        <div class="stat-card" data-page-node-id="96OA33DhGcVN7lrNuJz3Cw">
+            <div class="label" data-page-node-id="zLOLVdKwGmrcDUWjdVC5GR">游戏累计启动数</div>
+            <div class="value" data-page-node-id="E66ZwTCN1Maws1ziRULPwK">27,230</div>
+            <div class="change info" data-page-node-id="Eh9KcehQMAWFUrUmIGjIAv">近 14 天日均 1,945 次</div>
+        </div>
+        <div class="stat-card" data-page-node-id="6kNTtAv8RasbFePyFBCV1g">
+            <div class="label" data-page-node-id="3UJMw8dHWRe2phQ3wPQBDX">累计对局数</div>
+            <div class="value" data-page-node-id="G5sY53CrvlupWiQaUA9F8i">21,600</div>
+            <div class="change info" data-page-node-id="VHzVxujX41ELLLqfgbj9Pk">PVP 8,240 + PVE 13,360</div>
+        </div>
+        <div class="stat-card" data-page-node-id="HdxpvMPlOgzPFHZ0FFwPjV">
+            <div class="label" data-page-node-id="wxZXbTz7dvrJgNEYfx3jIA">杯赛平均失败率</div>
+            <div class="value" data-page-node-id="Y3BcYjtFIRA7CsxpnWQIco">39.3%</div>
+            <div class="change danger" data-page-node-id="kJPhRejB9VIZQ6Upg0ep7G">6 个杯赛单打均值（18%~61%）</div>
+        </div>
+        <div class="stat-card" data-page-node-id="OkJrZ0jKbjZnPayGYD4XVd">
+            <div class="label" data-page-node-id="jI571RNTpiMJ2qarRnSMJS">热门角色 Top1</div>
+            <div class="value" data-page-node-id="3PA5zBNYedigEsGRBwc811">角色1</div>
+            <div class="change info" data-page-node-id="0ckjvQhP95dDptGgbRJmUp">占比 30.2%（角色名待确认）</div>
+        </div>
+        <div class="stat-card" data-page-node-id="He1LOrDeUSwzdFpDIE1JCg">
+            <div class="label" data-page-node-id="5szPLUoaqh6HHBpDezEIn3">玩家对玩家累计对局</div>
+            <div class="value" data-page-node-id="HLUZQtO9NYDrZ8iYAjaTkH">8,240</div>
+            <div class="change neutral" data-page-node-id="iPcyXadbFGgeLKvFZd9CHx">1v1 5,180 / 2v2 3,060</div>
+        </div>
+        <div class="stat-card" data-page-node-id="k7DMdCCW8A3WPJaBJbcqoU">
+            <div class="label" data-page-node-id="1w8m3CFlAkCXgN6nW93QEV">玩家对电脑累计对局</div>
+            <div class="value" data-page-node-id="y0zoDmAPX7lPFOS7gZA5fG">13,360</div>
+            <div class="change neutral" data-page-node-id="NUW9x0rIzhH9br7nJbhbhL">1v1 8,660 / 2v2 4,700</div>
+        </div>
+    </div>
+
+    <!-- ======== 杯赛进度分析（每个杯赛单独卡片，单打/双打可切换） ======== -->
+    <div class="module-divider" data-page-node-id="zUeHM14Ge0ILRjHwsGJezc"></div>
+    <div class="section-title" data-page-node-id="3MHwtZUEJHTPEfwlySJNoa">🏆 杯赛进度分析（单打 / 双打可切换）</div>
+    <p class="block-hint" data-page-node-id="SFg917rkmsoihD29iCZSSP">
+        每个杯赛 5 局（第1局→第5局，单局 7 分制，难度递增），柱高 = 该局到达人次；点击「单打 / 双打」切换查看两种关卡模式。<br data-page-node-id="T1B21U2q9TGYZiPDMyqm8c">
+        ⚠️ 后 3 个杯赛名称待确认（当前用「杯赛4 / 杯赛5 / 杯赛6」占位）；小区杯免费，其余杯赛与双打杯赛付费解锁。<br>
+        6 个杯赛到达人次合计（单+双）= 13,360 = KPI「玩家对电脑累计对局」（玩家对电脑即杯赛单打 / 双打关卡对战）。
+    </p>
+    <div class="charts-grid" data-page-node-id="i0HyTELy1qOciBaDvQRSLn">
+
+        <!-- 杯赛 0：小区杯（免费） -->
+        <div class="chart-card" data-page-node-id="ryAVAKUph12etjgGvdvdGo">
+            <h3 data-page-node-id="6ovsquFQsId1Ag189RiGRE">🏆 小区杯 <span class="badge badge-success" data-page-node-id="qHuF7bgEQYPJPpDdqQIMXp">免费</span></h3>
+            <div class="chart-desc" data-page-node-id="98wxTeYceqKAeXpJ9PHs4t">第1局→第5局到达人次，单打 / 双打 并列对比，定位玩家卡点局数</div>
+            <div class="chart-container" data-page-node-id="m0acOPhA9DG907dLL2noat"><canvas id="cup0Round" data-page-node-id="2jedEK2zf1VCqI4JdMrorg"></canvas></div>
+            <table class="detail-table" data-page-node-id="nHBYFCoVbUzJCRzxLrFhFs">
+                <thead data-page-node-id="xdSBnpN6BSCRmHyGdBGJwa"><tr data-page-node-id="mdgm1IhkOgKxoCh84lqFaC"><th data-page-node-id="Wg3jTOkO7CyeOLz5BcDQTG">指标</th><th class="num" data-page-node-id="XTBMfIHEgo9lQegjKidyie">单打</th><th class="num" data-page-node-id="vyx1IADiUk5FWNgWTvmku5">双打</th></tr></thead>
+                <tbody data-page-node-id="3LdJzjEitJZDTFYdz5h6VL">
+                    <tr data-page-node-id="2TlnRfHlbmjGX5AP6r2U41"><td data-page-node-id="JvF5at0XBWw0WODT0cmaZW">到达人次</td><td class="num" data-page-node-id="9R5qAoHpIuECtxSVPXI6Ts">3,120</td><td class="num" data-page-node-id="rPbL4jGAvt09cG3D9tjso4">1,780</td></tr>
+                    <tr data-page-node-id="A1cmlM28erXc9NMpIprTA7"><td data-page-node-id="eQquhBCLRFwwt2A7r5qzfu">夺冠人次</td><td class="num" data-page-node-id="VByyISh2OSEQJivFBgUMW7">210</td><td class="num" data-page-node-id="DKzbdGYVabnRBwaC8XseJ9">110</td></tr>
+                    <tr data-page-node-id="Z4NDh7kscRh4KZT0Z17axH"><td data-page-node-id="EBGvOdSmF3SSCaKHdFKLUy">失败率</td><td class="num" data-page-node-id="sEBi4CBbUbSnkdWC5oP93P">18%</td><td class="num" data-page-node-id="faYnBoFIHl7aJAz0X0pAv4">24%</td></tr>
+                    <tr data-page-node-id="KSLLiDIsL02U8OUEc75j4S"><td data-page-node-id="d7XUlXrmlZRAI3BdlvSFLJ">平均时长</td><td class="num" data-page-node-id="UwHazHUiR6AtLCLeK3AwIP">3.6分</td><td class="num" data-page-node-id="9zL1T7C4jzzqAxizFElwHI">4.4分</td></tr>
+                    <tr data-page-node-id="YGKlbxT17RbSr70t6fgEWD"><td data-page-node-id="bvVvUGPGptOIYt2Hulwdz0">胜率</td><td class="num" data-page-node-id="ZcM1uZSC8EBbRUuLxyXnac">62%</td><td class="num" data-page-node-id="oPF8FagKuHh6yQZbc9pQxr">56%</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 杯赛 1：学校杯（付费） -->
+        <div class="chart-card" data-page-node-id="mmeXQnBzTFR9YygwTcURKf">
+            <h3 data-page-node-id="YmEPITZdWckESKSKvBc5mF">🏆 学校杯 <span class="badge badge-gold" data-page-node-id="uHzpR6t2Z9l24IWCtH9tCr">付费</span></h3>
+            <div class="chart-desc" data-page-node-id="310zJXkqkOGDvPvGWUAwmL">第1局→第5局到达人次，单打 / 双打 并列对比，定位玩家卡点局数</div>
+            <div class="chart-container" data-page-node-id="SXBmRmFuTopvdWngRkzoYX"><canvas id="cup1Round" data-page-node-id="vBCvIPH3jQMJG8vhis9Wa5"></canvas></div>
+            <table class="detail-table" data-page-node-id="2IL34vTYF9OiXTOeovno3U">
+                <thead data-page-node-id="nX3s5FImWW7gP3OsQsORLj"><tr data-page-node-id="c2bHB7AdoZemax41Velmjp"><th data-page-node-id="DKVcRdUiedOtzbJmeF3kxO">指标</th><th class="num" data-page-node-id="PdP1A5KxluxvTh8oFCP6A8">单打</th><th class="num" data-page-node-id="Sm8DJ7BHsynHstZYahL5x8">双打</th></tr></thead>
+                <tbody data-page-node-id="09nITejK3e7MlC4eGBaYFZ">
+                    <tr data-page-node-id="FHKCPvTaTtzkMzc0hyAGNK"><td data-page-node-id="sM7N5bu9ZvIG61y8bjqw55">到达人次</td><td class="num" data-page-node-id="SSTi9TaAJoQWhekFaThAqY">2,260</td><td class="num" data-page-node-id="pGK1h3eE3BSDdH2NfoS25Z">1,200</td></tr>
+                    <tr data-page-node-id="YqmMFXgQ87s9TMsNqJr2l4"><td data-page-node-id="7KvdqrY83HhD3oTPkzSMMc">夺冠人次</td><td class="num" data-page-node-id="hctH6sqEPoD3wWPGZMB4us">68</td><td class="num" data-page-node-id="Ejy3L9IdU9t4BxWgq69qR3">32</td></tr>
+                    <tr data-page-node-id="2bOiIctHtqwMCj22TKNVQ4"><td data-page-node-id="udLNzWbCfBVt86cQg25WuF">失败率</td><td class="num" data-page-node-id="5FD7Di719iHgH2XtpqCQS2">26%</td><td class="num" data-page-node-id="jzFMtrdJSIMvcCRNnwpyWT">32%</td></tr>
+                    <tr data-page-node-id="IPSdKp4OZvKmd8Fxjp6W28"><td data-page-node-id="9gF7QiJSxGqJeUuZcClseK">平均时长</td><td class="num" data-page-node-id="GQUkeObFDJgJk6gvtdmYih">3.8分</td><td class="num" data-page-node-id="qWQu7BzmLbrdWhutsQ7EYf">4.6分</td></tr>
+                    <tr data-page-node-id="NU86GsC9t9dUGzTSAQgEcV"><td data-page-node-id="MWjoXoAOBCjAPYvx5hUADB">胜率</td><td class="num" data-page-node-id="wlODd8vo19ixs3bHvxtFDa">60%</td><td class="num" data-page-node-id="9p7zsGL1KMGVoobbaJiodh">54%</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 杯赛 2：社区杯（付费） -->
+        <div class="chart-card" data-page-node-id="2zHzVLLrsycEmAwXSzwuHw">
+            <h3 data-page-node-id="v4JIswMqdB7z3HumV5J6OH">🏆 社区杯 <span class="badge badge-gold" data-page-node-id="EirM3JKD6BvXW1STvgahX6">付费</span></h3>
+            <div class="chart-desc" data-page-node-id="YK220pSj19bODZVqs54v3E">第1局→第5局到达人次，单打 / 双打 并列对比，定位玩家卡点局数</div>
+            <div class="chart-container" data-page-node-id="6ODsUg9XuOPIFR0ejnQUwT"><canvas id="cup2Round" data-page-node-id="F3muKWbNlgxw93YHXVIAuQ"></canvas></div>
+            <table class="detail-table" data-page-node-id="ZXwVg1iAz2SNgSCAJs6Foq">
+                <thead data-page-node-id="H6dXgYHLjQrIVyj66MF9EG"><tr data-page-node-id="MG856kjkBlgZYnmMJFTKTS"><th data-page-node-id="kpUn2h1V0PHSzHgADwHWGy">指标</th><th class="num" data-page-node-id="wk5agrE3gUDvqeV3vgQJyA">单打</th><th class="num" data-page-node-id="s05EVzCnoFZjra0hTsWbkg">双打</th></tr></thead>
+                <tbody data-page-node-id="udTUZ4AXkBHtv31uUU8ktJ">
+                    <tr data-page-node-id="kculoRWDUXc5YzQPqlBGmT"><td data-page-node-id="GAACQ5C5qXR3LfDzkEdx1b">到达人次</td><td class="num" data-page-node-id="OAcPjxhvztKByg7C3AXpPn">1,480</td><td class="num" data-page-node-id="2eBCjy5vCgr0HPNyKF1GYF">760</td></tr>
+                    <tr data-page-node-id="Z26EEpF1j4hPrbRGRQTyF6"><td data-page-node-id="QlYXZYHl2oWSNbw6Ez5rUB">夺冠人次</td><td class="num" data-page-node-id="FawkxTWj31uXDfi7z1My73">15</td><td class="num" data-page-node-id="gDfjgVCrz40AONKVxFxXLg">5</td></tr>
+                    <tr data-page-node-id="NjMs7T8peglJRgZZNr68FX"><td data-page-node-id="mQDbU909xdAvgWGiCCFFvH">失败率</td><td class="num" data-page-node-id="fTxDDXc1x4ObRlZd8JzSFT">35%</td><td class="num" data-page-node-id="twYumeGUWdrHTxswphehKY">41%</td></tr>
+                    <tr data-page-node-id="JZZVM9i35BnXEGBRHm5Qr7"><td data-page-node-id="j8qJMuqhd6NHQrRBMKbvxa">平均时长</td><td class="num" data-page-node-id="SXnAKtAsycSUV3BkC8KBAz">4.0分</td><td class="num" data-page-node-id="r4a24VBMTchls2hklqH6ag">4.8分</td></tr>
+                    <tr data-page-node-id="DEzuklCBT5NjWjOYbLxrBz"><td data-page-node-id="raOEtLrNRZPCtQcvmN4Kno">胜率</td><td class="num" data-page-node-id="FIxOKPCu2LE0M3PUNM3dTG">57%</td><td class="num" data-page-node-id="OZTjpSrBOfkQ8Y9MzHFrz3">51%</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 杯赛 3：杯赛4（付费，名称待确认） -->
+        <div class="chart-card" data-page-node-id="DA0ynaNGWPYp3vS3wSZCFZ">
+            <h3 data-page-node-id="gPmQiHVkL2h9kMoB11nA1C">🏆 杯赛4 <span class="badge badge-gold" data-page-node-id="gcstQXhxOKDpJfLBy22jxn">付费</span></h3>
+            <div class="chart-desc" data-page-node-id="CUxdd4jlVpMakGHyCltOTW">第1局→第5局到达人次，单打 / 双打 并列对比，定位玩家卡点局数</div>
+            <div class="chart-container" data-page-node-id="G0qSl6Wook9DFzGPlAyQLA"><canvas id="cup3Round" data-page-node-id="UcscHAkR3lK2af9ujXJ4je"></canvas></div>
+            <table class="detail-table" data-page-node-id="miE2njITIH81YFzZtPGiDP">
+                <thead data-page-node-id="WkdxC60KjpsI5rwS0nfDge"><tr data-page-node-id="8wu7cQ7pfsncPaxV6X01N0"><th data-page-node-id="AqFS1AyhLOS272eKbhMVBB">指标</th><th class="num" data-page-node-id="DLPKcAZd5AZmJCofF6cTGR">单打</th><th class="num" data-page-node-id="ePSLXIFti6tjXomDA8sk66">双打</th></tr></thead>
+                <tbody data-page-node-id="lEfiNQtttwOT0P4YHxn1F3">
+                    <tr data-page-node-id="D1do8zuEF7WKep9pPxHQJZ"><td data-page-node-id="2lLscHEappqhIurs83q0I9">到达人次</td><td class="num" data-page-node-id="mjSkAUDZL8420ZAApE65Mu">900</td><td class="num" data-page-node-id="2DFpLEo3rs6gmztTUX9dzN">480</td></tr>
+                    <tr data-page-node-id="JcozX1GEyHMRrwCcH5rM7f"><td data-page-node-id="fVfKeCSUornaAoXdUZvO62">夺冠人次</td><td class="num" data-page-node-id="PSoIHpDeltM1uZ3OaTeBBq">8</td><td class="num" data-page-node-id="D7KDIVAKA9lIqqRuQAawg3">2</td></tr>
+                    <tr data-page-node-id="eO47wcLOyFYD71kHbdMCx6"><td data-page-node-id="pqfl66AvHf2NNGKgyv5JQx">失败率</td><td class="num" data-page-node-id="1qDXEU72CqYW4XkclBErnc">44%</td><td class="num" data-page-node-id="NmRgm2B3RRl6k0QBv9qSzp">50%</td></tr>
+                    <tr data-page-node-id="qeBU6W5lCg9UaGycGbC63F"><td data-page-node-id="iKHKT5Xwu0SeapKzDttYrn">平均时长</td><td class="num" data-page-node-id="BeP6KBxgGlnINeHYffDBPq">4.2分</td><td class="num" data-page-node-id="8096AZ6NWYg7p7hbFmXU67">5.0分</td></tr>
+                    <tr data-page-node-id="ZJQYNcg3Fgdop20HeVheVr"><td data-page-node-id="xRYD6q5cytCNCaZdSOVBjE">胜率</td><td class="num" data-page-node-id="uKVUMxepekBHPVEAiWfeZ0">54%</td><td class="num" data-page-node-id="HNgdiqV5CCwdoeR2VzHJHR">48%</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 杯赛 4：杯赛5（付费，名称待确认） -->
+        <div class="chart-card" data-page-node-id="bwcCgmQDdqfvIE69EbADLw">
+            <h3 data-page-node-id="PL60bWNYo7MCvMyY6yLo3o">🏆 杯赛5 <span class="badge badge-gold" data-page-node-id="GcM6GBnHMuMa9Eb2RiBUBr">付费</span></h3>
+            <div class="chart-desc" data-page-node-id="BM9gvZ9HjeQLaq5offeEva">第1局→第5局到达人次，单打 / 双打 并列对比，定位玩家卡点局数</div>
+            <div class="chart-container" data-page-node-id="K53fznqC8b9tELaUqBhZWy"><canvas id="cup4Round" data-page-node-id="r9ru60XxcvGQeuTyZg7f8G"></canvas></div>
+            <table class="detail-table" data-page-node-id="ncEgscMNGEYkbYAeiIR4Eh">
+                <thead data-page-node-id="Arwb2JR3AAoeNTi6hFp6PV"><tr data-page-node-id="EohV393f7SRvhQn9O5N8aw"><th data-page-node-id="COLbwS1VZrpj3cxmtOEINC">指标</th><th class="num" data-page-node-id="nHXkpIkKFroTkCGSJdaT0d">单打</th><th class="num" data-page-node-id="ANGy6nh5lBASefKbrhLA5I">双打</th></tr></thead>
+                <tbody data-page-node-id="jto9uKKsK8lruTBhFyYvlm">
+                    <tr data-page-node-id="ltocM7K35tv8U6T2WGZyHt"><td data-page-node-id="05ntiaHeZEAj7n9rxQgpaw">到达人次</td><td class="num" data-page-node-id="X3dklDL3gJY6nWg4uWKsqY">560</td><td class="num" data-page-node-id="gkYpr55FVv8wq2oGAQGEMQ">300</td></tr>
+                    <tr data-page-node-id="X2TS95VlHs9RpSYmD2YQd8"><td data-page-node-id="4X8Cv1et0FUFRBkTJfHDaE">夺冠人次</td><td class="num" data-page-node-id="l0gHwTVrmtDY3AU6hnl4Bv">4</td><td class="num" data-page-node-id="vSc2iH3XGoHiazRMsmu2uQ">1</td></tr>
+                    <tr data-page-node-id="tUkylqh1mNmzPlttStQ7qV"><td data-page-node-id="QP9CrSCnCswfcaDOq6YDS0">失败率</td><td class="num" data-page-node-id="4zTYGmIqw1o4hnGncKefux">52%</td><td class="num" data-page-node-id="wzbLJDlecEuvMWpqGnTOvm">58%</td></tr>
+                    <tr data-page-node-id="L1zQHpZk3FKlkBbuOoD4jC"><td data-page-node-id="lrX7nt1VTYYx9Hu2pLa3ID">平均时长</td><td class="num" data-page-node-id="7B51WBLTMYKo0j2yZbiEKi">4.4分</td><td class="num" data-page-node-id="D0a1Cy7KFkwZryGVurzIeK">5.2分</td></tr>
+                    <tr data-page-node-id="WZXxnXHxSuslcwHbE66WYt"><td data-page-node-id="kX6OesRfAcoDFtCcFUUovv">胜率</td><td class="num" data-page-node-id="aI74ydq7WYqA9yCRpvzasV">51%</td><td class="num" data-page-node-id="bFJH4BrRrPHF3ugEqCpenD">45%</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 杯赛 5：杯赛6（付费，名称待确认） -->
+        <div class="chart-card" data-page-node-id="hFyDH3rmIHZw2bq23KoJNf">
+            <h3 data-page-node-id="Upk7LCUXLoMunZJqpNPYSi">🏆 杯赛6 <span class="badge badge-gold" data-page-node-id="AHCSvlvdkODvZeZeF1ZpPO">付费</span></h3>
+            <div class="chart-desc" data-page-node-id="tkYL4dKeXpJc1UoE4aAPQI">第1局→第5局到达人次，单打 / 双打 并列对比，定位玩家卡点局数</div>
+            <div class="chart-container" data-page-node-id="UUdtFWu25wOElULCp6uJjf"><canvas id="cup5Round" data-page-node-id="4SMFiUAzmQfkd4ZTOr9KVN"></canvas></div>
+            <table class="detail-table" data-page-node-id="SSx0OtohaFNXL6ZOGGeuVt">
+                <thead data-page-node-id="E2LA9EAcE0fbfsD5aKCrZz"><tr data-page-node-id="HsN4dxRzXGAjPrwk9nFuY9"><th data-page-node-id="rGYrPJTULGK00uHDivHL5A">指标</th><th class="num" data-page-node-id="hYorM9Qj0KmJCSwrLHhydq">单打</th><th class="num" data-page-node-id="ubSmBjd49OH5DHwwnoTpst">双打</th></tr></thead>
+                <tbody data-page-node-id="241pSYwivxNZedm9XnhODK">
+                    <tr data-page-node-id="Re6f04K010g81VyiceKTKV"><td data-page-node-id="T7HbZUjdtzMgLTV8e7bpac">到达人次</td><td class="num" data-page-node-id="pPnTLbgH6u7QSLDubR0N2Z">340</td><td class="num" data-page-node-id="9hY8Zx9BBrAIX7VDCoFbxP">180</td></tr>
+                    <tr data-page-node-id="DIDvlsgQM8zaLcSrlJq1fI"><td data-page-node-id="kE3927nYlzi5B6Iajmeyox">夺冠人次</td><td class="num" data-page-node-id="TXFSqQQA2K1pOxmIoD9GuZ">2</td><td class="num" data-page-node-id="nhmLJc9qZFfBVEEkOntGXw">0</td></tr>
+                    <tr data-page-node-id="MCnnHPFDYCICJdMKZmFhkN"><td data-page-node-id="7J0wAU9UHH58r5qQ3AAA1u">失败率</td><td class="num" data-page-node-id="VEnopMqFGgNp1t8nUNGgAH">61%</td><td class="num" data-page-node-id="Bh4ZMooEICy0kf0OZ1Nbz1">67%</td></tr>
+                    <tr data-page-node-id="sttN2dy0ptYNwa7uPcpsP9"><td data-page-node-id="qWUoRpCws6GBN6tLwnPtDs">平均时长</td><td class="num" data-page-node-id="hA70CuR1kJzh4xWYTD8N81">4.6分</td><td class="num" data-page-node-id="5woF7KNA9W2m0xpjp2K6ZB">5.4分</td></tr>
+                    <tr data-page-node-id="GBziW8aMzteuwJ4nU4FgFs"><td data-page-node-id="4Z56S0JnNx7XVt34iPXmGi">胜率</td><td class="num" data-page-node-id="pwSuFrfyCn5nxoAjW6RUOg">48%</td><td class="num" data-page-node-id="wPFD6YweM870hF5NlaPPLZ">42%</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 杯赛失败率总览（跨杯赛对比，单打 / 双打） -->
+        <div class="chart-card wide" data-page-node-id="FReGvTTPuiRJ2NsHGIWViC">
+            <h3 data-page-node-id="4h8xhHd1T0O3McX9QpjDOU">📉 杯赛失败率对比（单打 / 双打）</h3>
+            <div class="chart-desc" data-page-node-id="btHJAVWJxFJGLrdfTE4aev">6 个杯赛的单局失利率对比，随难度递增；柱色由绿转红表示失败率升高</div>
+            <div class="chart-container" data-page-node-id="kDnFORIZO5ZGwFo3siYBLx"><canvas id="cupFailChart" data-page-node-id="JMRd26925biPGTlStdlukO"></canvas></div>
+            <p class="note" data-page-node-id="UFITDdyCssLZeGnEJLkNAI">单打均值 (18+26+35+44+52+61)/6 = 39.3%，即 KPI「杯赛平均失败率」；双打均值 (24+32+41+50+58+67)/6 = 45.3%，双打协作难度更高。⚠️ 后 3 个杯赛名称待确认。</p>
+        </div>
+
+    </div>
+
+    <!-- ======== 热门角色（按杯赛分别统计） ======== -->
+    <div class="module-divider" data-page-node-id="RJf9XxDVlBlFAc13Sx5b6G"></div>
+    <div class="section-title" data-page-node-id="FfHzCobMt0hllbGzz60L6q">🎭 热门角色（按杯赛分别统计）</div>
+    <p class="block-hint" data-page-node-id="rnUWlqB5lPpiVpCfXpbvOZ">
+        每个杯赛独立统计 4 个角色的「使用率 vs 胜率」，定位不同难度下的角色偏好与强度差异（使用率按杯赛内选用占比，每行合计 100%）。<br data-page-node-id="zYC6xp2ZEM1JA1AuNRxVjT">
+        ⚠️ 角色名待确认（大纲仅说明 4 个角色，当前用「角色1~角色4」占位）；球拍仅 1 种横拍、无选择意义，故不设球拍图。
+    </p>
+    <div class="cup-2col" data-page-node-id="377eSXWB6DMevMebLEZF46">
+
+        <div class="cup-detail" data-page-node-id="pmrdYNbkcKyUt1s43WUEM0">
+            <div class="cup-title" data-page-node-id="PxeEaEhBsOObJRg1EUsiSb">🏆 小区杯 <span class="badge badge-success" data-page-node-id="KjMeajnoDmHAR9zIYbhvgi">免费</span></div>
+            <div class="charts-grid" data-page-node-id="lDmeBrtgyiNQTENJyvHHqt">
+                <div class="chart-card" data-page-node-id="NC8vJCydBpjAhauGiYJp8k">
+                    <h3 data-page-node-id="KmNg5YD5YWkb5iA13qfBWo">⭐ 角色 使用率 vs 胜率</h3>
+                    <div class="chart-desc" data-page-node-id="9GIzsGFXbPDYZF2jUvTHDj">4 个角色在「小区杯」的选用占比与对应胜率</div>
+                    <div class="chart-container" data-page-node-id="ChcQ6VJ9FCmLiaQ790LmHA"><canvas id="roleCup0" data-page-node-id="Q5ibjkmwcUjtXbn6CQsEqg"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cup-detail" data-page-node-id="fmBfL1ATO76jky0qScf4yI">
+            <div class="cup-title" data-page-node-id="1EkFwcJIz3gzoCqxgMFCBk">🏆 学校杯 <span class="badge badge-gold" data-page-node-id="cU5c90V138pamGmaIWNo4q">付费</span></div>
+            <div class="charts-grid" data-page-node-id="CmL0FFrPTb4UyHm3emuQOs">
+                <div class="chart-card" data-page-node-id="oetPK9iYinHJFpa7HXc30H">
+                    <h3 data-page-node-id="TCkYoJtg3dpNuiQWaofGPD">⭐ 角色 使用率 vs 胜率</h3>
+                    <div class="chart-desc" data-page-node-id="PlkMHRE64z4yZkmzvanEBo">4 个角色在「学校杯」的选用占比与对应胜率</div>
+                    <div class="chart-container" data-page-node-id="ElxjCmFX1w0Fwv2ExHZD1x"><canvas id="roleCup1" data-page-node-id="6fLHDyMiE72Jc9FhXc7F9a"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cup-detail" data-page-node-id="NXGSXCYiQOdrzqccLM6d4J">
+            <div class="cup-title" data-page-node-id="5BkwPbCA8htyPHpSnKg0mY">🏆 社区杯 <span class="badge badge-gold" data-page-node-id="FXD0hlpYILcZ7BVWxCCubt">付费</span></div>
+            <div class="charts-grid" data-page-node-id="emmybnmBRUqgENxLdPsgl5">
+                <div class="chart-card" data-page-node-id="IlTGBRECjj9tOmubS3mTGz">
+                    <h3 data-page-node-id="cDCjk3KrLEDnsCPj9SSpik">⭐ 角色 使用率 vs 胜率</h3>
+                    <div class="chart-desc" data-page-node-id="KcOR0FoY5VyNsGcuH9TO3j">4 个角色在「社区杯」的选用占比与对应胜率</div>
+                    <div class="chart-container" data-page-node-id="WaRn2fEy2ESlUrLDBb3aG9"><canvas id="roleCup2" data-page-node-id="TIcvYCBfX5Wm53b8QyfxKC"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cup-detail" data-page-node-id="K0bWRjKTIheM3gnQkBZid7">
+            <div class="cup-title" data-page-node-id="sNOmIPSXr8S6DtYhbmQntm">🏆 杯赛4 <span class="badge badge-gold" data-page-node-id="PBL7kwhxkZvkh87QX1kHSB">付费</span></div>
+            <div class="charts-grid" data-page-node-id="exWVoLOaPUMN8d8Pp1eAGi">
+                <div class="chart-card" data-page-node-id="UoKAmNKaqfvZBGPRFE8hSl">
+                    <h3 data-page-node-id="YkUNJj2mDE8qVQ3aBLEQYy">⭐ 角色 使用率 vs 胜率</h3>
+                    <div class="chart-desc" data-page-node-id="mIXs79wIjAqz8jt8lZqVdB">4 个角色在「杯赛4」的选用占比与对应胜率</div>
+                    <div class="chart-container" data-page-node-id="tZwDHjmN5QBDCS7uMGOEfP"><canvas id="roleCup3" data-page-node-id="VDsAIsfKs63neOmEK9ecoF"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cup-detail" data-page-node-id="7eRLGWoJKWkTS3gMrIPPff">
+            <div class="cup-title" data-page-node-id="C6pCqoGmXWnG6uECgbdkrr">🏆 杯赛5 <span class="badge badge-gold" data-page-node-id="HDrA3HHJKMluNiANDFCxjo">付费</span></div>
+            <div class="charts-grid" data-page-node-id="ftUkCRvqMCKg8XuZEJrsyz">
+                <div class="chart-card" data-page-node-id="WDI1Opzbev1vQPbbApVOJR">
+                    <h3 data-page-node-id="bdkd4ipRTBNxrnEYidSBo9">⭐ 角色 使用率 vs 胜率</h3>
+                    <div class="chart-desc" data-page-node-id="r0rVGvfD4O4eWqhUKA3yAE">4 个角色在「杯赛5」的选用占比与对应胜率</div>
+                    <div class="chart-container" data-page-node-id="4RwrEnQXpKmBGVbhhymT15"><canvas id="roleCup4" data-page-node-id="M5ockw8aKPWYIoqlWARkEi"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cup-detail" data-page-node-id="rnzwaBfqrCg7E2iflssjiU">
+            <div class="cup-title" data-page-node-id="4BGty2Yc4EtpQwG92brytR">🏆 杯赛6 <span class="badge badge-gold" data-page-node-id="h9dhWThprOEWwRyOeDVaFM">付费</span></div>
+            <div class="charts-grid" data-page-node-id="YYDcgloNcrC0frmqaIZ5th">
+                <div class="chart-card" data-page-node-id="AWeqRnrPD3UYCAJFfwpwCm">
+                    <h3 data-page-node-id="hdwjpkTGb8jZDOA5tuWvw7">⭐ 角色 使用率 vs 胜率</h3>
+                    <div class="chart-desc" data-page-node-id="2PVzA7IipPXj0BKoIw0mBc">4 个角色在「杯赛6」的选用占比与对应胜率</div>
+                    <div class="chart-container" data-page-node-id="GdbpBDDOzCsFIuwo64viSG"><canvas id="roleCup5" data-page-node-id="ZmVbmEtmQCLBqpfXcrlwKF"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ======== 对局数分布 ======== -->
+    <div class="module-divider" data-page-node-id="W6q4Zl1ukZ5N7OvgPGPEdH"></div>
+    <div class="section-title" data-page-node-id="2dofosDKFgBJ8zekYRNSZB">🆚 对局数分布（玩家对玩家 / 玩家对电脑）</div>
+    <div class="charts-grid" data-page-node-id="2R6WwYBAcmHfHiVmEebNv0">
+        <div class="chart-card" data-page-node-id="fLT2DbzkjdzsWAxoc5rumW">
+            <h3 data-page-node-id="AlSYZuOVNXQ3CbXnQgZuT9">🆚 玩家对玩家 · 累计对局数</h3>
+            <div class="chart-desc" data-page-node-id="kGkoS6ySWxqU4Lsky0A0q6">1v1 与 2v2 的累计对局数（PVP 11 分制，1v1 三局两胜，2v2 双打）</div>
+            <div class="chart-container" data-page-node-id="gTsnrDaw3MFoNotB2gTn61"><canvas id="pvpChart" data-page-node-id="pIhVd6uYmbNatPIHrQcsBP"></canvas></div>
+            <p class="note" data-page-node-id="KWRGgHEBVkCFeDrO8RGJ7M">合计 8,240 局 = KPI「玩家对玩家累计对局」。</p>
+        </div>
+        <div class="chart-card" data-page-node-id="Y33yyrWrukZcn5urBwv8t0">
+            <h3 data-page-node-id="FccagfB6qq8klqd5LYWQ6T">🤖 玩家对电脑 · 累计对局数</h3>
+            <div class="chart-desc" data-page-node-id="wsMbYILxia48HoT20U3Ga1">1v1 与 2v2 的累计对局数（即杯赛关卡对战）</div>
+            <div class="chart-container" data-page-node-id="mluLyVD0UCN1EYCTZSJJaE"><canvas id="pveChart" data-page-node-id="ii8FctKr9adT0xBMY2xAbw"></canvas></div>
+            <p class="note" data-page-node-id="EQWi1dlkoGMc7OIZMSVaEw">合计 13,360 局 = KPI「玩家对电脑累计对局」。</p>
+        </div>
+    </div>
+    <p class="block-hint" data-page-node-id="8lL4qbCKFYhgRiZwqLfiv1">玩家对电脑 = 杯赛（单打 / 双打关卡）对战；玩家对玩家 = 本地对战模式（非杯赛）。<br>
+        两者相加 8,240 + 13,360 = 21,600 = KPI「累计对局数」。</p>
+
+    <!-- ======== 启动数趋势 ======== -->
+    <div class="module-divider" data-page-node-id="ujMbfEc8mjPJDLxOgEVO7C"></div>
+    <div class="section-title" data-page-node-id="ywkm6PZ2H1VEYX8t7JA6HV">📈 活跃趋势 — 游戏启动数</div>
+    <div class="charts-grid" style="grid-template-columns: 1fr;" data-page-node-id="06TzQe9ClTPBEAExyltx0I">
+        <div class="chart-card" data-page-node-id="g9o5GnUsB0EjQwOoKNsjF4">
+            <h3 data-page-node-id="GDg5EYd90nwAVNLsQIvZvJ">📈 游戏启动数趋势（近 14 天）</h3>
+            <div class="chart-desc" data-page-node-id="xNwPQxOCbh43O7cF59B0ha">近 14 天（09-12 ~ 09-25）每日游戏启动次数</div>
+            <div class="chart-container tall" data-page-node-id="QeOSxDNlaVyiYE2vnBRjYJ"><canvas id="launchTrendChart" data-page-node-id="c2MLFAz466XePhlYJXonDP"></canvas></div>
+            <p class="note" data-page-node-id="Cxy6wyhoNPVlL1P9XP6OgJ">周末（09-17/09-18、09-24/09-25）形成明显高峰；14 天合计 27,230 次 = KPI「游戏累计启动数」。</p>
+        </div>
+    </div>
+
+    <!-- ======== Footer ======== -->
+    <div class="footer" data-page-node-id="WIB5Xm7JXG2ePQ1B8ynHBW">
+        1027《冠军乒乓球》数据统计看板 ｜ 数据更新：示例数据（2026-09-25）｜ 计划上线：2026-09-26 ｜ 1/2/4 人 · 3D 体感<br data-page-node-id="fYRFklwKqKwsqkQpqEHSST">
+        本页仅用于统计结果展示，不展示埋点采集细节
+    </div>
+
+</div>
+
+<script>
+    // ==========================================================================
+    // 数据来源映射（依据 1027《冠军乒乓球》埋点设计；本页仅展示统计结果，不展示埋点采集细节）
+    //   事件1「杯赛/比赛开始」上报：杯赛/赛事ID、比赛局数、1P/2P角色id与外观id、1P/2P球拍id、
+    //        单人双人模式ID、开始时间戳、玩家人数、单局会话id、存档累计经验值、已连接遥控器数量
+    //   事件2「杯赛/比赛结束」上报：完成时间戳、比赛结果、当局比分、比赛时长
+    // --------------------------------------------------------------------------
+    //   杯赛       = 事件1「杯赛/赛事ID」             （编码 0~5 → cupLabels）
+    //   局数       = 事件1「比赛局数」                 （1~5，即第1局→第5局 → roundLabels）
+    //   单打/双打  = 事件1「单人双人模式ID」           （single=单打 / double=双打）
+    //   到达人次   = 事件1 按 杯赛ID + 局数 + 模式ID 聚合的会话数（去重单局会话id）
+    //   夺冠人次   = 到达人次口径下、局数=5 且 比赛结果=胜 的会话数（事件2 结果关联事件1）
+    //   失败率     = 事件2「比赛结果」按 杯赛ID + 局数 + 模式ID 聚合：失败会话 / 总会话
+    //   胜率       = 事件2「比赛结果」按 杯赛ID + 局数 + 模式ID 聚合：获胜会话 / 总会话
+    //   平均时长   = 事件2「比赛时长」（缺失时用 完成时间戳 − 开始时间戳，同一单局会话id 关联，派生指标）
+    //   角色使用率 = 事件1 的 1P/2P 角色id 按 杯赛ID 聚合的选用占比（角色编码 → roleLabels）
+    //   角色胜率   = 事件2「比赛结果」经 单局会话id 关联事件1 的角色id 后，按 杯赛ID 聚合
+    //   对局数     = 事件1 按 模式ID + 玩家人数 区分：玩家对玩家 / 玩家对电脑 × 1v1 / 2v2
+    //   启动数     = 游戏启动统计（若为 enter_game 事件则按该事件计数；⚠️ 埋点设计目前未单列启动事件，口径待确认）
+    // ==========================================================================
+    // 示例数据勾稽（必须成立）：
+    //   1) 累计对局数 21,600 = 玩家对玩家 8,240（1v1 5,180 + 2v2 3,060）+ 玩家对电脑 13,360（1v1 8,660 + 2v2 4,700）
+    //   2) 玩家对电脑 13,360 = 6 个杯赛到达人次合计
+    //      - 单打合计 3,120+2,260+1,480+900+560+340 = 8,660 → 玩家对电脑 1v1
+    //      - 双打合计 1,780+1,200+760+480+300+180 = 4,700 → 玩家对电脑 2v2
+    //      - 杯赛逐杯合计：4,900 + 3,460 + 2,240 + 1,380 + 860 + 520 = 13,360（与上两行一致）
+    //      说明：玩家对电脑 = 杯赛的单打 / 双打关卡对战，不存在杯赛之外的玩家对电脑对局类型
+    //   3) 杯赛平均失败率 39.3% = (18+26+35+44+52+61)/6 = 236/6 = 39.33%（单打口径）
+    //   4) 启动趋势 14 天合计 27,230 = KPI「游戏累计启动数」
+    //   5) 各杯赛角色使用率每行合计 = 100%
+    //   6) 热门角色 Top1「角色1」占比 30.2% 为全局口径（全部对局中选用角色1的场次 / 累计对局数
+    //      = 6,520 / 21,600）；下方分杯赛图为「杯赛内」选用占比，两者统计范围不同，数值不要求相等
+    // ==========================================================================
+
+    // 统一乒乓球主题色板（球台蓝 + 乒乓球橙）
+    const palette = ['#1565c0', '#fa8c16', '#42a5f5', '#ffb74d', '#0d47a1', '#d46b08'];
+    const COLOR_SINGLE = '#1565c0';   // 单打主色
+    const COLOR_DOUBLE = '#fa8c16';   // 双打主色
+    const gridColor = 'rgba(0,0,0,0.06)';
+    const tickColor = '#5b6b82';
+
+    try {
+        Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
+        Chart.defaults.color = tickColor;
+    } catch (e) { console.error('Chart 全局默认设置失败：', e); }
+
+    // === 示例数据，待接入真实数据 ===
+    // 编码 → 展示名映射（索引 = 埋点上报的数字编码）
+    const cupLabels  = ['小区杯', '学校杯', '社区杯', '杯赛4', '杯赛5', '杯赛6'];  // 杯赛/赛事ID 编码 0~5（⚠️ 后 3 个名称待确认）
+    const roleLabels = ['角色1', '角色2', '角色3', '角色4'];                        // 1P/2P角色id 编码 0~3（⚠️ 角色名待确认）
+    const roundLabels = ['第1局', '第2局', '第3局', '第4局', '第5局'];              // 比赛局数 编码 1~5
+
+    // === 示例数据，待接入真实数据 ===
+    // 各杯赛进度与指标（与卡片内明细表严格一致）
+    //   arrival  = 第1局到达人次；champion = 第5局夺冠人次；fail/win 为百分比；dur 为平均时长（分钟）
+    const cupStats = [
+        { arrival: { single: 3120, double: 1780 }, champion: { single: 210, double: 110 }, fail: { single: 18, double: 24 }, dur: { single: '3.6分', double: '4.4分' }, win: { single: 62, double: 56 } }, // 小区杯（免费）
+        { arrival: { single: 2260, double: 1200 }, champion: { single:  68, double:  32 }, fail: { single: 26, double: 32 }, dur: { single: '3.8分', double: '4.6分' }, win: { single: 60, double: 54 } }, // 学校杯
+        { arrival: { single: 1480, double:  760 }, champion: { single:  15, double:   5 }, fail: { single: 35, double: 41 }, dur: { single: '4.0分', double: '4.8分' }, win: { single: 57, double: 51 } }, // 社区杯
+        { arrival: { single:  900, double:  480 }, champion: { single:   8, double:   2 }, fail: { single: 44, double: 50 }, dur: { single: '4.2分', double: '5.0分' }, win: { single: 54, double: 48 } }, // 杯赛4
+        { arrival: { single:  560, double:  300 }, champion: { single:   4, double:   1 }, fail: { single: 52, double: 58 }, dur: { single: '4.4分', double: '5.2分' }, win: { single: 51, double: 45 } }, // 杯赛5
+        { arrival: { single:  340, double:  180 }, champion: { single:   2, double:   0 }, fail: { single: 61, double: 67 }, dur: { single: '4.6分', double: '5.4分' }, win: { single: 48, double: 42 } }  // 杯赛6
+    ];
+
+    // === 示例数据，待接入真实数据 ===
+    // 漏斗中段形态：仅用于生成第2/3/4局的下降形状，两端（第1局=到达人次、第5局=夺冠人次）由 cupStats 决定
+    const cupRoundRef = [1, 0.66, 0.44, 0.25, 0.12];
+    const cupShape = (function () {
+        const span = cupRoundRef[0] - cupRoundRef[4];
+        return cupRoundRef.map(v => (cupRoundRef[0] - v) / span); // 第1局=0，第5局=1
+    })();
+    function buildFunnel(i, mode) {
+        const S = cupStats[i].arrival[mode], E = cupStats[i].champion[mode];
+        return cupShape.map(f => Math.round(S - (S - E) * f));
+    }
+
+    // 1. 各杯赛局数进度（6 张独立卡片 × 第1局→第5局），单打 / 双打 并列对比（无需切换页签）
+    cupStats.forEach((_, i) => {
+        const singleData = buildFunnel(i, 'single');
+        const doubleData = buildFunnel(i, 'double');
+        try {
+            new Chart(document.getElementById('cup' + i + 'Round'), {
+                type: 'bar',
+                data: {
+                    labels: roundLabels,
+                    datasets: [
+                        {
+                            label: '单打',
+                            data: singleData,
+                            backgroundColor: COLOR_SINGLE,
+                            borderRadius: 5,
+                            maxBarThickness: 34
+                        },
+                        {
+                            label: '双打',
+                            data: doubleData,
+                            backgroundColor: COLOR_DOUBLE,
+                            borderRadius: 5,
+                            maxBarThickness: 34
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { color: tickColor, boxWidth: 12 } },
+                        tooltip: { callbacks: { label: ctx => ctx.dataset.label + '：' + ctx.parsed.y.toLocaleString() + ' 人次' } }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: '到达人次' }, grid: { color: gridColor }, ticks: { color: tickColor } },
+                        x: { title: { display: true, text: '杯赛局数' }, grid: { display: false }, ticks: { color: tickColor } }
+                    }
+                }
+            });
+        } catch (e) { console.error('杯赛 ' + cupLabels[i] + ' 图表初始化失败：', e); }
+    });
+
+    // 2. 杯赛失败率对比（单打 / 双打 双柱）
+    try {
+        new Chart(document.getElementById('cupFailChart'), {
+            type: 'bar',
+            data: {
+                labels: cupLabels,
+                datasets: [
+                    { label: '单打失败率(%)', data: cupStats.map(d => d.fail.single), backgroundColor: COLOR_SINGLE, borderRadius: 5, maxBarThickness: 46 },
+                    { label: '双打失败率(%)', data: cupStats.map(d => d.fail.double), backgroundColor: COLOR_DOUBLE, borderRadius: 5, maxBarThickness: 46 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { color: tickColor, boxWidth: 12 } },
+                    tooltip: { callbacks: { label: ctx => ctx.dataset.label + '：' + ctx.parsed.y + '%' } }
+                },
+                scales: {
+                    y: { beginAtZero: true, max: 100, title: { display: true, text: '失败率 (%)' }, grid: { color: gridColor }, ticks: { color: tickColor } },
+                    x: { title: { display: true, text: '杯赛' }, grid: { display: false }, ticks: { color: tickColor } }
+                }
+            }
+        });
+    } catch (e) { console.error('cupFailChart 初始化失败：', e); }
+
+    // 3. 热门角色（按杯赛分别统计：使用率 vs 胜率）
+    //    使用率 = 事件1 的 1P/2P角色id 按杯赛聚合的杯赛内选用占比（每行合计 100%）
+    //    胜率   = 事件2 比赛结果 经单局会话id 关联角色id 后按杯赛聚合
+    // === 示例数据，待接入真实数据 ===
+    const roleByCup = [
+        { use: [34, 26, 22, 18], win: [62, 58, 55, 52] },  // 小区杯
+        { use: [32, 26, 23, 19], win: [60, 56, 53, 50] },  // 学校杯
+        { use: [30, 26, 24, 20], win: [57, 54, 51, 48] },  // 社区杯
+        { use: [28, 26, 24, 22], win: [54, 51, 49, 46] },  // 杯赛4
+        { use: [26, 25, 25, 24], win: [51, 49, 47, 44] },  // 杯赛5
+        { use: [25, 25, 25, 25], win: [48, 46, 44, 42] }   // 杯赛6
+    ];
+    const pairOpts = {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'top', labels: { color: tickColor, boxWidth: 12 } },
+            tooltip: { callbacks: { label: ctx => ctx.dataset.label + '：' + ctx.parsed.x + '%' } }
+        },
+        scales: {
+            // x 轴上限取 70（小区杯胜率最高 62%，若上限 60% 会被截断）
+            x: { beginAtZero: true, max: 70, title: { display: true, text: '占比 (%)' }, grid: { color: gridColor }, ticks: { color: tickColor, callback: v => v + '%' } },
+            y: { grid: { display: false }, ticks: { color: tickColor } }
+        }
+    };
+    roleByCup.forEach((d, i) => {
+        try {
+            new Chart(document.getElementById('roleCup' + i), {
+                type: 'bar',
+                data: {
+                    labels: roleLabels,
+                    datasets: [
+                        { label: '使用率(%)', data: d.use, backgroundColor: COLOR_DOUBLE, borderRadius: 5, maxBarThickness: 22 },
+                        { label: '胜率(%)',   data: d.win, backgroundColor: COLOR_SINGLE, borderRadius: 5, maxBarThickness: 22 }
+                    ]
+                },
+                options: pairOpts
+            });
+        } catch (e) { console.error('角色图表 ' + cupLabels[i] + ' 初始化失败：', e); }
+    });
+
+    // 4. 对局数分布（玩家对玩家 / 玩家对电脑）
+    //    口径：事件1 按 模式ID + 玩家人数 区分；玩家对电脑 = 杯赛（单打/双打关卡）对战，玩家对玩家 = 本地对战模式
+    // === 示例数据，待接入真实数据 ===
+    const matchLabels = ['1v1', '2v2'];
+    const pvpData = [5180, 3060];  // 合计 8,240
+    // 玩家对电脑 1v1 = 6 个杯赛「单打」到达人次合计 8,660；2v2 = 6 个杯赛「双打」到达人次合计 4,700
+    const pveData = [8660, 4700];  // 合计 13,360
+
+    function matchOpts(total) {
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.label + '：' + ctx.parsed.y.toLocaleString() + ' 局（占比 ' + (ctx.parsed.y * 100 / total).toFixed(1) + '%）'
+                    }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: '对局数' }, grid: { color: gridColor }, ticks: { color: tickColor } },
+                x: { title: { display: true, text: '对局类型' }, grid: { display: false }, ticks: { color: tickColor } }
+            }
+        };
+    }
+    try {
+        new Chart(document.getElementById('pvpChart'), {
+            type: 'bar',
+            data: {
+                labels: matchLabels,
+                datasets: [{
+                    label: '对局数',
+                    data: pvpData,
+                    backgroundColor: ['#1565c0', '#42a5f5'],
+                    borderRadius: 6,
+                    maxBarThickness: 90
+                }]
+            },
+            options: matchOpts(8240)
+        });
+    } catch (e) { console.error('pvpChart 初始化失败：', e); }
+
+    try {
+        new Chart(document.getElementById('pveChart'), {
+            type: 'bar',
+            data: {
+                labels: matchLabels,
+                datasets: [{
+                    label: '对局数',
+                    data: pveData,
+                    backgroundColor: ['#fa8c16', '#ffb74d'],
+                    borderRadius: 6,
+                    maxBarThickness: 90
+                }]
+            },
+            options: matchOpts(14360)
+        });
+    } catch (e) { console.error('pveChart 初始化失败：', e); }
+
+    // 5. 游戏启动数趋势（近 14 天，合计 27,230 = KPI「游戏累计启动数」）
+    // === 示例数据，待接入真实数据 ===
+    const launchDays = ['09-12', '09-13', '09-14', '09-15', '09-16', '09-17', '09-18', '09-19', '09-20', '09-21', '09-22', '09-23', '09-24', '09-25'];
+    const launchData = [1240, 1380, 1620, 1780, 1920, 2340, 2560, 2410, 1780, 1620, 1840, 2020, 2240, 2480];
+
+    // 轻量数值标签插件（不额外引入 CDN，仅用于折线图点上显示数值）
+    const valueLabelPlugin = {
+        id: 'valueLabelPlugin',
+        afterDatasetsDraw(chart, args, opts) {
+            if (!opts || !opts.display) return;
+            const ctx = chart.ctx;
+            ctx.save();
+            ctx.font = '11px "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif';
+            ctx.fillStyle = opts.color || '#8c8c8c';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            chart.data.datasets.forEach((dataset, di) => {
+                const meta = chart.getDatasetMeta(di);
+                if (meta.hidden) return;
+                meta.data.forEach((el, i) => {
+                    const v = dataset.data[i];
+                    if (v === null || v === undefined) return;
+                    ctx.fillText(Number(v).toLocaleString(), el.x, el.y - 8);
+                });
+            });
+            ctx.restore();
+        }
+    };
+
+    try {
+        new Chart(document.getElementById('launchTrendChart'), {
+            type: 'line',
+            data: {
+                labels: launchDays,
+                datasets: [{
+                    label: '启动次数',
+                    data: launchData,
+                    borderColor: COLOR_DOUBLE,
+                    backgroundColor: 'rgba(250,140,22,0.16)',
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 4,
+                    pointBackgroundColor: COLOR_DOUBLE,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 1,
+                    borderWidth: 2
+                }]
+            },
+            plugins: [valueLabelPlugin],
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { top: 24 } },
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: tickColor, boxWidth: 12 } },
+                    valueLabelPlugin: { display: true, color: '#d46b08' },
+                    tooltip: { callbacks: { label: ctx => ctx.label + ' 启动：' + ctx.parsed.y.toLocaleString() + ' 次' } }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: '启动次数' }, grid: { color: gridColor }, ticks: { color: tickColor } },
+                    x: { title: { display: true, text: '日期' }, grid: { display: false }, ticks: { color: tickColor } }
+                }
+            }
+        });
+    } catch (e) { console.error('launchTrendChart 初始化失败：', e); }
+</script>
+</body>
+</html>
