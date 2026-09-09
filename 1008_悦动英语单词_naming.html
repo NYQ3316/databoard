@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="rDQkeD2jzxRdqBsxC3P1YW">
+<head data-page-node-id="l1QEVE8YLGG6tMHpdOg6y9">
+    <meta charset="UTF-8" data-page-node-id="Zz1gvSzIhqqzGEUG5BALJc">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="OZgS4Tyzdb6YLzvusMGFdt">
     <title>1008 悦动英语单词 - 埋点事件与属性定义</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -96,213 +96,314 @@
             .header h1 { font-size: 20px; }
             th, td { vertical-align: top; padding: 8px; font-size: 12px; }
         }
+    
+        /* ======== 深色主题：深蓝夜空 navy（自动跟随系统深浅色） ======== */
+        html { color-scheme: light dark; }
+        @media (prefers-color-scheme: dark) {
+            body { background: #0b1220; color: #cbd5e1; }
+            .container { color: #cbd5e1; }
+
+            /* 顶栏：品牌色暗化，保留项目辨识度 */
+            .header { background: linear-gradient(135deg, #293c8d 0%, #4c3861 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .header h1, .header h2, .header h3, .header .subtitle, .header .meta,
+            .header p, .header div, .header span { color: #f1f5f9; }
+            .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
+            .back-btn:hover { background: rgba(255,255,255,0.22); }
+            .back-link { color: #60a5fa; }
+            .back-link:hover { color: #93c5fd; }
+
+            /* 卡片 / 区块 */
+            .event-section, .event-block, .info-bar, .legend, .note-box {
+                background: #131c31; box-shadow: 0 2px 12px rgba(0,0,0,0.45);
+            }
+            .info-bar, .legend { color: #94a3b8; }
+            .info-bar strong, .legend strong { color: #f1f5f9; }
+            .event-header { border-bottom-color: #1e293b; }
+            .event-header .left h2 { color: #f1f5f9; }
+            .event-header .left .ename { color: #93c5fd; background: transparent; }
+            .event-header .left .edesc { color: #94a3b8; }
+            .event-title { color: #f1f5f9; border-bottom-color: #334155; }
+            .event-desc { background: #0f172a; color: #94a3b8; border-left-color: #334155; }
+            .tag-badge { background: rgba(74,222,128,0.15); color: #86efac; }
+            .tag-badge-chest { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .tag-badge-new { background: rgba(248,113,113,0.15); color: #fca5a5; }
+            .field-name-new { color: #fca5a5; background: transparent; }
+            .note-title { color: #f1f5f9; }
+
+            /* 表格 */
+            th { color: #94a3b8; background: #0f172a; border-bottom-color: #1e293b; }
+            td { border-bottom-color: #1e293b; }
+            th, td { border-bottom-color: #1e293b; }
+            tr:hover, tr:hover td { background: #1e293b; }
+            .field-name { color: #93c5fd; background: transparent; }
+            .example { color: #94a3b8; }
+
+            /* 类型 / 范围标签：淡色半透明徽章 + 亮字（不做实色填充） */
+            .type-tag.type-string { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+            .type-tag.type-int { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .type-tag.type-float { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+            .type-tag.type-bool { background: rgba(45,212,191,0.15); color: #5eead4; }
+            .type-tag.type-list { background: rgba(74,222,128,0.15); color: #86efac; }
+            .type-tag.type-object { background: rgba(244,114,182,0.15); color: #f9a8d4; }
+            .type-tag.type-time { background: rgba(251,113,133,0.15); color: #fda4af; }
+            .scope-tag.scope-common { background: rgba(74,222,128,0.15); color: #86efac; }
+            .scope-tag.scope-project { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .scope-tag.scope-required { background: rgba(248,113,113,0.15); color: #fca5a5; }
+            .scope-tag.scope-new { background: rgba(148,163,184,0.18); color: #cbd5e1; }
+            /* 提示行 */
+            .note-row, .note-row td { background: #1e293b; color: #fcd34d; }
+
+            /* 强制覆盖 HTML 内联写死的深色文字 */
+            div[style], p[style], span[style], td[style], th[style],
+            h1[style], h2[style], h3[style], strong[style] { color: #cbd5e1 !important; }
+            .header [style], .event-header [style] { color: #f1f5f9 !important; }
+            .note-row [style], .note-row td[style] { color: #fcd34d !important; }
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <div>
-                <h1>📚 1008 悦动英语单词 - 埋点事件与属性定义</h1>
-                <div class="subtitle">项目埋点规范 | 事件命名 + 属性定义 | 对齐跨项目统一标准</div>
+<body data-page-node-id="W1ewVpbrb0u2AmP0TyZAbG">
+    <div class="container" data-page-node-id="YG3v3QLbfJ9wuhLIcDwPuh">
+        <div class="header" data-page-node-id="hcwHsfigjhQBJAAEhHGkCJ">
+            <div data-page-node-id="H01P88jncMOFPlpRm5guYz">
+                <h1 data-page-node-id="Edi5ExhlPyMuP7J7YmLDIj">📚 1008 悦动英语单词 - 埋点事件与属性定义</h1>
+                <div class="subtitle" data-page-node-id="4VbPkuKJRwU1CAIw46QgDD">项目埋点规范 | 事件命名 + 属性定义 | 对齐跨项目统一标准</div>
             </div>
-            <a class="back-btn" href="naming_standards_standalone.html">&larr; 返回命名规范</a>
+            <a class="back-btn" href="naming_standards.html" data-page-node-id="ErwWyfDTIw98E5KAFpAVQC">&larr; 返回命名规范</a>
         </div>
 
-        <div class="info-bar">
-            <div><strong>项目编号：</strong>1008</div>
-            <div><strong>当前事件数：</strong>6</div>
-            <div><strong>最后更新：</strong>2026-06-25</div>
+        <div class="info-bar" data-page-node-id="Cg2VmS1hgNdMmGm2IPBfXs">
+            <div data-page-node-id="rFOHNQGaEskBzppgkrO7Ik"><strong data-page-node-id="EnraSSikDSFiU5zDDkGCoB">项目编号：</strong>1008</div>
+            <div data-page-node-id="E6DrtFUOcHuveNzG4XL7M1"><strong data-page-node-id="TrSOCo4fn0S70X4vLwiZnF">当前事件数：</strong>7</div>
+            <div data-page-node-id="o6GaINme5MqW1RJTjdlCFU"><strong data-page-node-id="SK4aAB4Y2Cpi4zAvo1Im2P">最后更新：</strong>2026-06-25</div>
         </div>
 
-        <div class="legend">
-            <div class="tag"><span class="dot dot-common"></span> 跨项目通用属性</div>
-            <div class="tag"><span class="dot dot-project"></span> 项目特有属性</div>
-            <div class="tag"><span class="dot dot-new"></span> 本项目新增属性</div>
+        <div class="legend" data-page-node-id="ICG49ZgYeeEkUjoEQpRtQi">
+            <div class="tag" data-page-node-id="SNrm84hIM3iLycDW0axI46"><span class="dot dot-common" data-page-node-id="IyEqFTmKIXtmooGc0JH0WR"></span> 跨项目通用属性</div>
+            <div class="tag" data-page-node-id="YmFwLL6MaoBtH0fJyBdhtV"><span class="dot dot-project" data-page-node-id="ALa9sSU0HXkHQjZNHjEBgV"></span> 项目特有属性</div>
+            <div class="tag" data-page-node-id="NcLHuFEJrGPLIwuVwU9bxj"><span class="dot dot-new" data-page-node-id="IeVtaZgb96qjTu3L6IgBJH"></span> 本项目新增属性</div>
         </div>
 
         <!-- Event 1: enter_game -->
-        <div class="event-section">
-            <div class="event-header">
-                <div class="left">
-                    <h2>事件一：<span class="ename">enter_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">进入游戏/关卡</span></h2>
-                    <div class="edesc">玩家确认进入一个主题关卡时触发</div>
+        <div class="event-section" data-page-node-id="LzCdv5PUve5hoC6W23cJ8V">
+            <div class="event-header" data-page-node-id="BHMRWGHEIMmfjUBBhCez4g">
+                <div class="left" data-page-node-id="EzU3fGoKjBGr1uQ9Z5f0cf">
+                    <h2 data-page-node-id="QTFzd45uQnraq08W4CJ2R5">事件一：<span class="ename" data-page-node-id="geitpPfI2U2ZLDQJtkNQa7">enter_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="H1Xcj3tHQ5GHRspE4DqNFq">进入游戏/关卡</span></h2>
+                    <div class="edesc" data-page-node-id="UFHd2uOPMzRNLGfE2teJIr">玩家确认进入一个主题关卡时触发</div>
                 </div>
-                <span class="tag-badge">游戏</span>
+                <span class="tag-badge" data-page-node-id="tsKHlA6230nEgprAJJLA5i">游戏</span>
             </div>
-            <table>
-                <colgroup>
-                    <col style="width: 160px">
-                    <col style="width: 110px">
-                    <col style="width: 80px">
-                    <col style="width: auto">
-                    <col style="width: 170px">
-                    <col style="width: 100px">
+            <table data-page-node-id="QSRQ7bNoG0pOmf37KqhsNG">
+                <colgroup data-page-node-id="cDqEaP1V8YJWbjD5NJiCZr">
+                    <col style="width: 160px" data-page-node-id="Sei7cEMPz77DKtXH29Mge0">
+                    <col style="width: 110px" data-page-node-id="NKEvtUzTs3yjEv9EiNIg8A">
+                    <col style="width: 80px" data-page-node-id="fDWQtET2w3AuuCvilkDiZz">
+                    <col style="width: auto" data-page-node-id="thORWSyEkuJTYyRJvejTfy">
+                    <col style="width: 170px" data-page-node-id="pQQAPKMt0B3tvlEg16aCy8">
+                    <col style="width: 100px" data-page-node-id="EjWrVmYIE7xLi5SZVrK5Bd">
                 </colgroup>
-                <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
-                <tbody>
-                    <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1008</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">theme_id</span></td><td>主题ID</td><td><span class="type-tag type-string">文本</span></td><td>当前关卡所属主题标识</td><td class="example">1=农场 / 2=宠物店 / 3=游乐场 / 4=超市 / 5=夏日海滩 / 6=草原 / 7=西餐餐厅 / 8=服装店 / 9=动物园 / 10=魔法学校</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>当前关卡编号（主题内序号）</td><td class="example">1 ~ 6</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <thead data-page-node-id="tyqLpEcIlP0bLRaJVBQVSd"><tr data-page-node-id="yFvQ8x0D7GHAXL30WekI6A"><th data-page-node-id="Y9FpZkGgBBOrwerdWcpJzw">属性名</th><th data-page-node-id="jupgv78Hlf2lKRGDxIiu1N">属性显示名</th><th data-page-node-id="NDohuCIoeNtVQmebLO8HW2">类型</th><th data-page-node-id="Wk1ocUzGkJcjwZZF1Frujq">说明</th><th data-page-node-id="m3qDrayfeEL9uEa1NOAlqi">示例</th><th data-page-node-id="no4uajbbXKVQbI5xpUJhx9">属性来源</th></tr></thead>
+                <tbody data-page-node-id="tA1SoYcJVhm1yZuoqKfz1A">
+                    <tr data-page-node-id="uyuyVhgx3aCO3rGbjBTLYH"><td data-page-node-id="8X05jaWNH0tB3qHuWAQCWb"><span class="field-name" data-page-node-id="4rJS14Bi45GsyuOk53JBex">game_id</span></td><td data-page-node-id="7p0aQVOb2qyV2rAoCIltF4">游戏ID</td><td data-page-node-id="Pb22E49jjPLLMI54l2UCBY"><span class="type-tag type-string" data-page-node-id="WiF7TpzXCfGz34D3Q7GdJW">文本</span></td><td data-page-node-id="QgJvoHTRjoddizwQ80TndZ">产品/游戏唯一编号</td><td class="example" data-page-node-id="zPDLJjBpvKPJXWlMnTeRhS">1008</td><td data-page-node-id="cXyLyxH2U5zWBDpC5H7Gdj"><span class="scope-tag scope-required" data-page-node-id="GBP87iVzdxQKJNCJrBLrsZ">必含</span></td></tr>
+                    <tr data-page-node-id="ST2ehrnphvqGubPgNwJvG8"><td data-page-node-id="JtDXFTt7at9l2sWS2V3P1W"><span class="field-name" data-page-node-id="lSbZsrU5ZTDcetKcBJtw6T">user_id</span></td><td data-page-node-id="VkJ8RyCLpOwTgUoqKAFGbm">人脸角色ID</td><td data-page-node-id="0JeDEaBDCePewovzewvVlG"><span class="type-tag type-list" data-page-node-id="3sMULduTWXnFsp9MNiJjcC">列表</span></td><td data-page-node-id="5hkVKK7Sigz9PDSrSZXha5">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="z2nOSPb5UWniNoEraaKYFs">["135"]</td><td data-page-node-id="aRwZGS7sMSn722WZqTOtBs"><span class="scope-tag scope-required" data-page-node-id="DVk8kyKNY9lDSjbvC0gtGq">必含</span></td></tr>
+                    <tr data-page-node-id="Qjq8BhRwpGQES3ax0cRcEw"><td data-page-node-id="GSlZ2IBKWJVR14VaETpJjH"><span class="field-name" data-page-node-id="bjwYVTl1yD0IGYoPgcqvXU">session_id</span></td><td data-page-node-id="wbOEVyGZiLxlOeBWtzOM1z">会话ID</td><td data-page-node-id="Bs4m0Jn9pD0VcCtYx0IUfA"><span class="type-tag type-string" data-page-node-id="mcu1sAyh6MWsAINNOYDWR8">文本</span></td><td data-page-node-id="0DIPLTSay5Sk9KDr1v2YQd">单次启动唯一标识</td><td class="example" data-page-node-id="yZRPuce6YndUBFM5UwQGy9">s_987654321</td><td data-page-node-id="vNhTNTkBeueWJZkFH88bPB"><span class="scope-tag scope-required" data-page-node-id="wx6Elg9DHGXYDziqy8xErf">必含</span></td></tr>
+                    <tr data-page-node-id="VeSOCB4JFMFgFvrMoHUH7z"><td data-page-node-id="1DFSn5If2e1T4DPscuEUvn"><span class="field-name" data-page-node-id="thLQRze12Qnn6wVaoGIzUK">timestamp</span></td><td data-page-node-id="7EjuGH8iqXnk9bxEENdNRc">时间戳</td><td data-page-node-id="nMrL9ejilN63gAFU3oWAUA"><span class="type-tag type-time" data-page-node-id="Le0PhqYZ47iNH6WKuUUeE3">时间</span></td><td data-page-node-id="GDXymOvXW2qalqPKPr2A3k">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="EzzlLVh5yGgxff7jltKmOC">2026-05-26T09:35:00+08:00</td><td data-page-node-id="QSunAfNV8eQtGkB2r2KvcZ"><span class="scope-tag scope-required" data-page-node-id="I5dP74ZqTVaHwNgdprGyRe">必含</span></td></tr>
+                    <tr data-page-node-id="UWioFhXAnHmKHvJh0gqoOC"><td data-page-node-id="hR5KNlmRKSmpdV3OAYgG35"><span class="field-name" data-page-node-id="cXURXbVvJxbcFzwpLYNWsc">theme_id</span></td><td data-page-node-id="R65xDi19StJfpqGSmvbUGN">主题ID</td><td data-page-node-id="piXADkiZXVMyufEXBTpBkd"><span class="type-tag type-string" data-page-node-id="hBsY8PdJwJ8TB2Vrw9FVGZ">文本</span></td><td data-page-node-id="CCnqLjUaHb6VjS4bpq9roG">当前关卡所属主题标识</td><td class="example" data-page-node-id="72gaodN2rmVM4Ci9CjfNS8">1=农场 / 2=宠物店 / 3=游乐场 / 4=超市 / 5=夏日海滩 / 6=草原 / 7=西餐餐厅 / 8=服装店 / 9=动物园 / 10=魔法学校</td><td data-page-node-id="TYFHZLKwqcUMuvvlZaH92x"><span class="scope-tag scope-common" data-page-node-id="hHb3EMaXZ6iFL5SszGQ0QC">通用</span></td></tr>
+                    <tr data-page-node-id="ioYasjFUU2XHWAMItjBw9D"><td data-page-node-id="yv7o3CNg0kfhjoAqPD82nW"><span class="field-name" data-page-node-id="AdEvBCtLAOEvh7b4tVLqRR">level_id</span></td><td data-page-node-id="GGl2o0nRGH7W34wB1nCcl4">关卡ID</td><td data-page-node-id="O13fUR7KtGZblzSU8dMtlP"><span class="type-tag type-string" data-page-node-id="C0UJBDr49QwglZXxzzMC6W">文本</span></td><td data-page-node-id="pqWXVdpvFSCygPRfVyyC2n">当前关卡编号（主题内序号）</td><td class="example" data-page-node-id="LiA1If7ncHuJ4P9Bk82OQZ">1 ~ 6</td><td data-page-node-id="keAc6G85GjOGKEF2iKoapH"><span class="scope-tag scope-common" data-page-node-id="vQG4Bj1mgIofKExA9UDNe4">通用</span></td></tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Event 2: end_game -->
-        <div class="event-section">
-            <div class="event-header">
-                <div class="left">
-                    <h2>事件二：<span class="ename">end_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">退出游戏/关卡</span></h2>
-                    <div class="edesc">玩家完成或退出一关时触发；关卡时长由 end_game.timestamp - enter_game.timestamp 计算</div>
+        <div class="event-section" data-page-node-id="oxe4CUFIY3RR6bCqR3yAL5">
+            <div class="event-header" data-page-node-id="yBwGEI8Z0jLUFZO2czEM2N">
+                <div class="left" data-page-node-id="PRqTVeUMo1vdZUqhPTvtty">
+                    <h2 data-page-node-id="44XgS237c0vhNaqEoIq0CK">事件二：<span class="ename" data-page-node-id="5TsOiRbdMJhKf5C8Mw9Ldb">end_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="UamsYH4BSqUIMRBpvYDGJd">退出游戏/关卡</span></h2>
+                    <div class="edesc" data-page-node-id="Bl64JUdp20KULBkcl4WfrG">玩家完成或退出一关时触发；关卡时长由 end_game.timestamp - enter_game.timestamp 计算</div>
                 </div>
-                <span class="tag-badge">游戏</span>
+                <span class="tag-badge" data-page-node-id="jhDoUt4JnNpeAcZEEjP270">游戏</span>
             </div>
-            <table>
-                <colgroup>
-                    <col style="width: 160px">
-                    <col style="width: 110px">
-                    <col style="width: 80px">
-                    <col style="width: auto">
-                    <col style="width: 170px">
-                    <col style="width: 100px">
+            <table data-page-node-id="X7QPuQ0TQn1eMQAs8FZ0NG">
+                <colgroup data-page-node-id="G8uXEWImyjDeQAJHazroeP">
+                    <col style="width: 160px" data-page-node-id="irc86uDkfvQajrH8gD06zI">
+                    <col style="width: 110px" data-page-node-id="v5MqIzZI0xbVhv65EuMk9y">
+                    <col style="width: 80px" data-page-node-id="61Gqk4BQJTeFx6gU94M1xG">
+                    <col style="width: auto" data-page-node-id="K1IfPAMJ4lxFMH7JCobwQt">
+                    <col style="width: 170px" data-page-node-id="akLF2QTFppBFCLDrP30Txa">
+                    <col style="width: 100px" data-page-node-id="hwGXVgcE5GU5g8kaUOFx4q">
                 </colgroup>
-                <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
-                <tbody>
-                    <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1008</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">theme_id</span></td><td>主题ID</td><td><span class="type-tag type-string">文本</span></td><td>当前关卡所属主题标识</td><td class="example">1=农场 / 2=宠物店 / 3=游乐场 / ... / 10=魔法学校</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>当前关卡编号（主题内序号）</td><td class="example">1 ~ 6</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">score</span></td><td>总得分</td><td><span class="type-tag type-int">数值</span></td><td>本关累计得分</td><td class="example">48</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">star_rating</span></td><td>成绩评价</td><td><span class="type-tag type-string">文本</span></td><td>本关星级评价</td><td class="example">1 / 2 / 3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name-new">answer_count</span></td><td>错误次数</td><td><span class="type-tag type-int">数值</span></td><td>本关玩家答错/识别失败的次数</td><td class="example">3</td><td><span class="scope-tag scope-new">新增</span></td></tr>
+                <thead data-page-node-id="9vHN9t4UfTwsAMOlSDu2L7"><tr data-page-node-id="Ij9d186BxvX9Ih2t7XZif0"><th data-page-node-id="HBpQ7yT2JgSc03vEqdI5Qe">属性名</th><th data-page-node-id="pcorrZkZy8rxLUdXXf2WBL">属性显示名</th><th data-page-node-id="JAxBYdpJvLAaXU3zQVlyRD">类型</th><th data-page-node-id="vZNpAsQ7151rhOR9uqrczA">说明</th><th data-page-node-id="p8VgbOAhvAqvHkwLFqK6nE">示例</th><th data-page-node-id="y6Z4D6mOtD6HSA6rNuX5nS">属性来源</th></tr></thead>
+                <tbody data-page-node-id="5rLi7hT58DICvDIwIGsHqJ">
+                    <tr data-page-node-id="4eGspsAaGHri1oFikOyjln"><td data-page-node-id="OMIwbUpUyjTMsH2ijmT4nz"><span class="field-name" data-page-node-id="aXLhO34f6WAJHGEDbpQoxz">game_id</span></td><td data-page-node-id="HKO6G6Jr70aO4NzfxvuleJ">游戏ID</td><td data-page-node-id="aEW7v7NciwyrPY9JqDVpKb"><span class="type-tag type-string" data-page-node-id="9vFUD0EIrnL4vB6KlkgVLn">文本</span></td><td data-page-node-id="0V5Xz5lC9QRun2FykRzBHf">产品/游戏唯一编号</td><td class="example" data-page-node-id="eCZWp5JuTkDWvtKxPlVJiZ">1008</td><td data-page-node-id="az1BQcF6GQEkzpKweV0jwG"><span class="scope-tag scope-required" data-page-node-id="EXEWGnoJFHTpCNJnSVn9A3">必含</span></td></tr>
+                    <tr data-page-node-id="QHg0cn0SyCKn7Zbwfki4bp"><td data-page-node-id="6IjveWGDg6vf7qfin68hky"><span class="field-name" data-page-node-id="vFlXof1L864XPMWeHA51Df">user_id</span></td><td data-page-node-id="pX3jSz7GiYiSuwJxmZoRRC">人脸角色ID</td><td data-page-node-id="UerSkjOixBJ78GHrIEZKWy"><span class="type-tag type-list" data-page-node-id="V5tLWfgJa8fnLoh8V7jlIu">列表</span></td><td data-page-node-id="g9VcJKInQlctFFai8CiDXI">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="Ud7Uq0SEnorKHFoBwFApsP">["135"]</td><td data-page-node-id="VjfIKbr4BYiZMk6VtPBi3m"><span class="scope-tag scope-required" data-page-node-id="4X7R325DhEiJGsnrsK47CI">必含</span></td></tr>
+                    <tr data-page-node-id="V8MMN56P5yOT04FjKzedvQ"><td data-page-node-id="Arg0yIchTFAOosP7ao7MV4"><span class="field-name" data-page-node-id="yG7GkRxxd7MRdkIUfvRVRn">session_id</span></td><td data-page-node-id="cYX2N396t6EHHxe2pt2rA9">会话ID</td><td data-page-node-id="oGDfqiY6WF4fbfoTSwibRC"><span class="type-tag type-string" data-page-node-id="4hDzpgA1cqBP8mrtsnlARz">文本</span></td><td data-page-node-id="WqiPWjAXiK8iou1POW3TLx">单次启动唯一标识</td><td class="example" data-page-node-id="agrLkJaUmIZnh7uG1ZlVxo">s_987654321</td><td data-page-node-id="yJAOjAHVtohB7xaWQ5Rpr3"><span class="scope-tag scope-required" data-page-node-id="wPIyQC98dcAKDPth7qvnQm">必含</span></td></tr>
+                    <tr data-page-node-id="IwaBMnmBCGQuSLN3rNjRdd"><td data-page-node-id="q5neFhNQ2oICAzBR2XWuDa"><span class="field-name" data-page-node-id="f5udRIeBUi5QMGU9jHEG4c">timestamp</span></td><td data-page-node-id="ftYxgRNYBzBdE5J6EwECRK">时间戳</td><td data-page-node-id="Nih2FDDbtu9Zl6wDLkyvYH"><span class="type-tag type-time" data-page-node-id="KM1Rng4TTZ1CEiCPiHp3Ax">时间</span></td><td data-page-node-id="oYnDYZN3hiTbXxI0Z2bvQu">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="BNMkXLx780v2z9G9jIfBIg">2026-05-26T09:35:00+08:00</td><td data-page-node-id="FFjrS38RQPWyo3qNT1U1wp"><span class="scope-tag scope-required" data-page-node-id="WY1O0OnNbUNar1n5nUxBnK">必含</span></td></tr>
+                    <tr data-page-node-id="ZtvR5ABlAT5Plw2EwsxVEd"><td data-page-node-id="hPRO7kgaYPPWKQ6FyHzBC7"><span class="field-name" data-page-node-id="uQX69Ln74dZFVBcnFhA4UG">theme_id</span></td><td data-page-node-id="D9P7f64PTeYB7rUxesPfoS">主题ID</td><td data-page-node-id="fd653v7wVsuR0lndHSgXQn"><span class="type-tag type-string" data-page-node-id="0vzwHaaq0C1XlRz36Cbhkn">文本</span></td><td data-page-node-id="LhByXhOwthxyFSEtfn68CW">当前关卡所属主题标识</td><td class="example" data-page-node-id="qb5ucAjcEFVDQIqZ9c1Tyh">1=农场 / 2=宠物店 / 3=游乐场 / ... / 10=魔法学校</td><td data-page-node-id="wA3rVNPnse24zklKJ3f3um"><span class="scope-tag scope-common" data-page-node-id="Z9QCAPJxFSJ1cdnoRfNWQn">通用</span></td></tr>
+                    <tr data-page-node-id="jckEIXUkek2dHdWw38SCTb"><td data-page-node-id="SCMcCbnbW6c0P94WKAGSHM"><span class="field-name" data-page-node-id="f5Duy4rVEkQKeAOiVVJcA7">level_id</span></td><td data-page-node-id="Ir0W98mFYbnFl8LmyPWB8H">关卡ID</td><td data-page-node-id="THi1BWKWkAl3dEbCNTYKrG"><span class="type-tag type-string" data-page-node-id="5FkFDmJXcrjCGhg9l4IaW9">文本</span></td><td data-page-node-id="csfnJ3SKIPtdBO1kMhTmbm">当前关卡编号（主题内序号）</td><td class="example" data-page-node-id="bpsKCQhmDXvQge8ZpyWgPX">1 ~ 6</td><td data-page-node-id="LGBNKBhKtMYQYnyZbp5hX5"><span class="scope-tag scope-common" data-page-node-id="XHHE4luqqNA8pdAmP8mFnt">通用</span></td></tr>
+                    <tr data-page-node-id="mBsDaBszOnLboh1RLPgeh3"><td data-page-node-id="vFJtH8pSqC2kI9XEwMWKq5"><span class="field-name" data-page-node-id="rE0FlMXq4BeRpmyEgTJing">score</span></td><td data-page-node-id="HQDdHcIJxGiakKP6FTncGL">总得分</td><td data-page-node-id="zwbcjdywbldhnNnMdK5MBU"><span class="type-tag type-int" data-page-node-id="mowJz6lEdur8RzmolBkdvU">数值</span></td><td data-page-node-id="CEI4R2dWePx8XsaGP0AOwt">本关累计得分</td><td class="example" data-page-node-id="BnNxcErZxueeX52kxYVyNM">48</td><td data-page-node-id="R3D5EFAjE3FIqXK9ojIKvi"><span class="scope-tag scope-common" data-page-node-id="BoEFLaA3rUQMT6Ej8vepzs">通用</span></td></tr>
+                    <tr data-page-node-id="g5ph42D8D35OZBjkoUAZEB"><td data-page-node-id="Dhc6JVsRf8XQbso4UYoTVU"><span class="field-name" data-page-node-id="dXOa4TFsRUHq1Qr6J6NPoM">star_rating</span></td><td data-page-node-id="XmlZtwhruLhaSP9pkBA1w8">成绩评价</td><td data-page-node-id="Yc5hIWWIAeDLuDWT1RGXNf"><span class="type-tag type-string" data-page-node-id="DKnMwmc8v2yhQkwicaMYKe">文本</span></td><td data-page-node-id="kHDVlxFCDrlaUFIoeparzU">本关星级评价</td><td class="example" data-page-node-id="o6iPDWK03s0EmC6zrhjF6a">1 / 2 / 3</td><td data-page-node-id="170RWeihpUJIw2IaXkdUIz"><span class="scope-tag scope-common" data-page-node-id="a6hlNDCawMXVtwYwUQKQQo">通用</span></td></tr>
+                <tr class="note-row" data-page-node-id="7YsMzoEN6mLizuH0WbxKRY">
+                    <td colspan="6" data-page-node-id="jgSU4GSBiz6Z2oj3XVanyj">
+                        <strong data-page-node-id="OTONAnGdJVUtZCDX8wfxRG">📦 对象组字段：</strong>以下字段封装在 <code data-page-node-id="EdkTHG7pcbN5hdGyqEISYF">word_list</code> 对象数组中，每个对象记录本关一个单词的作答情况；对象组格式下所有字段值均为裸值（无引号），类型由标签承载。
+                    </td>
+                </tr>
+                <tr data-page-node-id="EieoSx3idQwMVbCLGMtdNi"><td data-page-node-id="qZOsS0KgDw3VV8okzevBX7"><span class="field-name-new" data-page-node-id="FCgnxDuQ4pSVdfXCmX5EFv">word_list</span></td><td data-page-node-id="vY4X0S7rAwTvCeT3wARrj3">单词列表</td><td data-page-node-id="mho310V3o5twLA9sgrdFGD"><span class="type-tag type-object" data-page-node-id="KYcGoQbHPtrswCTXyV6gh2">对象组</span></td><td data-page-node-id="7UZTerfDAJCmnsfpkT8Qef">本关出现过的单词及其正确/错误次数数组，每个对象一个单词；无作答时为空数组 []</td><td class="example" data-page-node-id="bxfHJjkYm1fBwxzYIcVjeA">[{"word_id":1,"word_text":apple,"true_count":3,"false_count":3}] / []</td><td data-page-node-id="JPFbZ5L72CwibKrxJRLVcX"><span class="scope-tag scope-new" data-page-node-id="mM0e84sG5Byil69GQgTh7x">新增</span></td></tr>
+                <tr data-page-node-id="OqiEHmXiIX5AyKkC0rOoKC"><td data-page-node-id="knmMHf2qQof4JzVdomgjtQ"><span class="field-name-new" data-page-node-id="FS2IK2CoYcsyYWOEyVjnGv">word_list.word_id</span></td><td data-page-node-id="4EHLwhRl0cS7PhLxNHs00j">单词编号</td><td data-page-node-id="IPrSwFIJYJFUbAfVjI2tzQ"><span class="type-tag type-string" data-page-node-id="FtZ9QU4aGjqS1o1cYlriUR">文本</span></td><td data-page-node-id="MjzzkBgFpwEPO7A1S8qxRp">单词的唯一编号（数字型文本，裸值）</td><td class="example" data-page-node-id="DFAl1BNASpLy4CE5YaFZqc">1</td><td data-page-node-id="MF7A21vL32M6ZmerjI9yh1"><span class="scope-tag scope-new" data-page-node-id="dJoDLH2SHkRJ0sFcP6ZJ8a">新增</span></td></tr>
+                <tr data-page-node-id="3xzv31HhthqleqK9tPEal9"><td data-page-node-id="CFOgyeQFUsq70LgUPNNveb"><span class="field-name-new" data-page-node-id="QRUp1blxZoTiA5dXTDWGZS">word_list.word_text</span></td><td data-page-node-id="kL1udc3Wa0Gx7prpeKxjz1">单词名</td><td data-page-node-id="EQQ9o6BDkRxidirFU5CKfT"><span class="type-tag type-string" data-page-node-id="JEBRErexM2RefmoPrDtUYI">文本</span></td><td data-page-node-id="Bml9p4S993HEkbBfgvU5fn">单词文本内容（裸值）</td><td class="example" data-page-node-id="8vlwaoMAIUBILH9rdoZ7PW">apple</td><td data-page-node-id="aH4DQbC1emAOsuojr3et9J"><span class="scope-tag scope-new" data-page-node-id="zjGvhgMLxD9mnGDyGSPQvd">新增</span></td></tr>
+                <tr data-page-node-id="jMiZKAS4b97eaQsrnbANAC"><td data-page-node-id="JOAjcyfjw5iFXYyr3dfxR0"><span class="field-name-new" data-page-node-id="NaBzC4kZwQqgw789G2hS5K">word_list.true_count</span></td><td data-page-node-id="Sat0b4NmP6LFDvXf3W4B3s">正确次数</td><td data-page-node-id="BLDizEkETJI4H5eSmVDIoD"><span class="type-tag type-int" data-page-node-id="LZW3uEdQczx6g9sl20PSSZ">数值</span></td><td data-page-node-id="J7NLYYY8ZVjkrVbUrOzSOM">本关该单词被正确识别/答对的次数</td><td class="example" data-page-node-id="FIIzCaM740TrGMryPbGQCp">3</td><td data-page-node-id="Nevy1MeCe1vu894TjS4aQP"><span class="scope-tag scope-new" data-page-node-id="hMtOZGExpDqyQN9CEPhQZm">新增</span></td></tr>
+                <tr data-page-node-id="sjC5fSWJLzy4ImCbwuUG9O"><td data-page-node-id="8qfKkOmZ9feDl0mXviTlbr"><span class="field-name-new" data-page-node-id="V4CqWaHAVYZ2e203TMphgB">word_list.false_count</span></td><td data-page-node-id="FpDpv62oitm9fUwBjtc4GN">错误次数</td><td data-page-node-id="Pj3DP8GIoE56E4S8eVj6N9"><span class="type-tag type-int" data-page-node-id="0Om4VW4MDOTTJta30yHovf">数值</span></td><td data-page-node-id="wLY2S7Opv4h3uJnpqSKfDC">本关该单词答错/识别失败的次数</td><td class="example" data-page-node-id="feNIFkjr29Zr1FswaOo4e1">3</td><td data-page-node-id="ego8LfxmTWzTZ61e3ZeSgm"><span class="scope-tag scope-new" data-page-node-id="IgaTNlAHUgEwphJLdrejAz">新增</span></td></tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Event 3: quiz_start -->
-        <div class="event-section">
-            <div class="event-header">
-                <div class="left">
-                    <h2>事件三：<span class="ename">quiz_start</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">开始语音宝箱</span></h2>
-                    <div class="edesc">玩家开始语音宝箱的某一轮语音识别时触发；每轮开始各上报一次</div>
+        <div class="event-section" data-page-node-id="2kr7ygn5Vt4WkADzbURgVr">
+            <div class="event-header" data-page-node-id="ijVX3qbETZmBxmLtkweEgw">
+                <div class="left" data-page-node-id="esay2AyIRxYfyyFAPIuzHT">
+                    <h2 data-page-node-id="uvlGKfwK45E6TTMjdang6u">事件三：<span class="ename" data-page-node-id="EgSDtkEDdHw90iHdkL378G">quiz_start</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="97qP3qVYGi6GhdQJfUiGDM">开始语音宝箱</span></h2>
+                    <div class="edesc" data-page-node-id="ItaWZpXFsE9sfoxuJ9PKFd">玩家开始语音宝箱的某一轮语音识别时触发；每轮开始各上报一次</div>
                 </div>
-                <span class="tag-badge-chest">答题</span>
+                <span class="tag-badge-chest" data-page-node-id="rY7hnV3QTbMmiIOJwoNgT1">答题</span>
             </div>
-            <table>
-                <colgroup>
-                    <col style="width: 160px">
-                    <col style="width: 110px">
-                    <col style="width: 80px">
-                    <col style="width: auto">
-                    <col style="width: 170px">
-                    <col style="width: 100px">
+            <table data-page-node-id="lOCxk5eja2Dzv3MHiLm7vN">
+                <colgroup data-page-node-id="8B1cddBsYeJbVKet7aKOF5">
+                    <col style="width: 160px" data-page-node-id="LH56HqGOPO8KupXIlpIPu9">
+                    <col style="width: 110px" data-page-node-id="7wDS0aImxCWAhYe2ubSnun">
+                    <col style="width: 80px" data-page-node-id="QWuh7kGxbRDJiaxoICZS7H">
+                    <col style="width: auto" data-page-node-id="qUytwmsQaksajd7PDbKuHE">
+                    <col style="width: 170px" data-page-node-id="FjF0HX6OuIbLB0t2KDefmB">
+                    <col style="width: 100px" data-page-node-id="8C1Xa6hj9X4jkLavtABDMo">
                 </colgroup>
-                <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
-                <tbody>
-                    <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1008</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name-new">chest_type</span></td><td>宝箱类型</td><td><span class="type-tag type-string">文本</span></td><td>当前开启的语音宝箱类型</td><td class="example">1=帽子礼盒 / 2=眼镜礼盒 / 3=衣服礼盒 / 4=手套礼盒</td><td><span class="scope-tag scope-new">新增</span></td></tr>
-                    <tr><td><span class="field-name">round_count</span></td><td>当前轮次</td><td><span class="type-tag type-string">文本</span></td><td>当前语音识别轮次（本项目含义：第几轮）</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name-new">answer_count</span></td><td>错误次数</td><td><span class="type-tag type-int">数值</span></td><td>本轮开始前玩家累计答错/识别失败次数</td><td class="example">3</td><td><span class="scope-tag scope-new">新增</span></td></tr>
+                <thead data-page-node-id="EyTLHQBAIE7go43szp2qCV"><tr data-page-node-id="VlxpErAJbVeTNPEk1PZ8Xh"><th data-page-node-id="xBh7mdS4L1qrfpeFYPR9rU">属性名</th><th data-page-node-id="ACkYv46DGUiHX4pqpZuLOV">属性显示名</th><th data-page-node-id="X6IiEW9tFTNeSsDMHsEntQ">类型</th><th data-page-node-id="F8nLtFzPRFXBizpi0ucdVi">说明</th><th data-page-node-id="ibfBmiTKIFyhjbiRotT8lK">示例</th><th data-page-node-id="LGOworlKqXdnz6mMUP9FvU">属性来源</th></tr></thead>
+                <tbody data-page-node-id="KkasmkIm8e5o5dslInNfsC">
+                    <tr data-page-node-id="dR6mooGFKnryyYf08B1fQ0"><td data-page-node-id="ymUIDmld64GjkMfUxpbMkU"><span class="field-name" data-page-node-id="Bgf6nZsyRfyzcPLyZ6v7Dg">game_id</span></td><td data-page-node-id="zNNSpxjeTJyYDXVBuF2MwZ">游戏ID</td><td data-page-node-id="oOPZ0KF0E2T8vXrTMcBhBf"><span class="type-tag type-string" data-page-node-id="YVaQ1hFzeOcPpTHPJl7vcZ">文本</span></td><td data-page-node-id="Evf32AGZDB81aoaI8qHX5o">产品/游戏唯一编号</td><td class="example" data-page-node-id="tYoExKLSC0RUq2uqIRjE3P">1008</td><td data-page-node-id="pL6hmCG6R2mnLydV1hWlFB"><span class="scope-tag scope-required" data-page-node-id="qzEJCF4utqqUmZC1gbGBZz">必含</span></td></tr>
+                    <tr data-page-node-id="D9XBHH8h7eTf46HVhAbk05"><td data-page-node-id="IY6S0ZgegIUoF4fn80rtpL"><span class="field-name" data-page-node-id="BOxJDRkivpoUoIWXn8hwyY">user_id</span></td><td data-page-node-id="Q1JpK53CEYpAfUdwqGm6wM">人脸角色ID</td><td data-page-node-id="fIckkPxHoWxCO03hlDPY9E"><span class="type-tag type-list" data-page-node-id="zc2CdgBgMNJJgFGJeEDnkv">列表</span></td><td data-page-node-id="nuHwKlh4GJWEZeRTZB4TR1">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="ERQPcUY9sf8B2pGTx0zYUV">["135"]</td><td data-page-node-id="zM4WzJEh84ftMDEhDm1rxR"><span class="scope-tag scope-required" data-page-node-id="dSs9IKjWxbQ5uNAct62zLZ">必含</span></td></tr>
+                    <tr data-page-node-id="9iaV8QFUyP2KvuSpGK5r8f"><td data-page-node-id="MUNv9jVohYlGV86IUH0lv6"><span class="field-name" data-page-node-id="cH2jmdjvFklESXWH1N5LXc">session_id</span></td><td data-page-node-id="xRPbWgJxGOEYUeefZu6FuK">会话ID</td><td data-page-node-id="yFjAqf9Wu7WUrebAs7qLN7"><span class="type-tag type-string" data-page-node-id="i4tmLiH73a0jFrdwRf86SQ">文本</span></td><td data-page-node-id="X8ZPXwLIItBt9iPBy8dmzy">单次启动唯一标识</td><td class="example" data-page-node-id="fz6E6DLnPqDOA6fV6GzvPH">s_987654321</td><td data-page-node-id="ppjC0HZjDGMSvpmTSdL5cQ"><span class="scope-tag scope-required" data-page-node-id="smwsQP2PJKpnrCF2zABUhD">必含</span></td></tr>
+                    <tr data-page-node-id="PnYc4MA1dj50Wz0dTwCdwo"><td data-page-node-id="95leTl24uy95a2be2rJynH"><span class="field-name" data-page-node-id="XascDAlvMeZr4fkCVbFfWG">timestamp</span></td><td data-page-node-id="d6H51HZA2nHxQA36cz2dSi">时间戳</td><td data-page-node-id="OPYHBt0HzTDQmjTsfCYWgS"><span class="type-tag type-time" data-page-node-id="aLDfooysPC8pBpGtTf3GED">时间</span></td><td data-page-node-id="0OEgKiZUgB4lKoI7ddVDeJ">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="Em4v6GI4wcs3QCvZbVotzY">2026-05-26T09:35:00+08:00</td><td data-page-node-id="XQMWTjojh5r0v1TB0Q4mhd"><span class="scope-tag scope-required" data-page-node-id="vVEi1S1Fvq0CAGdlmmsP6i">必含</span></td></tr>
+                    <tr data-page-node-id="02naUNb5WLHi24xswHbOCh"><td data-page-node-id="j9bJCAiT1DPPJ4We8mrkxi"><span class="field-name-new" data-page-node-id="vIThjEKcp88sXhMQdv2iow">chest_type</span></td><td data-page-node-id="JsTWvGdov0z1licZoAqNyg">宝箱类型</td><td data-page-node-id="FB3uACF9YxDE1BR7ZjulZN"><span class="type-tag type-string" data-page-node-id="8KFEAlYcNMsTkL5LHLm95H">文本</span></td><td data-page-node-id="lLzF6aNalL4hcGIWUbGwZh">当前开启的语音宝箱类型</td><td class="example" data-page-node-id="gzZJCqvyDfrqxkN440lu4V">1=帽子礼盒 / 2=眼镜礼盒 / 3=衣服礼盒 / 4=手套礼盒</td><td data-page-node-id="sri767YPecv3lAN7MxWC7v"><span class="scope-tag scope-new" data-page-node-id="NCbaxAqs5SB7iXaDY0IgIV">新增</span></td></tr>
+                    <tr data-page-node-id="cNHHVDJ2Y7wZYm4ZbaPdN0"><td data-page-node-id="waL4HdB9J2dXT1VgsiTsOh"><span class="field-name" data-page-node-id="8gFul7KFFwHQjMNKiekb2l">round_count</span></td><td data-page-node-id="x0xzXiJiM1jHwoxvbwgEkv">当前轮次</td><td data-page-node-id="O6l0PenOgoUQtVkwdja86L"><span class="type-tag type-string" data-page-node-id="C12bivA7XHUG0fAg2U4syq">文本</span></td><td data-page-node-id="7l3yw0HNesFp68JXiNZYU4">当前语音识别轮次（本项目含义：第几轮）</td><td class="example" data-page-node-id="YvTPWr63PUz0I66yYErwaf">1 / 2 / 3 / 4</td><td data-page-node-id="xqKDUPzHHjliO67rc9uBoH"><span class="scope-tag scope-common" data-page-node-id="tlYxwer3tOEw8mhpNvFIkN">通用</span></td></tr>
+                    <tr data-page-node-id="vnj5BXxBzmMFPieK5EncJV"><td data-page-node-id="4n8N3BVbwRu1ucN0eC13pu"><span class="field-name-new" data-page-node-id="Y09tqSZX6O4FoKddGsdTC2">answer_count</span></td><td data-page-node-id="A0QEF9PTTkvNB07WlHXApY">错误次数</td><td data-page-node-id="pyNE3LOiJu8ix7wMtzYvnb"><span class="type-tag type-int" data-page-node-id="vB8Jc25yv7yAq5Twng1QGD">数值</span></td><td data-page-node-id="z44rNbPuxMWLF1pP9xe4Fe">本轮开始前玩家累计答错/识别失败次数</td><td class="example" data-page-node-id="Hi5LqVEEVU777OpVA07Br5">3</td><td data-page-node-id="BpEasrcG1j8EXVNQmU3MLN"><span class="scope-tag scope-new" data-page-node-id="KJnrboPEwcHsDHpqCQyTpy">新增</span></td></tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Event 4: single_answer -->
-        <div class="event-section">
-            <div class="event-header">
-                <div class="left">
-                    <h2>事件四：<span class="ename">single_answer</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">结束语音宝箱</span></h2>
-                    <div class="edesc">玩家完成或退出语音宝箱某一轮语音识别时触发；每轮结束各上报一次。通过率由 single_answer(score=1) / quiz_start 计算得出</div>
+        <div class="event-section" data-page-node-id="jc2ixhZqPS3V09EqDQPYWb">
+            <div class="event-header" data-page-node-id="UAGMrFCw6HfjywLgw743P9">
+                <div class="left" data-page-node-id="2UbVfCQo5cXnngQ2qTp3Pw">
+                    <h2 data-page-node-id="GW5EaghVuYA8ri1hZj6sJe">事件四：<span class="ename" data-page-node-id="gnHLOIVF7OETtzM3n8V1NR">single_answer</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="BqtkmJFzuB0YbHUBg0WlEx">结束语音宝箱</span></h2>
+                    <div class="edesc" data-page-node-id="9Oo5qN706aDvTeDHW0lN4i">玩家完成或退出语音宝箱某一轮语音识别时触发；每轮结束各上报一次。通过率由 single_answer(score=1) / quiz_start 计算得出</div>
                 </div>
-                <span class="tag-badge-chest">答题</span>
+                <span class="tag-badge-chest" data-page-node-id="w2naaLSUfFHhecOkreqxmy">答题</span>
             </div>
-            <table>
-                <colgroup>
-                    <col style="width: 160px">
-                    <col style="width: 110px">
-                    <col style="width: 80px">
-                    <col style="width: auto">
-                    <col style="width: 170px">
-                    <col style="width: 100px">
+            <table data-page-node-id="IWVI6gvYTg0Jm93WORqlqW">
+                <colgroup data-page-node-id="ziwrfDK4FrAjeKJko7drMV">
+                    <col style="width: 160px" data-page-node-id="uPXzF2i302SoXaKiLHnr5O">
+                    <col style="width: 110px" data-page-node-id="LrcCmbl33mJFTihktUDBQe">
+                    <col style="width: 80px" data-page-node-id="kvQiUYL1dFZ7dek9tXhpBQ">
+                    <col style="width: auto" data-page-node-id="IFRFZPyiieWBh4JQaaIjzs">
+                    <col style="width: 170px" data-page-node-id="6nMPighQI6TwG0Z11tAcjr">
+                    <col style="width: 100px" data-page-node-id="XNOZFyogZapwUw2KomJTPU">
                 </colgroup>
-                <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
-                <tbody>
-                    <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1008</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name-new">chest_type</span></td><td>宝箱类型</td><td><span class="type-tag type-string">文本</span></td><td>当前开启的语音宝箱类型</td><td class="example">1=帽子礼盒 / 2=眼镜礼盒 / 3=衣服礼盒 / 4=手套礼盒</td><td><span class="scope-tag scope-new">新增</span></td></tr>
-                    <tr><td><span class="field-name">round_count</span></td><td>当前轮次</td><td><span class="type-tag type-string">文本</span></td><td>当前语音识别轮次（本项目含义：第几轮）</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">score</span></td><td>本轮通过状态</td><td><span class="type-tag type-int">数值</span></td><td>本轮语音识别是否通过</td><td class="example">1=通过 / 0=未通过</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <thead data-page-node-id="s5VFYXAzF7GQHraOnaiIUS"><tr data-page-node-id="bVLsFh8vNHy4CWe7D2JYc6"><th data-page-node-id="yjFsbEZXvUDcGnWNLvwShF">属性名</th><th data-page-node-id="XwA2E7Ea8BWRBDTbFfyDQe">属性显示名</th><th data-page-node-id="LOtIfjLxjJE1b882N7BKGy">类型</th><th data-page-node-id="4QBYu0NYmA3HLxlbgzPVCJ">说明</th><th data-page-node-id="EVCdmxr7xaijsQqPB5WckS">示例</th><th data-page-node-id="RYPK37XS3ARafCXhYj15DI">属性来源</th></tr></thead>
+                <tbody data-page-node-id="AheEn1vR1HN5LqlpmiFVtA">
+                    <tr data-page-node-id="FYTo0KtlnGAkHUvBjgCFtG"><td data-page-node-id="4cgxmvY9iruErgb5Cwm5HK"><span class="field-name" data-page-node-id="mkOiCa1HHytN04qgAYd38L">game_id</span></td><td data-page-node-id="uRslPJg38iMXPDzEOzWzu1">游戏ID</td><td data-page-node-id="EaCsDAMlJhGphdkVGR8YbZ"><span class="type-tag type-string" data-page-node-id="XfLbjsuIhEcNEGzK89DFGf">文本</span></td><td data-page-node-id="EnEVS2xFYmkBNsPhUibiFr">产品/游戏唯一编号</td><td class="example" data-page-node-id="RLaWOLsRWLAkUj1wtxdWQ0">1008</td><td data-page-node-id="nYlqHcrzApeA9Jm8hJ5CH7"><span class="scope-tag scope-required" data-page-node-id="2TTwUJdnCs39xdWpyPH2SX">必含</span></td></tr>
+                    <tr data-page-node-id="8c04xO4i2hZHAIKiucdFkM"><td data-page-node-id="psbsJOp3rEB8017cSXi39P"><span class="field-name" data-page-node-id="ggmuaR21wmBhdxp0srlLUh">user_id</span></td><td data-page-node-id="ZHMvGb7TVEFEzOt4LWtoH0">人脸角色ID</td><td data-page-node-id="N1DChCqy0EogpBlfKkGA7o"><span class="type-tag type-list" data-page-node-id="cdoEl5Nmm6kTi32cwKmN8J">列表</span></td><td data-page-node-id="Ll3AFJ5xhEcXdDxfb00mO4">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="HHmfidLHdGoFT1ENT0DdVx">["135"]</td><td data-page-node-id="KGNHspE3MhARoN8rkiF8ll"><span class="scope-tag scope-required" data-page-node-id="p1NWdVjkDQzuyCQqEFK2nt">必含</span></td></tr>
+                    <tr data-page-node-id="ulGsCooDkNXVxwYP7odnpF"><td data-page-node-id="0zLTVVcABVIwhBBrKOKOHQ"><span class="field-name" data-page-node-id="BdBLp1RMVhRnsbQA259Jha">session_id</span></td><td data-page-node-id="DakWjdzbKSNMStSCpbM8Co">会话ID</td><td data-page-node-id="supde2D5LSsDCEfPAzZsZg"><span class="type-tag type-string" data-page-node-id="Hb4BNSddyFsnvFJcE1MTpO">文本</span></td><td data-page-node-id="416NRuasK3fGd3ImUyF6Iq">单次启动唯一标识</td><td class="example" data-page-node-id="k3bsXs7Cpv2rptny4YlaRb">s_987654321</td><td data-page-node-id="IXM8nMeKFeFuWWS96ZzGna"><span class="scope-tag scope-required" data-page-node-id="kNDMLyw3vrKhnWMoz7Bb7n">必含</span></td></tr>
+                    <tr data-page-node-id="Sip9Lume8z3zl1foyGNy72"><td data-page-node-id="uv6bJQj1ujAAljQsv8x3SP"><span class="field-name" data-page-node-id="vXKe9j7vQLP6idebxLOx8Y">timestamp</span></td><td data-page-node-id="SRDNv0mHTOph6b6L3b1C7E">时间戳</td><td data-page-node-id="y82fMKEZdKnhmLokmaIyH0"><span class="type-tag type-time" data-page-node-id="Q4vaWoZ5pzldtsLtACC9RJ">时间</span></td><td data-page-node-id="VwrCbl8JfjnbnQAOJCMgLT">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="G6IZZxZdobXjivFExUTEhE">2026-05-26T09:35:00+08:00</td><td data-page-node-id="lv23VUSF7lj4HYbCjQ14ol"><span class="scope-tag scope-required" data-page-node-id="copS5OWGw10imvSWHJINQe">必含</span></td></tr>
+                    <tr data-page-node-id="AJK0H8ZARDC0XecXCwxJnF"><td data-page-node-id="U0AitSNmRO2E9sYIGFdkWf"><span class="field-name-new" data-page-node-id="wRrQbGZHCfZi3XzmCee8lo">chest_type</span></td><td data-page-node-id="iOqHNHrq57XkHD46qKlzmQ">宝箱类型</td><td data-page-node-id="Y4YHlJe0HRIFYG98TY7MBS"><span class="type-tag type-string" data-page-node-id="NU3go7uvizQPzAbWfmZ8Kr">文本</span></td><td data-page-node-id="d8p4k4DftgFu1lok8UakTp">当前开启的语音宝箱类型</td><td class="example" data-page-node-id="FkbemcC2Z6XTZtOaiwGG0W">1=帽子礼盒 / 2=眼镜礼盒 / 3=衣服礼盒 / 4=手套礼盒</td><td data-page-node-id="SRY1w6Re0HT1GPGymubneJ"><span class="scope-tag scope-new" data-page-node-id="eYRcC50VwnthJWbhby6nWS">新增</span></td></tr>
+                    <tr data-page-node-id="QCe3UGeTAlLIQfrCfjVPKF"><td data-page-node-id="43C6YAjXFzphpsHBQRI8NA"><span class="field-name" data-page-node-id="3k4nipznzQJUcA2CMxg87B">round_count</span></td><td data-page-node-id="zEtKlWgy2M1jwSldVRxXcp">当前轮次</td><td data-page-node-id="CFpY3EPDja1FcXdqjb0AF1"><span class="type-tag type-string" data-page-node-id="y5gm4OkN8Ynr7RGuIIojM1">文本</span></td><td data-page-node-id="bkXvzOC72dfQ0E1DzLA78e">当前语音识别轮次（本项目含义：第几轮）</td><td class="example" data-page-node-id="IGQ6ehgTnFkvxvnqI9XjA1">1 / 2 / 3 / 4</td><td data-page-node-id="8NZ1qu5F6HXCfjtfYEZjQF"><span class="scope-tag scope-common" data-page-node-id="M8t9tWtMCQ9S4svvEozm8Q">通用</span></td></tr>
+                    <tr data-page-node-id="zwjyDiH8gQ2ZPQ6ZxK7Yir"><td data-page-node-id="CYzjWcRRibwcQ8YSP8rlE3"><span class="field-name" data-page-node-id="PkcBd7UclXZHGPWmndRSxv">score</span></td><td data-page-node-id="YaxwZnfLQkrmB39JDZF3hB">本轮通过状态</td><td data-page-node-id="D9ekDYfuCJgEqwESVzJYFn"><span class="type-tag type-int" data-page-node-id="VqgvTDeYU4S1UbJiXgmDdS">数值</span></td><td data-page-node-id="PQWWGo7GuGi5favBHQ4eWt">本轮语音识别是否通过</td><td class="example" data-page-node-id="EYFxEGagfKGvP4MQI9rWSK">1=通过 / 0=未通过</td><td data-page-node-id="MDX2IFE8CtfbJt9buqGPa6"><span class="scope-tag scope-common" data-page-node-id="zGrV926pGDfhOLqKBB3xUY">通用</span></td></tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Event 5: pause_game -->
-        <div class="event-section">
-            <div class="event-header">
-                <div class="left">
-                    <h2>事件五：<span class="ename">pause_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">暂停游戏</span></h2>
-                    <div class="edesc">游戏暂停时触发</div>
+        <div class="event-section" data-page-node-id="YzTqfru0JpXrcsD2z3O1Rd">
+            <div class="event-header" data-page-node-id="s5Ltg8FUkivfSzZPBcYM4W">
+                <div class="left" data-page-node-id="5QUSld8r1Nr4eEoKjCuyLH">
+                    <h2 data-page-node-id="fBX1egwK4EUUgI85qy2FP4">事件五：<span class="ename" data-page-node-id="U27EWSf2NLAS8dEYrbm2Lm">pause_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="Hd4rjPBfLVept9TVF32xIK">暂停游戏</span></h2>
+                    <div class="edesc" data-page-node-id="aHUEfntGz9cbQlLozQCJrm">游戏暂停时触发</div>
                 </div>
-                <span class="tag-badge">游戏</span>
+                <span class="tag-badge" data-page-node-id="vhBQXLSywa13xwkwcS3wMw">游戏</span>
             </div>
-            <table>
-                <colgroup>
-                    <col style="width: 160px">
-                    <col style="width: 110px">
-                    <col style="width: 80px">
-                    <col style="width: auto">
-                    <col style="width: 170px">
-                    <col style="width: 100px">
+            <table data-page-node-id="wEkE2b1uRHoYPLGmMF0dT4">
+                <colgroup data-page-node-id="5BrNsndzsJNeh8C9duD6Ta">
+                    <col style="width: 160px" data-page-node-id="zzGpuReOeeX5j3FNsqpq88">
+                    <col style="width: 110px" data-page-node-id="pMxHcYmhMs0t8ePCVtGEDZ">
+                    <col style="width: 80px" data-page-node-id="fJJ0isvYqavcQAzExalOvm">
+                    <col style="width: auto" data-page-node-id="8Grnr9wx55CcCoYFfjwTw0">
+                    <col style="width: 170px" data-page-node-id="qYr9SWY83wkdH2osf2EXlH">
+                    <col style="width: 100px" data-page-node-id="D9woBqA9HuuXRbDtgHOGM0">
                 </colgroup>
-                <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
-                <tbody>
-                    <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1008</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <thead data-page-node-id="mx49dtZ3Y5JHBdshM0csf7"><tr data-page-node-id="krAsil9SaWfdK4m2NZXZ7o"><th data-page-node-id="SYHLnfsqx3XbBJEZXrd3eh">属性名</th><th data-page-node-id="LFvXVy7cIMVaAJnahY2D4X">属性显示名</th><th data-page-node-id="Ki0931vWXBEb94Q4GNhf5L">类型</th><th data-page-node-id="sv2jpziUTip56yvLxkhRDF">说明</th><th data-page-node-id="89KB4lOIqTpB9Plq8lwYL5">示例</th><th data-page-node-id="FdOal8bGNom5b6ziktBPHo">属性来源</th></tr></thead>
+                <tbody data-page-node-id="IxkDz07JRddWt0B5AQLi7f">
+                    <tr data-page-node-id="vgnX5oxptASMDmjOp2B5ca"><td data-page-node-id="LXZwVOISdaqSxpUk7F1jqt"><span class="field-name" data-page-node-id="IJSx2xP9ALspFg5ZvuJt0a">game_id</span></td><td data-page-node-id="itWojIaV9uzob3C8lNbFRT">游戏ID</td><td data-page-node-id="MDOzyb8N5xCW20c3fB5Qlb"><span class="type-tag type-string" data-page-node-id="kRa1AeaHDCpZmb1HG1BzWe">文本</span></td><td data-page-node-id="7hKIZWRGWzDSM0f4qiZbal">产品/游戏唯一编号</td><td class="example" data-page-node-id="bHltJnMnyQO5UNrGHyJ4EN">1008</td><td data-page-node-id="9VNmaAnRUURCQDiPmCQ13A"><span class="scope-tag scope-required" data-page-node-id="slNwejJiO5lYHOm1vgpNlo">必含</span></td></tr>
+                    <tr data-page-node-id="AHOC0SsivUQ6OXZmWY8pL9"><td data-page-node-id="THnVlTzNHOK8VZ8BjM0Les"><span class="field-name" data-page-node-id="02iEhPMsceLyrkux8PIUdX">user_id</span></td><td data-page-node-id="pFKJCTuSG5bzQpfT6kBZaf">人脸角色ID</td><td data-page-node-id="wEDhnsP49NTZJlggldhFGQ"><span class="type-tag type-list" data-page-node-id="gVybLnDFRnM9MCEmEt1mRF">列表</span></td><td data-page-node-id="iStigi07GDdP9pYC5MeMaO">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="y7QpqJoQpDwEThIDFD8nRF">["135"]</td><td data-page-node-id="7FszHe0Yw5TQOqzgAimckA"><span class="scope-tag scope-required" data-page-node-id="EWHdkyGLzClpCrXaNrwDgQ">必含</span></td></tr>
+                    <tr data-page-node-id="6ICoVfFYFTff6swKLFmzjf"><td data-page-node-id="Iu5UQWzyhRHp5YRuuHnYMr"><span class="field-name" data-page-node-id="MDX1FNgBwnwkZ8nkgS2Hnq">session_id</span></td><td data-page-node-id="aVeN6BaRNAf05x0XYTKGyK">会话ID</td><td data-page-node-id="pMTANLW4sAhMewqqJ8JcTO"><span class="type-tag type-string" data-page-node-id="jeFFZDlSjTX9xRWWaKrEKY">文本</span></td><td data-page-node-id="CD99xHksdvdxYbufX5F4wX">单次启动唯一标识</td><td class="example" data-page-node-id="3ghv58NsjShzhXJDs6WtZg">s_987654321</td><td data-page-node-id="8hRAQlVPstHRLcH1okdiMB"><span class="scope-tag scope-required" data-page-node-id="QVl6KBR8wAZvXB9xDxIg3w">必含</span></td></tr>
+                    <tr data-page-node-id="nGsDW7z9jcU80VXQzVhHVY"><td data-page-node-id="43Gwo2C9zOViXEmjef3YLw"><span class="field-name" data-page-node-id="KK3aBeOWTLGmhUlwWcrkQ7">timestamp</span></td><td data-page-node-id="sSfBL6HZBMClAB70pXZAUp">时间戳</td><td data-page-node-id="JzaOvQfT86ZAuK02ZIq71g"><span class="type-tag type-time" data-page-node-id="i74Ulq67P3o2GittmQ2rY9">时间</span></td><td data-page-node-id="YgCcfGckDUGfaLz389tM4h">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="MIDU0JtfUVhMsRZ27ZxSHm">2026-05-26T09:35:00+08:00</td><td data-page-node-id="ftUelKKbeyQEKItADny9HX"><span class="scope-tag scope-required" data-page-node-id="8u4uqlczrliMLwBRcgRwRc">必含</span></td></tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Event 6: continue_game -->
-        <div class="event-section">
-            <div class="event-header">
-                <div class="left">
-                    <h2>事件六：<span class="ename">continue_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">回到游戏</span></h2>
-                    <div class="edesc">从暂停状态恢复时触发</div>
+        <div class="event-section" data-page-node-id="ea8YPIMmdxcNSPCpGXY5kR">
+            <div class="event-header" data-page-node-id="gGw8YuYkj6EfhCsHNDtoGt">
+                <div class="left" data-page-node-id="7zV1BVW7YFiDGbZ9dG3wGt">
+                    <h2 data-page-node-id="vFe4pClNZyR4F6oTLDtCHe">事件六：<span class="ename" data-page-node-id="WurE4O9TK3BTJls8598iR5">continue_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="7EBfW4SBBXKe2cc6gbY3Da">回到游戏</span></h2>
+                    <div class="edesc" data-page-node-id="ehxWbQpaEHbfBJFY8T3bN5">从暂停状态恢复时触发</div>
                 </div>
-                <span class="tag-badge">游戏</span>
+                <span class="tag-badge" data-page-node-id="b3PpCRdLAirpv0dBSuRGEN">游戏</span>
             </div>
-            <table>
-                <colgroup>
-                    <col style="width: 160px">
-                    <col style="width: 110px">
-                    <col style="width: 80px">
-                    <col style="width: auto">
-                    <col style="width: 170px">
-                    <col style="width: 100px">
+            <table data-page-node-id="T6sQHthj9PM4KShAgrYTtc">
+                <colgroup data-page-node-id="84vUtG8aeOgiaB3f17TpZl">
+                    <col style="width: 160px" data-page-node-id="0ZbI7Ljlst80P3mDOVFfyP">
+                    <col style="width: 110px" data-page-node-id="eklwAPeiFeAKCCsaCaF9Dm">
+                    <col style="width: 80px" data-page-node-id="bOKpZCYF7qReqF3Knbo9xp">
+                    <col style="width: auto" data-page-node-id="o5VEwZ7B6ZeAIOOvOvBzFq">
+                    <col style="width: 170px" data-page-node-id="41MKGt8KlO71AKxZYjOFLo">
+                    <col style="width: 100px" data-page-node-id="H64WwxXIYMQPDAthxASIuK">
                 </colgroup>
-                <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
-                <tbody>
-                    <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1008</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">1748314800000</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <thead data-page-node-id="yWX30Tsd7BwENLamrECnWY"><tr data-page-node-id="51so6LElG3sCSD7Yb44RoS"><th data-page-node-id="2tqwBtFxzZR7CUQRb7hhVU">属性名</th><th data-page-node-id="iPmsWQzdpcV5DDKWwHQStA">属性显示名</th><th data-page-node-id="hXFYZFg1iFtqzoaG8haVS5">类型</th><th data-page-node-id="PMyKYzRlvzuy837KG7GxHq">说明</th><th data-page-node-id="kvkoHcxMnaUH8QQROG484r">示例</th><th data-page-node-id="Plez2ZnXW7iPErHkgjHCIq">属性来源</th></tr></thead>
+                <tbody data-page-node-id="Bnig2gXmhmRzyqIcofQxU0">
+                    <tr data-page-node-id="PRhTINGNIwNwkxZtfG5ceD"><td data-page-node-id="6zEFuz84F8xXvFNteEQY0J"><span class="field-name" data-page-node-id="ZUMQGmmymnCW4deHU3lPNg">game_id</span></td><td data-page-node-id="bVi8UmGBK89avsVMR4q6an">游戏ID</td><td data-page-node-id="emhSrYHQQXvQuilZO0baWt"><span class="type-tag type-string" data-page-node-id="AItoeHlORprxJ4TQbLJglE">文本</span></td><td data-page-node-id="25rehT17i9VVYrs1aNaWnT">产品/游戏唯一编号</td><td class="example" data-page-node-id="4W0hxBsDMgeCnNfko3XTnW">1008</td><td data-page-node-id="eED6a80nSAwNpHeOlSyk3w"><span class="scope-tag scope-required" data-page-node-id="4mk0E4XKB0p6OBWnUFkWhi">必含</span></td></tr>
+                    <tr data-page-node-id="eI2htkfJFdps7zW1rGLKzq"><td data-page-node-id="ysAjXv1OayQDToW3vVTkUP"><span class="field-name" data-page-node-id="mMdHLjvnb2DqOsCLW8hhoF">user_id</span></td><td data-page-node-id="Ws8SmfdVpDGBPf5org18Sl">人脸角色ID</td><td data-page-node-id="oMvFZsAn11dWhE71C3Kq5r"><span class="type-tag type-list" data-page-node-id="ty8nrZuYU4LoumW3eXqxMu">列表</span></td><td data-page-node-id="LTfCxavHWGn1YOG4EfEBlc">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="L7zB4iv1XrAPbEwCqoXMpz">["135"]</td><td data-page-node-id="sp6jGXmw3KTfp38A9tE3OK"><span class="scope-tag scope-required" data-page-node-id="vzaqiAxOVl3Ny4oy0XnxbS">必含</span></td></tr>
+                    <tr data-page-node-id="pVVLTkYmtyZPoxU0TTGnPE"><td data-page-node-id="3B5NTBAa7fOSVrSlweUxIl"><span class="field-name" data-page-node-id="kf4wAG3AYp7IEGFTZAF98w">session_id</span></td><td data-page-node-id="wwbzgQA2asi7r1azxaTpXq">会话ID</td><td data-page-node-id="MtLPu5y7xyHqVBRpUCobFE"><span class="type-tag type-string" data-page-node-id="mCiTNRsMu3QwgeMjxYiD27">文本</span></td><td data-page-node-id="9RxFFhPnaxjZy5FPYpBoHb">单次启动唯一标识</td><td class="example" data-page-node-id="GbRpWh8WySWSeAohcp7z7l">s_987654321</td><td data-page-node-id="A4thByaGusIeLfxxzPCRqw"><span class="scope-tag scope-required" data-page-node-id="qTppeSSIgkpWLNYvtuJ65c">必含</span></td></tr>
+                    <tr data-page-node-id="hd7DtE7HgK0qNwS5yE8sVs"><td data-page-node-id="ABsLGXKaHZC9KbtDumEBgk"><span class="field-name" data-page-node-id="mTqV68IzKHqyswFqNtRkWY">timestamp</span></td><td data-page-node-id="hbblEM9WIlmN84uCnGzxZv">时间戳</td><td data-page-node-id="FAnqxhfYeOl5rrsE2s2Duw"><span class="type-tag type-time" data-page-node-id="nnE7CtyFSbOFKeT6S12oFX">时间</span></td><td data-page-node-id="OGNymddE5UeVLS5PRVODpx">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="jZHKijrXxJBhBo87qRbrCD">2026-05-26T09:35:00+08:00</td><td data-page-node-id="Ln5OfoXhA02YIQWLlLmkM5"><span class="scope-tag scope-required" data-page-node-id="YbE678AXsVXwkgGeJWTC9r">必含</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Event 7: VIP_show -->
+        <div class="event-section" data-page-node-id="YdjP7nbyCLreROBYT3kRoy">
+            <div class="event-header" data-page-node-id="8wm7yg8Nv5LXsD6H2n9kqB">
+                <div class="left" data-page-node-id="Tzj9NzjqFwrILI6NToSr4E">
+                    <h2 data-page-node-id="EAkt5CiQ5CwkgdMXBiQxyb">事件七：<span class="ename" data-page-node-id="jbCE5iryMKxaxyAkEVRsfg">VIP_show</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="P7uvEIspmC5lBwAATa7kAC">时间订阅弹窗</span></h2>
+                    <div class="edesc" data-page-node-id="yPPargHfwAmtPQXAWCSIkV">时间订阅弹窗弹出时触发；每次弹出各上报一次</div>
+                </div>
+                <span class="tag-badge-new" data-page-node-id="C3JhnQnGkpv3HD7Qoca4V8">弹窗</span>
+            </div>
+            <table data-page-node-id="I0BcvkbhD8Zz04I5YjeUJT">
+                <colgroup data-page-node-id="gCRj7nK9VK8vb4erotsveS">
+                    <col style="width: 160px" data-page-node-id="tTFC9TcCx6cwFtGDGGHk9B">
+                    <col style="width: 110px" data-page-node-id="WHFzkwKdPYtOFOvVOWIQ9o">
+                    <col style="width: 80px" data-page-node-id="206EwtEGhhHZTx568s1Z8e">
+                    <col style="width: auto" data-page-node-id="GJmpHye52QmtjANxtQy0Gw">
+                    <col style="width: 170px" data-page-node-id="ZCVPOy0Uam9jAmXcrcKcK6">
+                    <col style="width: 100px" data-page-node-id="S2WMbeSJqllNGJpB6oFEfz">
+                </colgroup>
+                <thead data-page-node-id="jE6H7k7kyIrEfGEtX4oGOS"><tr data-page-node-id="FSiQynuOXJSdt7bHEcMTf0"><th data-page-node-id="2KvcVcEMDR8Kbdzqdh55xC">属性名</th><th data-page-node-id="Mwt6WPb7zRbLl6JEC4FPN5">属性显示名</th><th data-page-node-id="jvwy7TNhxVGdUYT5xfYy0R">类型</th><th data-page-node-id="GYJpDKNG2H3nWeKeJQrh2z">说明</th><th data-page-node-id="Qwc4v3dQRIVnFogW8jLuYV">示例</th><th data-page-node-id="vsleguhKctnKsa98sSie2s">属性来源</th></tr></thead>
+                <tbody data-page-node-id="7rfGs3gXifCQheSYD2gmwb">
+                    <tr data-page-node-id="FiV9DFz6K17B82kR6fuKsN"><td data-page-node-id="hdWhPdQxMe38KPJra6l72a"><span class="field-name" data-page-node-id="Byacf1JA1mylMt95xXih5k">game_id</span></td><td data-page-node-id="cDAJAfZvFSsJLk8JnZSJvf">游戏ID</td><td data-page-node-id="d9OH46KCChA0udiHCUzAoG"><span class="type-tag type-string" data-page-node-id="5kwfq8WbcWqNSYj9LGhJrX">文本</span></td><td data-page-node-id="0D4k8omWeAfkrWNaCQlETN">产品/游戏唯一编号</td><td class="example" data-page-node-id="vSCQZ2m2honTOR9BlAdyon">1008</td><td data-page-node-id="f36pBdT7jA5QvnG7i5GBib"><span class="scope-tag scope-required" data-page-node-id="tZ9368E6f7ZIsIVPHa6QpR">必含</span></td></tr>
+                    <tr data-page-node-id="Hc467qM6KAUZO5c67aED9w"><td data-page-node-id="kAjwJgsA0SxeekUCBLxhke"><span class="field-name" data-page-node-id="gMonBNWkaAjEJmkK61RUDV">user_id</span></td><td data-page-node-id="fKzENwDJfCMre4EtZ5Fope">人脸角色ID</td><td data-page-node-id="WJ0hqXQLDyBINbfVnUHPkY"><span class="type-tag type-list" data-page-node-id="GGciJ0VSve5cHrJNJa796d">列表</span></td><td data-page-node-id="vZpO4tOW06oCNq8Ht3rgxI">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="dYJIcVPgtRiWqRjUENgx4g">["135"]</td><td data-page-node-id="0cO2INNtlEUaKLgYUBfJL1"><span class="scope-tag scope-required" data-page-node-id="q42zmtRuGR9V8aOgRnl1Xc">必含</span></td></tr>
+                    <tr data-page-node-id="LwVRILqYGYr2DQ1vq41CqX"><td data-page-node-id="9A8BOuHAAR1xvMjcaEGfQo"><span class="field-name" data-page-node-id="9F1BK3rvWOJlf5cRjWoJmK">session_id</span></td><td data-page-node-id="ZFfGb1hc3sGl3L7A5HRaVE">会话ID</td><td data-page-node-id="UwUmhseFT5eGHnCQeAdZMK"><span class="type-tag type-string" data-page-node-id="xirY0MufOWjAt8UShkY6qz">文本</span></td><td data-page-node-id="p72dVdZ1PPkZ0AqN7FsosF">单次启动唯一标识</td><td class="example" data-page-node-id="I1c33acPcNfdv9N5n2Dpbx">s_987654321</td><td data-page-node-id="lOzjWQsPgQYGOhjzBRIQCv"><span class="scope-tag scope-required" data-page-node-id="O1bI3WHnnLlPD5RpzW6sDy">必含</span></td></tr>
+                    <tr data-page-node-id="MoaWfOtKEjrgGTbEb5M0Gk"><td data-page-node-id="yfzXrBb7h1ZKJ1vtii6APo"><span class="field-name" data-page-node-id="BEkzXhjItj4C0WccBw5tFt">timestamp</span></td><td data-page-node-id="BfEAzuYUbBSMrxYpQCIBb1">时间戳</td><td data-page-node-id="2w4uq9bTVzr8ReHVmtW9xF"><span class="type-tag type-time" data-page-node-id="uG6rYFD2ozsb25beK9ywDx">时间</span></td><td data-page-node-id="NOEtGlY0xFKppGOsAw2pr3">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="0SrYYMGdzN98WWK29UCRUd">2026-05-26T09:35:00+08:00</td><td data-page-node-id="aJ0bA8gVlqTv9UtKgXiqtm"><span class="scope-tag scope-required" data-page-node-id="b4OBF0C3IhgSzd77uU67r2">必含</span></td></tr>
+                    <tr data-page-node-id="3tU2GrOw20BBUgYCph4Iqb"><td data-page-node-id="oN4eYH5kGLXPYfXa9k7JEq"><span class="field-name-new" data-page-node-id="BgiD6kAQDZILK25pgMHKDG">ui_id</span></td><td data-page-node-id="yZRBpK9dqYE057G6hDQKJz">弹出来源</td><td data-page-node-id="cDZKVlKiGJM3YKEKhU4eQ7"><span class="type-tag type-string" data-page-node-id="r9nmwCWB2Vx1GsJwcr6hcb">文本</span></td><td data-page-node-id="JxBCoXd4BH6FM7T2bxBGA7">弹出该弹窗的界面，直接取代码中的 UI 名称（示例为占位值，实际以代码中的 UI 命名为准）</td><td class="example" data-page-node-id="V3hahePSwzzbO30moMLFEX">UIMain</td><td data-page-node-id="n6y7Ndk9p0TBXlE2Vikovj"><span class="scope-tag scope-new" data-page-node-id="PzVOeLm64BWRIj9yU9EUnE">新增</span></td></tr>
                 </tbody>
             </table>
         </div>
 
         <!-- Footer -->
-        <div style="text-align: center; color: #999; font-size: 13px; padding: 20px 0;">
+        <div style="text-align: center; color: #999; font-size: 13px; padding: 20px 0;" data-page-node-id="gsFW1pKaEu0WY5QKF0eNat">
             1008《悦动英语单词》| 项目埋点规范 | 对齐跨项目统一标准 | 复用 quiz_start / single_answer 通用事件
         </div>
     </div>
