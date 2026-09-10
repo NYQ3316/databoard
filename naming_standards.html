@@ -284,7 +284,49 @@
             .field-name { font-size: 11px; }
         }
 
-</style>
+
+        /* ======== 悬浮目录组件 ======== */
+        html { scroll-behavior: smooth; }
+        .section { scroll-margin-top: 16px; }
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: var(--card); color: var(--text-strong);
+            border: 1px solid var(--border); box-shadow: var(--shadow);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: var(--hover); border-color: var(--accent); }
+        .toc-panel {
+            width: 188px; padding: 8px; border-radius: 12px;
+            background: var(--card); border: 1px solid var(--border);
+            box-shadow: var(--shadow); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title {
+            font-size: 11px; color: var(--text-muted);
+            padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600;
+        }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: var(--text); text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: var(--hover); }
+        .toc-link.active {
+            color: var(--accent-text); border-left-color: var(--accent);
+            background: var(--hover);
+        }
+        @media (max-width: 640px) {
+            .toc-fab { right: 12px; bottom: 12px; }
+            .toc-panel { width: 168px; }
+        }
+        @media print { .toc-fab { display: none; } }
+    </style>
 </head>
 <body data-page-node-id="s16qhIie3orSP9YCnfrktQ">
     <div class="container" data-page-node-id="HHDioaHddJCjzq3PfcNEQn">
@@ -304,7 +346,7 @@
         </div>
 
         <!-- 事件命名规范 -->
-        <div class="section" data-section="事件规范" data-page-node-id="azpcfdBwmaJzGhE8L4Pnaw">
+        <div class="section" data-section="事件规范" id="sec-events" data-page-node-id="azpcfdBwmaJzGhE8L4Pnaw">
             <h2 data-page-node-id="XBAqdyd8W5QCKSqFAEqMp8">
                 📐 事件命名规范
                 <span class="badge badge-template" data-page-node-id="Dl9LNNbwaKykHe8SOfdsTP">命名规则</span>
@@ -359,7 +401,7 @@
         </div>
         
         <!-- 基础字段 -->
-        <div class="section" data-section="基础字段" data-page-node-id="3YaM0GqgLFpyLSymitJdYz">
+        <div class="section" data-section="基础字段" id="sec-base" data-page-node-id="3YaM0GqgLFpyLSymitJdYz">
             <h2 data-page-node-id="kuMGnhwKZ8NREIJxBN74t0">
                 🔒 基础字段（游戏业务日志必填）
                 <span class="badge badge-required" data-page-node-id="NQPxpXEI4uAg6hvbmmCvdK">必填</span>
@@ -396,7 +438,7 @@
         </div>
         
         <!-- 通用业务属性 -->
-        <div class="section" data-section="通用属性" data-page-node-id="XnWvojJovDuoXQQWHGkuXb">
+        <div class="section" data-section="通用属性" id="sec-common" data-page-node-id="XnWvojJovDuoXQQWHGkuXb">
             <h2 data-page-node-id="k61ahA7ZZGOpIvGwMvwXPA">
                 🔧 跨项目通用业务属性
                 <span class="game-tag tag-common" data-page-node-id="MtFUm1ttmI2ICrKGrM6NKq">多项目共用</span>
@@ -480,7 +522,7 @@
         </div>
 
         <!-- 项目埋点规范入口 -->
-        <div class="section" data-section="项目入口" data-page-node-id="SEqY9eBE3MSDCZgJRb4lEd">
+        <div class="section" data-section="项目入口" id="sec-projects" data-page-node-id="SEqY9eBE3MSDCZgJRb4lEd">
             <h2 data-page-node-id="2FNlA3SSqcp1LZ9QCyNUjZ">
                 🎮 项目埋点规范入口
                 <span class="badge badge-template" data-page-node-id="pqK6RKGH9b7tB2gX0UBBV4"><span id="projectTotal" data-page-node-id="fUrcIlZZLl2WfsC4mUD4AS">0</span> 个项目（<span id="projectDone" data-page-node-id="KEp5EgOPQz3lMmyQawFa5m">0</span> 已填充）</span>
@@ -591,6 +633,67 @@
             if (totalEl) totalEl.textContent = allLinks.length;
             if (doneEl) doneEl.textContent = doneLinks.length;
         })();
+    </script>
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link" href="#sec-events">📐 事件命名规范</a>
+            <a class="toc-link" href="#sec-base">🔒 基础字段</a>
+            <a class="toc-link" href="#sec-common">🔧 通用业务属性</a>
+            <a class="toc-link" href="#sec-projects">🎮 项目入口</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+
+        var links   = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+        var KEY = 'ns_toc_open';
+
+        // 宽屏默认展开，窄屏默认折叠；用户手动切换后记住选择
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '\u2715' : '\u2630';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        links.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // 滚动高亮当前区块（搜索隐藏掉的区块自动跳过）
+        function spy() {
+            var cur = -1;
+            targets.forEach(function (t, i) {
+                if (t && t.offsetParent !== null && t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1 && targets[0] && targets[0].offsetParent !== null) cur = 0;
+            links.forEach(function (a, i) { a.classList.toggle('active', i === cur); });
+        }
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+
+        apply();
+        spy();
+    })();
     </script>
 </body>
 </html>
