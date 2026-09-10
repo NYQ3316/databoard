@@ -131,6 +131,110 @@
             .header h1 { font-size: 20px; }
             th, td { vertical-align: top; padding: 8px; font-size: 12px; }
         }
+    
+        /* ======== 深色主题：深蓝夜空 navy（自动跟随系统深浅色） ======== */
+        html { color-scheme: light dark; }
+        @media (prefers-color-scheme: dark) {
+            body { background: #0b1220; color: #cbd5e1; }
+            .container { color: #cbd5e1; }
+
+            /* 顶栏：品牌色暗化，保留项目辨识度 */
+            .header { background: linear-gradient(135deg, #235e79 0%, #20536e 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .header h1, .header h2, .header h3, .header .subtitle, .header .meta,
+            .header p, .header div, .header span { color: #f1f5f9; }
+            .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
+            .back-btn:hover { background: rgba(255,255,255,0.22); }
+            .back-link { color: #60a5fa; }
+            .back-link:hover { color: #93c5fd; }
+
+            /* 卡片 / 区块 */
+            .event-section, .event-block, .info-bar, .legend, .note-box {
+                background: #131c31; box-shadow: 0 2px 12px rgba(0,0,0,0.45);
+            }
+            .info-bar, .legend { color: #94a3b8; }
+            .info-bar strong, .legend strong { color: #f1f5f9; }
+            .event-header { border-bottom-color: #1e293b; }
+            .event-header .left h2 { color: #f1f5f9; }
+            .event-header .left .ename { color: #93c5fd; background: transparent; }
+            .event-header .left .edesc { color: #94a3b8; }
+            .event-title { color: #f1f5f9; border-bottom-color: #334155; }
+            .event-desc { background: #0f172a; color: #94a3b8; border-left-color: #334155; }
+            .tag-badge { background: rgba(74,222,128,0.15); color: #86efac; }
+            .note-title { color: #f1f5f9; }
+
+            /* 表格 */
+            th { color: #94a3b8; background: #0f172a; border-bottom-color: #1e293b; }
+            td { border-bottom-color: #1e293b; }
+            th, td { border-bottom-color: #1e293b; }
+            tr:hover, tr:hover td { background: #1e293b; }
+            .field-name { color: #93c5fd; background: transparent; }
+            .example { color: #94a3b8; }
+
+            /* 类型 / 范围标签：淡色半透明徽章 + 亮字（不做实色填充） */
+            .type-tag.type-string { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+            .type-tag.type-int { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .type-tag.type-float { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+            .type-tag.type-bool { background: rgba(45,212,191,0.15); color: #5eead4; }
+            .type-tag.type-list { background: rgba(74,222,128,0.15); color: #86efac; }
+            .type-tag.type-object { background: rgba(244,114,182,0.15); color: #f9a8d4; }
+            .type-tag.type-time { background: rgba(251,113,133,0.15); color: #fda4af; }
+            .scope-tag.scope-common { background: rgba(74,222,128,0.15); color: #86efac; }
+            .scope-tag.scope-project { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .scope-tag.scope-required { background: rgba(248,113,113,0.15); color: #fca5a5; }
+            .scope-tag.scope-new { background: rgba(148,163,184,0.18); color: #cbd5e1; }
+            /* 提示行 */
+            .note-row, .note-row td { background: #1e293b; color: #fcd34d; }
+
+            /* 强制覆盖 HTML 内联写死的深色文字 */
+            div[style], p[style], span[style], td[style], th[style],
+            h1[style], h2[style], h3[style], strong[style] { color: #cbd5e1 !important; }
+            .header [style], .event-header [style] { color: #f1f5f9 !important; }
+            .note-row [style], .note-row td[style] { color: #fcd34d !important; }
+        }
+    
+        /* ======== 悬浮目录组件 ======== */
+        html { scroll-behavior: smooth; }
+        .event-section, .event-block { scroll-margin-top: 16px; }
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 188px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+        @media (prefers-color-scheme: dark) {
+            .toc-btn { background: #131c31; color: #f1f5f9; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-btn:hover { background: #1e293b; border-color: #60a5fa; }
+            .toc-panel { background: #131c31; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-title { color: #94a3b8; }
+            .toc-link { color: #cbd5e1; }
+            .toc-link:hover { background: #1e293b; }
+            .toc-link.active { color: #93c5fd; border-left-color: #60a5fa; background: #1e293b; }
+            .toc-back { border-bottom-color: #1e293b; }
+        }
+        @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
+        @media print { .toc-fab { display: none; } }
     </style>
 </head>
 <body>
@@ -156,7 +260,7 @@
     </div>
 
     <!-- Event 1: enter_game -->
-    <div class="event-section">
+    <div class="event-section" id="sec-enter-game">
         <div class="event-header">
             <div class="left">
                 <h2>事件一：<span class="ename">enter_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">进入游戏</span></h2>
@@ -203,7 +307,7 @@
     </div>
 
     <!-- Event 2: end_game -->
-    <div class="event-section">
+    <div class="event-section" id="sec-end-game">
         <div class="event-header">
             <div class="left">
                 <h2>事件二：<span class="ename">end_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">退出游戏</span></h2>
@@ -233,7 +337,7 @@
     </div>
 
     <!-- Event 3: mini_game_start -->
-    <div class="event-section">
+    <div class="event-section" id="sec-mini-game-start">
         <div class="event-header">
             <div class="left">
                 <h2>事件三：<span class="ename">mini_game_start</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">小游戏开始</span></h2>
@@ -279,7 +383,7 @@
     </div>
 
     <!-- Event 4: pause_game -->
-    <div class="event-section">
+    <div class="event-section" id="sec-pause-game">
         <div class="event-header">
             <div class="left">
                 <h2>事件四：<span class="ename">pause_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">暂停游戏</span></h2>
@@ -318,7 +422,7 @@
     </div>
 
     <!-- Event 5: continue_game -->
-    <div class="event-section">
+    <div class="event-section" id="sec-continue-game">
         <div class="event-header">
             <div class="left">
                 <h2>事件五：<span class="ename">continue_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">继续游戏</span></h2>
@@ -356,5 +460,84 @@
         </table>
     </div>
 </div>
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="naming_standards.html">← 返回命名规范</a>
+            <a class="toc-link" href="#sec-enter-game">enter_game</a>
+            <a class="toc-link" href="#sec-end-game">end_game</a>
+            <a class="toc-link" href="#sec-mini-game-start">mini_game_start</a>
+            <a class="toc-link" href="#sec-pause-game">pause_game</a>
+            <a class="toc-link" href="#sec-continue-game">continue_game</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        // 只把 # 锚点链接纳入滚动高亮；返回链接是外链，跳过
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+        var KEY = 'ns1013_toc_open';
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+
+        function setActive(i) {
+            anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); });
+        }
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '\u2715' : '\u2630';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+        anchors.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActive(i);
+                lock = i; clearTimeout(lockTimer);
+                lockTimer = setTimeout(function () { lock = -1; spy(); }, 700);
+            });
+        });
+
+        ['wheel', 'touchstart'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+                if (lock !== -1) { lock = -1; clearTimeout(lockTimer); spy(); }
+            }, { passive: true });
+        });
+
+        var lock = -1, lockTimer = null;
+        function spy() {
+            if (lock !== -1) return;
+            var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+            var cur = -1, lastVisible = -1;
+            targets.forEach(function (t, i) {
+                if (!t || t.offsetParent === null) return;
+                lastVisible = i;
+                if (t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1) cur = 0;
+            if (atBottom && lastVisible !== -1) cur = lastVisible;
+            setActive(cur);
+        }
+
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+        apply(); spy();
+    })();
+    </script>
 </body>
 </html>

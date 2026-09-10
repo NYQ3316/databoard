@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="w9VFCNhjmo2aiYgsmShPZ5">
+<head data-page-node-id="AAJO0zUuWFxgBd7wuY0Wkj">
+    <meta charset="UTF-8" data-page-node-id="c3JXEGhoK0sV7sDE5DD1eW">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="BUhIdfZR0gi7XmxhG7w9Md">
     <title>1061《奇妙萌可之闪耀流星》事件与属性命名</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -193,130 +193,130 @@
         @media print { .toc-fab { display: none; } }
     </style>
 </head>
-<body>
-<div class="container">
-    <a class="back-link" href="naming_standards.html">&larr; 返回命名规范</a>
-    <div class="header">
-        <h1>🌟 1061《奇妙萌可之闪耀流星》事件与属性命名</h1>
-        <div class="meta">体感闯关 · 1~2人 · 故事 / 挑战(简单·普通·困难) · 18 关（关底萌可）</div>
+<body data-page-node-id="owpSNzWOCUcB9toW2mitDB">
+<div class="container" data-page-node-id="sXb2xlntW9zPaUdk6AYnJ9">
+    <a class="back-link" href="naming_standards.html" data-page-node-id="QPqtqv652gRNfCbjTtSyB7">&larr; 返回命名规范</a>
+    <div class="header" data-page-node-id="jJqlemDgSkHbaRpZZqHdHV">
+        <h1 data-page-node-id="nssCqNPe2uh5HDGQpTzrpa">🌟 1061《奇妙萌可之闪耀流星》事件与属性命名</h1>
+        <div class="meta" data-page-node-id="o6IkwFPGu2Ft1SGHHjRh9V">体感闯关 · 1~2人 · 故事 / 挑战(简单·普通·困难) · 18 关（关底萌可）</div>
     </div>
 
     <!-- Event 1: enter_game -->
-    <div class="event-block" id="sec-enter-game">
-        <div class="event-title">enter_game（进入关卡）</div>
-        <div class="event-desc">玩家确认进入某一关时上报。</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-enter-game" data-page-node-id="eVWbvBtayqqRUTJ07PoHas">
+        <div class="event-title" data-page-node-id="5bnV1Ql2ACh4NVqFmocom2">enter_game（进入关卡）</div>
+        <div class="event-desc" data-page-node-id="muqAXD6DaoZC0MPcAKaZKy">玩家确认进入某一关时上报。</div>
+        <table data-page-node-id="bNf8AcDMgOzaNOW3cIg3Pl">
+            <colgroup data-page-node-id="D9uRPP2QghM6tMKKlWp6Je"><col data-page-node-id="0kBJcxG27i4GLBkyQVB34v"><col data-page-node-id="f5uQxtCJPvWvRX6Jvf7Y8D"><col data-page-node-id="scSHVc2zNfhnouFDMAynT9"><col data-page-node-id="jHOwQGCHqvVqZ3BP3WtAzb"><col data-page-node-id="FnyGGnwJq6OhG47fHpqFNE"><col data-page-node-id="zVDdte1rsWpq00Ml2OgRI5"></colgroup>
+            <thead data-page-node-id="EryCIhDIwztwxv7BTIq1xo">
+                <tr data-page-node-id="vKMnKBGOZ9mAjIrr8yvVDM"><th data-page-node-id="2BPTlYG2e4D9H6xgqb3hHN">属性名</th><th data-page-node-id="YPgcBg4CwpbQblNk5fuSiQ">显示名</th><th data-page-node-id="mQsz3uNnLJ7nWI9LGEbZNl">类型</th><th data-page-node-id="yG1XHpXhWYyxLHxfoYFJJd">说明</th><th data-page-node-id="lg9aZOwUUz8XCHAAMMVOf8">示例</th><th data-page-node-id="rY1XwJTwHTvi91trx1qxyN">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1061</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次游玩唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>通用 game_type 字段，本项目重定义枚举：0=故事 / 1=挑战（数字型文本）</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数，1=单人 / 2=双人（数字型文本，复用通用 player_number）</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>具体关卡标识，1~18（数字型文本，复用通用 level_id；关底萌可：1兔兔/2呼啦/3光明/4叮咚/5流浪/6动动/7贴贴/8熊熊/9缤缤·纷纷/10绵羊/11透明/12共共/13跳舞/14狐狐/15歌谣/16悄悄/17亲亲/18黑洞Boss）</td><td class="example">3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">difficulty</span></td><td>游戏难度</td><td><span class="type-tag type-string">文本</span></td><td>通用 difficulty 字段，本项目重定义编码：0=简单 / 1=普通 / 2=困难（数字型文本）；仅挑战模式（game_type=1）有效，故事模式不上报</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr class="note-row">
-                    <td colspan="6">
-                        <strong>📦 对象组字段：</strong>封装在 <code>user_info</code> 对象数组中，每个对象以 <code>user_id</code>（数值，裸数字，如 135，对齐示例）标识角色，并含该角色选用的皇室萌可（role_id，数字型文本）。
+            <tbody data-page-node-id="3gplGUzK3tQQ9wGhcLDbvX">
+                <tr data-page-node-id="BUdJIPX20jO3ZgotVEaHqX"><td data-page-node-id="Bhpx1GHoBsyBeEVd4pDwbS"><span class="field-name" data-page-node-id="t04q1bxENtPXF2HAGjWwHc">game_id</span></td><td data-page-node-id="SijQV9DfTApFDLg5lVCKxa">游戏ID</td><td data-page-node-id="brnJlXQ0Z4t52ci3IGfrQ0"><span class="type-tag type-string" data-page-node-id="NUOrsksBbVAoFl2LZAt8eG">文本</span></td><td data-page-node-id="ZO3DxDigAJAMEFq98fh16D">产品唯一编号</td><td class="example" data-page-node-id="nZh1tlbFsvjPm8AdL82Z2V">1061</td><td data-page-node-id="wNi37tbkdQ8hXupvPw4reS"><span class="scope-tag scope-required" data-page-node-id="GHjGLWIt556um8k9oQ5oEt">必含</span></td></tr>
+                <tr data-page-node-id="tpBqDABB8kElGAzDkEydNn"><td data-page-node-id="JokG1Pt4IfTpaUkX6HCjnp"><span class="field-name" data-page-node-id="DPc4DA9GPfBmRozXLiVASc">session_id</span></td><td data-page-node-id="3JVvBE1Iqsq3oE8XLTtinH">会话ID</td><td data-page-node-id="Dv3WKqxn1ekWoH3yvk54a4"><span class="type-tag type-string" data-page-node-id="bCql92HCpKWwe8qxqhsCI6">文本</span></td><td data-page-node-id="XmtKNKcnl7lqZUxvKo7WK0">单次游玩唯一标识</td><td class="example" data-page-node-id="6j2eTSML71E0ButG24r1J8">s_987654321</td><td data-page-node-id="BWcvRsUqitikGg0yAmVr7E"><span class="scope-tag scope-required" data-page-node-id="s8uHtveyh0kBumpKQXKJdU">必含</span></td></tr>
+                <tr data-page-node-id="JGCJafpjjK2DASvPfm69kl"><td data-page-node-id="zxFJW0LrmT7iZ6CcDMgCn0"><span class="field-name" data-page-node-id="XDQp55xA34XipOdvdsZogE">timestamp</span></td><td data-page-node-id="F1P3YgUNyZklS7r1rINTPv">时间戳</td><td data-page-node-id="JaWJSVeAqtBAytVhf6pekv"><span class="type-tag type-time" data-page-node-id="8OBWfBpomOnSyFSjUhUT7A">时间</span></td><td data-page-node-id="7sDSrnfyqPqtNirZwcCYfK">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="oU2SEJk4z9x62qfmzSmIp3">2026-05-26T09:35:00+08:00</td><td data-page-node-id="7UPdHZ8N7bCHoDCX8Jjphe"><span class="scope-tag scope-required" data-page-node-id="EEy7gcBAqGz297FMLvBwoG">必含</span></td></tr>
+                <tr data-page-node-id="2K99PkmqaN8b7Ap7d1Ic9M"><td data-page-node-id="y91RCGGGK0PMAsdQTtBV6N"><span class="field-name" data-page-node-id="kIxsbhKdSQYWSis9PMKUxK">game_type</span></td><td data-page-node-id="lwgtow4LW3kwab0ENrbHsM">游戏模式</td><td data-page-node-id="xIdgf8lXeGQhyF9Sc84dgl"><span class="type-tag type-string" data-page-node-id="8m52IV2RNMrshuuEA8vPdq">文本</span></td><td data-page-node-id="tHDWjRv7S4LVLT96M7KM04">通用 game_type 字段，本项目重定义枚举：0=故事 / 1=挑战（数字型文本）</td><td class="example" data-page-node-id="wO0qCiIgFV9nwScAgQg4qA">0 / 1</td><td data-page-node-id="iEYz2Vrjr1kDqlqFD56mv5"><span class="scope-tag scope-common" data-page-node-id="2zBMmWzXIXTRmwSjLQxa0d">通用</span></td></tr>
+                <tr data-page-node-id="i0Xn8vAmqW2SdMbwGfa5yw"><td data-page-node-id="CRrnT5A8CLmmlA7OgyUd2J"><span class="field-name" data-page-node-id="PelvoEewAHZLbeofPZAVUu">player_number</span></td><td data-page-node-id="pA4zqSpCcsTTD1PZaa4k6I">游戏人数</td><td data-page-node-id="Ih07nhoZlVT6BNpKMk6H9O"><span class="type-tag type-string" data-page-node-id="CAGx7LkMfCssvKbIvYR2vd">文本</span></td><td data-page-node-id="5K7bjwMjUSm6x72rMuJiWM">参与本局的玩家人数，1=单人 / 2=双人（数字型文本，复用通用 player_number）</td><td class="example" data-page-node-id="SMXI3s8HKm0jfuWMuO9Rum">1 / 2</td><td data-page-node-id="T3C5IAFRYWeTTryd4SFOWG"><span class="scope-tag scope-common" data-page-node-id="pQ8mlckE6GEVnqpOnYMxbD">通用</span></td></tr>
+                <tr data-page-node-id="6jFH4eaIsR9PZF7pC0HdOB"><td data-page-node-id="8OkInMAkV5kYOYIswNMPQZ"><span class="field-name" data-page-node-id="tEQHjdqtO9ymWk2aKWLDpP">level_id</span></td><td data-page-node-id="4Gf7g46TUL9wMMyjRQWCni">关卡ID</td><td data-page-node-id="wAw3fATFnTXcUQLG9kb2na"><span class="type-tag type-string" data-page-node-id="FCi52fkCZFrChABDjGFBdq">文本</span></td><td data-page-node-id="OG6O3SGCHcmVqYLxvQVlyo">具体关卡标识，1~18（数字型文本，复用通用 level_id；关底萌可：1兔兔/2呼啦/3光明/4叮咚/5流浪/6动动/7贴贴/8熊熊/9缤缤·纷纷/10绵羊/11透明/12共共/13跳舞/14狐狐/15歌谣/16悄悄/17亲亲/18黑洞Boss）</td><td class="example" data-page-node-id="68fbLz1vyoydYp3Omi3Tm6">3</td><td data-page-node-id="DapdwVwsMURneCwH0U3MxA"><span class="scope-tag scope-common" data-page-node-id="eDNtcBUAPuVegoBq70H0Sh">通用</span></td></tr>
+                <tr data-page-node-id="62QMXyKdciKBCYWFkpEdfF"><td data-page-node-id="D6inrwOSwKhsRmiEp74JXo"><span class="field-name" data-page-node-id="aGHDlemDR1ExZEo3DGg0FW">difficulty</span></td><td data-page-node-id="8L3JLIqpDSLSqulzUsGn2S">游戏难度</td><td data-page-node-id="qA6EC5orLgFVr9pUwHReyX"><span class="type-tag type-string" data-page-node-id="DkAq9psyKecCFMg8l52Api">文本</span></td><td data-page-node-id="4ILB5bJcJ8lat6ikcKGGO4">通用 difficulty 字段，本项目重定义编码：0=简单 / 1=普通 / 2=困难（数字型文本）；仅挑战模式（game_type=1）有效，故事模式不上报</td><td class="example" data-page-node-id="XcYZU2SfFrLVNfTDIlmuHP">0 / 1 / 2</td><td data-page-node-id="e5UFW2nx4e19aoyGvwasxB"><span class="scope-tag scope-common" data-page-node-id="BdtLK7yaW0zmtEyHtC8flF">通用</span></td></tr>
+                <tr class="note-row" data-page-node-id="DbHxkiavdSHnUX4kin5bTn">
+                    <td colspan="6" data-page-node-id="P6QjwaxCVpVe0zKVHXgfXI">
+                        <strong data-page-node-id="g6vEpsjkIZ1PiLwNgY6LCF">📦 对象组字段：</strong>封装在 <code data-page-node-id="qxVYpZDE3A50pBO5kQ3wg1">user_info</code> 对象数组中，每个对象以 <code data-page-node-id="hc4hFghpkriQbHJBZVxwR4">user_id</code>（数值，裸数字，如 135，对齐示例）标识角色，并含该角色选用的皇室萌可（role_id，数字型文本）。
                     </td>
                 </tr>
-                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（数值，裸数字）与 role_id（皇室萌可，数字型文本）</td><td class="example">[{"user_id":135,"role_id":"0"},{"user_id":136,"role_id":"2"}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-int">数值</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135，对齐示例）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_info.role_id</span></td><td>皇室萌可</td><td><span class="type-tag type-string">文本</span></td><td>玩家选用的皇室萌可（数字型文本），5 类：0=爱心 / 1=银光 / 2=星光 / 3=月光 / 4=极光（极光仅 18 关 + 挑战模式可用）。复用通用 role_id 字段，本项目重定义为皇室萌可</td><td class="example">0 / 1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr data-page-node-id="oMw7JYGRWucUhhrhs5yg68"><td data-page-node-id="D9DjGfNGsTORVMuhcaVl9Y"><span class="field-name" data-page-node-id="1d1T4ZPOHReIhyKEN8ggtP">user_info</span></td><td data-page-node-id="Fm8et3q5pVLKAZrJoZtJ2a">各角色数据</td><td data-page-node-id="VeigquAkfizQKyhWiw25w2"><span class="type-tag type-object" data-page-node-id="UBz74VJ4NpHLLfoKQvsgSt">对象组</span></td><td data-page-node-id="kWgeYiAvSZrJD1EBhT8GTB">对象数组，每个对象包含 user_id（数值，裸数字）与 role_id（皇室萌可，数字型文本）</td><td class="example" data-page-node-id="6kC7r6k9THfYTWWcjbOwCi">[{"user_id":135,"role_id":0},{"user_id":136,"role_id":2}]</td><td data-page-node-id="QhgSCKkaX8En4AgCLoxqqz"><span class="scope-tag scope-common" data-page-node-id="HHb0qBC6EvovwpJFNeQZnP">通用</span></td></tr>
+                <tr data-page-node-id="Xr004nDZz219XqG3QKkocB"><td data-page-node-id="kWUX2Gw8IxxId8XJSKi0U0"><span class="field-name" data-page-node-id="qbgCYz0yS7X3saGe3QvO0g">user_info.user_id</span></td><td data-page-node-id="vW7blYu3nBZEtIYh1cGndp">角色ID</td><td data-page-node-id="brIRPXO1EcSjchpIacxZaJ"><span class="type-tag type-int" data-page-node-id="ds9rAPYm2VuGwUFZhCHNO9">数值</span></td><td data-page-node-id="CVRfEsTrrJ8sGKSCr9oTLi">参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135，对齐示例）</td><td class="example" data-page-node-id="6IBpGj0avEOp5GmE9ZfRlp">135</td><td data-page-node-id="LtsYS4GBcBXzY8WsVXiYO1"><span class="scope-tag scope-required" data-page-node-id="H6umAHZbMeX210zIs5p29P">必含</span></td></tr>
+                <tr data-page-node-id="w6rNQVOKcrCVOrh4QRKunt"><td data-page-node-id="ZBgd7sLuTFj4Cj6J3B5Efj"><span class="field-name" data-page-node-id="3PzvETqxoBM68fYZo6nXMc">user_info.role_id</span></td><td data-page-node-id="LYo8rkyFHLhDFxP2ETTYOd">皇室萌可</td><td data-page-node-id="d3AGPt8vcjA6NqHDl5oJyb"><span class="type-tag type-string" data-page-node-id="vnppBwS23Xy359uCseiwmI">文本</span></td><td data-page-node-id="ZTqy6WNzJiMNSMzVjvEgTW">玩家选用的皇室萌可（数字型文本），5 类：0=爱心 / 1=银光 / 2=星光 / 3=月光 / 4=极光（极光仅 18 关 + 挑战模式可用）。复用通用 role_id 字段，本项目重定义为皇室萌可</td><td class="example" data-page-node-id="oBC19ZwUUqeGRauFaFebJZ">0 / 1 / 2 / 3 / 4</td><td data-page-node-id="4UD0sGcmOkInZjoUL65vfQ"><span class="scope-tag scope-common" data-page-node-id="nMWDb0KSjyVfTulNvX5ASK">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- Event 2: end_game -->
-    <div class="event-block" id="sec-end-game">
-        <div class="event-title">end_game（关卡结束）</div>
-        <div class="event-desc">一关自然结束时上报。通关结果不建独立字段，由 hp 推导（hp&gt;0 通关 / hp==0 未通关）。</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-end-game" data-page-node-id="SfDFyXmnK8oCIwfviOAPWa">
+        <div class="event-title" data-page-node-id="PHokasgRCtc7DVlGbgiAKi">end_game（关卡结束）</div>
+        <div class="event-desc" data-page-node-id="5DDzW1OEYuxEU9CmsPfJ1r">一关自然结束时上报。通关结果不建独立字段，由 hp 推导（hp&gt;0 通关 / hp==0 未通关）。</div>
+        <table data-page-node-id="GwN2MEnr9NFuGh2tGgLpWp">
+            <colgroup data-page-node-id="6WDxIJ1N5sVEwEKfn0BKMO"><col data-page-node-id="MSyHWMrTwxNXoJxat0G2D7"><col data-page-node-id="DCKgMHvqn5RmSvwMivKPmQ"><col data-page-node-id="go9ipcDHIUX3CtEVkiQFfW"><col data-page-node-id="uIBQ0WSXSZbmZdfCXX9loD"><col data-page-node-id="7J4zDCDbGVqRwTJnS4lx0C"><col data-page-node-id="zG9DW8nhTBRNNDrLMMrChf"></colgroup>
+            <thead data-page-node-id="w8sdRbWlCeADUcn5PCwZ6B">
+                <tr data-page-node-id="1AO1RkAf2rJIEEP4ouaq9H"><th data-page-node-id="HOjoGHjupMLOq1F8S8Uy9u">属性名</th><th data-page-node-id="RnUZotGuA1PBD54GBA0awn">显示名</th><th data-page-node-id="knLW3Cd1kEf6WJJyf2ynrQ">类型</th><th data-page-node-id="mctqlGDsl1qJXXc1xbFRMl">说明</th><th data-page-node-id="vRwldGGhWtnwr0VG3HuwsJ">示例</th><th data-page-node-id="Jybtj1AY8XHVxwvKsC9BCH">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1061</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次游玩唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>通用 game_type 字段，0=故事 / 1=挑战（数字型文本）</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数，1=单人 / 2=双人（数字型文本）</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>具体关卡标识，1~18（数字型文本；关底萌可：1兔兔/2呼啦/3光明/4叮咚/5流浪/6动动/7贴贴/8熊熊/9缤缤·纷纷/10绵羊/11透明/12共共/13跳舞/14狐狐/15歌谣/16悄悄/17亲亲/18黑洞Boss）</td><td class="example">3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">difficulty</span></td><td>游戏难度</td><td><span class="type-tag type-string">文本</span></td><td>通用 difficulty 字段，0=简单 / 1=普通 / 2=困难（数字型文本）；仅挑战模式（game_type=1）有效</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">collecting</span></td><td>星尘瓶数量</td><td><span class="type-tag type-int">数值</span></td><td>本局收集星尘瓶总数（可求平均），复用通用 collecting「收集物数量」字段承载星尘瓶</td><td class="example">8</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">hp</span></td><td>剩余生命点数</td><td><span class="type-tag type-int">数值</span></td><td>通关时剩余生命点数（可求平均）。本页唯一标准外自定义字段；通关结果由此派生：hp&gt;0 通关(成功)，hp==0 未通关(失败)</td><td class="example">3 / 0</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr class="note-row">
-                    <td colspan="6">
-                        <strong>📦 对象组字段：</strong>user_info 每个对象含 <code>user_id</code>（数值，裸数字）与 <code>score</code>（每名玩家得分，双人时分别看）；collecting / hp 为整局级，置于事件顶层。
+            <tbody data-page-node-id="uFUZIFuEydF7CWLwLvCHOI">
+                <tr data-page-node-id="A3h7muo57wzCDsdK5rxEwn"><td data-page-node-id="MaHm7AHGarx39Y6nHh8JaF"><span class="field-name" data-page-node-id="sBElY1xVcPs5DIQend9EAH">game_id</span></td><td data-page-node-id="5GKqMhX1PuySWqsUUmaNKE">游戏ID</td><td data-page-node-id="MwLIle2eDdn9h5aDc4dUDZ"><span class="type-tag type-string" data-page-node-id="DMAhmXt1ZoPpqT9PvRLrCt">文本</span></td><td data-page-node-id="XdkrIRRShtOXvDSGOtQ1s8">产品唯一编号</td><td class="example" data-page-node-id="2fxugozuSRslDjSD9tRsEW">1061</td><td data-page-node-id="q79H7gnidQbKdmVxRBWkPg"><span class="scope-tag scope-required" data-page-node-id="NLBGoQuBBAylwFy1Mx3oLY">必含</span></td></tr>
+                <tr data-page-node-id="VUlku0GFEVVIrGqsdiNWJY"><td data-page-node-id="WZSdSH0qNQstXW0fuHqbIW"><span class="field-name" data-page-node-id="KFItQ2iL8CzmLe9VAsHEE8">session_id</span></td><td data-page-node-id="haYEZyz2a1Xj3Cp5BENS97">会话ID</td><td data-page-node-id="4sIOnxnCQFAsS9cJjM8Ev6"><span class="type-tag type-string" data-page-node-id="OzZvKvomDeufRMgZaEJvE6">文本</span></td><td data-page-node-id="GMHUAhPqwW0OKUNd3twXpU">单次游玩唯一标识</td><td class="example" data-page-node-id="AGMBm1F5q5QS8WdjJG1Ieh">s_987654321</td><td data-page-node-id="CMPJHdoEytpKDQbiAGRfox"><span class="scope-tag scope-required" data-page-node-id="mExpuOGgyLIHPfmdWGqQ12">必含</span></td></tr>
+                <tr data-page-node-id="1WBd5Cyl14YFmZZaCVRSro"><td data-page-node-id="CSoNFIXSDaEavbA9LPjWSv"><span class="field-name" data-page-node-id="FnG4q6aypRLiP5sPSZgdri">timestamp</span></td><td data-page-node-id="dG5pNS4F2nWwp9T8u0CDxa">时间戳</td><td data-page-node-id="FhnbHHvVO5oOmS2twmy9Rh"><span class="type-tag type-time" data-page-node-id="cIpvZxUmD0h6COaAyIqRAK">时间</span></td><td data-page-node-id="NzxBmtBLbXbkN5Ifkiiv07">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="sA8vuNXGkCoXWKFLg0i0YG">2026-05-26T09:35:00+08:00</td><td data-page-node-id="IYlB0KLuGtQeB4L9sNc2gJ"><span class="scope-tag scope-required" data-page-node-id="0glHLHPYixGw8VTENlCgMD">必含</span></td></tr>
+                <tr data-page-node-id="QQqDq9ZJWp46W8qN8Qcakc"><td data-page-node-id="E9ABKzJiY34MiTveDWIPWb"><span class="field-name" data-page-node-id="1ScB9MXQXCkeqwdDsYwn2m">game_type</span></td><td data-page-node-id="do5vJiictHQtAPFyvgvoQa">游戏模式</td><td data-page-node-id="iio5HaW2tmZSg7AavDMi3I"><span class="type-tag type-string" data-page-node-id="xsNny3XwNiEP0KlDLt3C0n">文本</span></td><td data-page-node-id="UssiyjCHW6Nmk5jMiK8NDi">通用 game_type 字段，0=故事 / 1=挑战（数字型文本）</td><td class="example" data-page-node-id="95TjsEPDWASth7b9cZbM6U">0 / 1</td><td data-page-node-id="hVMpyygB9mTIeHvZ9FTSTD"><span class="scope-tag scope-common" data-page-node-id="bw3jqoEOF1UmfN1YjoBTbm">通用</span></td></tr>
+                <tr data-page-node-id="2DIrrHlx3ioI2wNJsNS11e"><td data-page-node-id="a7xNR6ii7lctRL4dCrg11m"><span class="field-name" data-page-node-id="BorzgiNkFNFFTvwdTQL0Bs">player_number</span></td><td data-page-node-id="EuekciScFw2LYEsKNmjlPH">游戏人数</td><td data-page-node-id="OKRABiFtotpE4ePKtQFag9"><span class="type-tag type-string" data-page-node-id="ta4MZLVqckB9JT2XBYiYdE">文本</span></td><td data-page-node-id="xkM8chiegeu1bUNGtfIKhT">参与本局的玩家人数，1=单人 / 2=双人（数字型文本）</td><td class="example" data-page-node-id="jsMRQpccbdR87dK0sqGYe4">1 / 2</td><td data-page-node-id="nwLq5NkKaDXSC9KaGLXY5q"><span class="scope-tag scope-common" data-page-node-id="Z11QijhhBwihZ8Js8b1sgr">通用</span></td></tr>
+                <tr data-page-node-id="GtoFhtUiE7wo126EqJl2cL"><td data-page-node-id="aPAGuBqRcKBHmnbCZwWXRR"><span class="field-name" data-page-node-id="JnZgVvqsOnAy8oTBEMZ1bw">level_id</span></td><td data-page-node-id="aDXvOfbOV9zVT2wMbXmXcC">关卡ID</td><td data-page-node-id="6KH3jBW1PNq6jVIOARWLfE"><span class="type-tag type-string" data-page-node-id="NWONjiqfvFGpfbNLBoLFS3">文本</span></td><td data-page-node-id="AssP9L8th8wXLeVFSz8QkC">具体关卡标识，1~18（数字型文本；关底萌可：1兔兔/2呼啦/3光明/4叮咚/5流浪/6动动/7贴贴/8熊熊/9缤缤·纷纷/10绵羊/11透明/12共共/13跳舞/14狐狐/15歌谣/16悄悄/17亲亲/18黑洞Boss）</td><td class="example" data-page-node-id="xhFNR2S4lfVsZA2FKJtH8u">3</td><td data-page-node-id="CZkhgDVTP2B06v9dA52Pfz"><span class="scope-tag scope-common" data-page-node-id="nN5fKEEmtwTBnkZCQoa2G7">通用</span></td></tr>
+                <tr data-page-node-id="uCiUxgwYAiW9hWP8wXwna8"><td data-page-node-id="NoNqOkiFq1JwVjSbaZqtEw"><span class="field-name" data-page-node-id="0HyxMCvXtCbzslO9caT6VR">difficulty</span></td><td data-page-node-id="ww9a3dVtct8tGvAdDPlEjp">游戏难度</td><td data-page-node-id="CDagtg6K5iqFExAsKbQcip"><span class="type-tag type-string" data-page-node-id="Zn7DQS2sCipgtjMReeuBRW">文本</span></td><td data-page-node-id="bpzeEsHbapChXLPA1EaL2n">通用 difficulty 字段，0=简单 / 1=普通 / 2=困难（数字型文本）；仅挑战模式（game_type=1）有效</td><td class="example" data-page-node-id="XT3vIXmQtLo2rvCCUl4APR">0 / 1 / 2</td><td data-page-node-id="O4N9zmaqbPYq9r51UQzGfA"><span class="scope-tag scope-common" data-page-node-id="K20zMytaBOs4sscNrueClW">通用</span></td></tr>
+                <tr data-page-node-id="brUPftfii2AFOubQaHRf4T"><td data-page-node-id="907zntfNsQnvqPVCbBCZcR"><span class="field-name" data-page-node-id="LjftCbt44x0W3reRVL0mjq">collecting</span></td><td data-page-node-id="QBXGurGGZxPbDXPu5xAi6B">星尘瓶数量</td><td data-page-node-id="TTuXqALjHOABSaSyvEPH5B"><span class="type-tag type-int" data-page-node-id="hzE7TjPeslzZFIZOwXfSWs">数值</span></td><td data-page-node-id="mtz35EshHr5zEN7bydXCjH">本局收集星尘瓶总数（可求平均），复用通用 collecting「收集物数量」字段承载星尘瓶</td><td class="example" data-page-node-id="tsUWrY6yh2FIa3PmQlvP0s">8</td><td data-page-node-id="6IJNN3QjJ5brjSngO770N5"><span class="scope-tag scope-common" data-page-node-id="i0qYAG8dWixBOjbJV2mLeT">通用</span></td></tr>
+                <tr data-page-node-id="PzOg2UC984oT1AUvhrxaFU"><td data-page-node-id="IMhqoRYPxvmXJFHsWQQNbm"><span class="field-name" data-page-node-id="jKK7HCNSCPPkBWKGcIY5C1">hp</span></td><td data-page-node-id="Sb45BiFUGmTSJN6oEFSgn5">剩余生命点数</td><td data-page-node-id="Z7prkhgAVD7c8SamXdsbWy"><span class="type-tag type-int" data-page-node-id="BZC29cvJC95VMJ0rAxBHuL">数值</span></td><td data-page-node-id="wkPOszTjlhWWmPCcuHjPxd">通关时剩余生命点数（可求平均）。本页唯一标准外自定义字段；通关结果由此派生：hp&gt;0 通关(成功)，hp==0 未通关(失败)</td><td class="example" data-page-node-id="xMiVAV7l7wyvK1lsMEi5ZN">3 / 0</td><td data-page-node-id="OqRNZw9QS0kJ7KdTmwPZtl"><span class="scope-tag scope-project" data-page-node-id="mumidImRhGeEPLKqSyPHS1">项目</span></td></tr>
+                <tr class="note-row" data-page-node-id="nyCi86AnhM5UTTbTJk5WeU">
+                    <td colspan="6" data-page-node-id="ajS8TDNOODFoz2uPTpcrws">
+                        <strong data-page-node-id="DLWpDQuY7ICxBJe6jJCXWS">📦 对象组字段：</strong>user_info 每个对象含 <code data-page-node-id="BAFqnWBLNDRkqlh69hn7Pu">user_id</code>（数值，裸数字）与 <code data-page-node-id="NOUaUgkxC1pWqwvGESbChx">score</code>（每名玩家得分，双人时分别看）；collecting / hp 为整局级，置于事件顶层。
                     </td>
                 </tr>
-                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（数值，裸数字）与 score（本局得分，数值）</td><td class="example">[{"user_id":135,"score":48},{"user_id":136,"score":35}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-int">数值</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135，对齐示例）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_info.score</span></td><td>本局得分</td><td><span class="type-tag type-int">数值</span></td><td>该玩家本局累计得分（可求平均），双人时按 user_id 分别看</td><td class="example">48 / 35</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr data-page-node-id="atztfcJv3l3H1EdRCDYtaG"><td data-page-node-id="nUiNQFg9N5NqIC6Rq02N5M"><span class="field-name" data-page-node-id="HXiBIDahuaYf1wYUUpBnfn">user_info</span></td><td data-page-node-id="iuHd199zq4zTEiRkFazAy7">各角色数据</td><td data-page-node-id="KJaagGP23evGRHuIUykrrE"><span class="type-tag type-object" data-page-node-id="rxArcTHdbSAK9srcHM8EBH">对象组</span></td><td data-page-node-id="z1dNRReL3lHoXzVrzLqbcs">对象数组，每个对象包含 user_id（数值，裸数字）与 score（本局得分，数值）</td><td class="example" data-page-node-id="HKCU5qhsgIAtGhFUAezMuf">[{"user_id":135,"score":48},{"user_id":136,"score":35}]</td><td data-page-node-id="WC8Spjas1ILNBZ1qC8Y9qC"><span class="scope-tag scope-common" data-page-node-id="YlpHTpEwQ9NPAAb6Dswy1A">通用</span></td></tr>
+                <tr data-page-node-id="RU1BwhGVgGmHM43S7DlGfx"><td data-page-node-id="SroOT5WdLbhRDFSkSQ2OU1"><span class="field-name" data-page-node-id="I9IZI0Y80jmN3hephlvFT1">user_info.user_id</span></td><td data-page-node-id="q31fR2BzCrRybYbketOxFT">角色ID</td><td data-page-node-id="nVMo9acOsg0duAzXPPPe8D"><span class="type-tag type-int" data-page-node-id="PbnROqUhGueoWUWZkHJ6s8">数值</span></td><td data-page-node-id="ZzhNekt3j3ZL38lgqVTNUa">参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135，对齐示例）</td><td class="example" data-page-node-id="aR6CCrnw2SSkPtwSfiEGor">135</td><td data-page-node-id="M3lQCbRGGmXY9vIJDUfwMa"><span class="scope-tag scope-required" data-page-node-id="24XfGEZbdKp3yKJ6yA4AEm">必含</span></td></tr>
+                <tr data-page-node-id="BL3ecvJVh2HXYA3VxDxtnC"><td data-page-node-id="YSZaejiteqYHdAXIRfPadP"><span class="field-name" data-page-node-id="izKI1XA6xtDd0wxbM7D591">user_info.score</span></td><td data-page-node-id="ECVCrZb7AGBThptij582mN">本局得分</td><td data-page-node-id="WHzEJfw2Uj8AjgjdA42moz"><span class="type-tag type-int" data-page-node-id="Iy7ahZfGZVy7g09rnuqPxU">数值</span></td><td data-page-node-id="ft5TMypNEctVMY7NapKKI4">该玩家本局累计得分（可求平均），双人时按 user_id 分别看</td><td class="example" data-page-node-id="zaSyIWXL9fTC66QIb1ffNr">48 / 35</td><td data-page-node-id="zcDkfWaCiUTeG0NhwPmdv8"><span class="scope-tag scope-common" data-page-node-id="X4MFGJle0Ykmr4H5cELDvF">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- Event 3: pause_game -->
-    <div class="event-block" id="sec-pause-game">
-        <div class="event-title">pause_game（游戏暂停）</div>
-        <div class="event-desc">玩家在关卡中触发暂停时上报（无 user_info，沿用顶层 user_id 列表）。</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-pause-game" data-page-node-id="AHG4PyodFFFEmsfogZ98L5">
+        <div class="event-title" data-page-node-id="fu2OSSb1zRnH5sGrESROmV">pause_game（游戏暂停）</div>
+        <div class="event-desc" data-page-node-id="QurUuaTkf4gIOZfcm3dQrS">玩家在关卡中触发暂停时上报（无 user_info，沿用顶层 user_id 列表）。</div>
+        <table data-page-node-id="8FGHVOdFPrdwOOLuJ8Z8zj">
+            <colgroup data-page-node-id="nAHFeJe7O830HtB58xockd"><col data-page-node-id="NVi9zwBVEWyWrEUAEkSomJ"><col data-page-node-id="bzdyCDosJswDbECZZxCSn9"><col data-page-node-id="wyuGlNK1rlVIQvr9ZXoLqe"><col data-page-node-id="rwKkqa9Yea41DxS0N8hMAw"><col data-page-node-id="qKOZAY7DVOsfxyUV0L9FnJ"><col data-page-node-id="12oxtUH0gDIQiWLnw69Rz0"></colgroup>
+            <thead data-page-node-id="GpzbeWgPUjG9v855C5LCcv">
+                <tr data-page-node-id="Fd4YYxTKNzU8wSRFfT8fW9"><th data-page-node-id="5BMAMWYRoR9jOlIvAMIlqe">属性名</th><th data-page-node-id="bDbHAA31b9ESl2dEIjWGpr">显示名</th><th data-page-node-id="pz7dNrJpcSbF85w7tWEZIH">类型</th><th data-page-node-id="ik9c7zb64NWW6KMsPEizTJ">说明</th><th data-page-node-id="8lXse9jQfDQbe9jSNgCqfa">示例</th><th data-page-node-id="o43tmhKhs9Z9uEmkkuuWlK">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1061</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次游玩唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=故事 / 1=挑战（数字型文本）</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1=单人 / 2=双人（数字型文本）</td><td class="example">2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            <tbody data-page-node-id="F6f2KxghZdpulMCF2Gv36f">
+                <tr data-page-node-id="m068iRKwpoxJPn2DBjXHkr"><td data-page-node-id="5dKdVMZDxaf6XnirnI9oQr"><span class="field-name" data-page-node-id="UMDBjQXJcx98x8Mi3xDt8x">game_id</span></td><td data-page-node-id="UwEOysemuFYZFW5EdmlcCc">游戏ID</td><td data-page-node-id="DwlJXWOoHXOQOxJiFL1ndo"><span class="type-tag type-string" data-page-node-id="PAhnfFtXOfUxSuHVAAiGUk">文本</span></td><td data-page-node-id="28U2slgQbeRpNjNYBQpS2f">产品唯一编号</td><td class="example" data-page-node-id="rDXD1H4u7srLBgKl2Hl6e8">1061</td><td data-page-node-id="EWLBv7OgnQtzjIvhUyCNw9"><span class="scope-tag scope-required" data-page-node-id="U3OjxkKJN40b1QZE3dnBZ4">必含</span></td></tr>
+                <tr data-page-node-id="OFr4ZYWzAf2XdTJpF91NCI"><td data-page-node-id="ODpHfI5fInZkGYoUzJI66r"><span class="field-name" data-page-node-id="FNH4r4IRUlP2GcUuXUDIuF">user_id</span></td><td data-page-node-id="c7gONLx51GdNMMpZ42LaKo">人脸角色ID</td><td data-page-node-id="gyICa5RAYGnCKxthrVuUEC"><span class="type-tag type-list" data-page-node-id="FzQUjTnWCIz5yhKER0E0gX">列表</span></td><td data-page-node-id="ZSNZa47eHkh4YbqVHQ7Cyi">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="0qeMSxt0SxCRVABHsxCK85">["135","136"]</td><td data-page-node-id="AHamUImoCLfadGv1z3zrsZ"><span class="scope-tag scope-required" data-page-node-id="60sCibg6VjvnTXIhDMrZGl">必含</span></td></tr>
+                <tr data-page-node-id="s2z2I29q2874tHYECKCOLZ"><td data-page-node-id="mD7OvT9kOHPckss1MSB2NC"><span class="field-name" data-page-node-id="SMW0r3xbvq5vrp7isavKqa">session_id</span></td><td data-page-node-id="ZeZ9jF13cGGbvnOPNG8fQ7">会话ID</td><td data-page-node-id="MiPCHpYTRWVbCVuWVEUQvX"><span class="type-tag type-string" data-page-node-id="sCEq0zqGaY8Ljm4bRiS2HZ">文本</span></td><td data-page-node-id="9Q8kRHrIHfvwEAzknlNiYN">单次游玩唯一标识</td><td class="example" data-page-node-id="Sm92eLfBb6Va92MALbEIxC">s_987654321</td><td data-page-node-id="Ph5mXCSox0E0NuxiN7pRMT"><span class="scope-tag scope-required" data-page-node-id="p342TzypRz3jdwvaej4Gpp">必含</span></td></tr>
+                <tr data-page-node-id="mXkSxAzngJNs4W2XAfb7mV"><td data-page-node-id="9QQkD1ZzHA5B15BhJbnMmb"><span class="field-name" data-page-node-id="UXTAplhlFQO6wXIfbZiREj">timestamp</span></td><td data-page-node-id="BrhHDFm2f8ywungWtntJgn">时间戳</td><td data-page-node-id="EwL3hQgC7sjxBycH4LteeU"><span class="type-tag type-time" data-page-node-id="lEtBAP8wRZRGQEEs4RozWn">时间</span></td><td data-page-node-id="ZCMo5AVX7OBykq6GYAABaA">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="LH0WW9RFF0dgo1ANgtkDCM">2026-05-26T09:35:00+08:00</td><td data-page-node-id="6P79eKPcEClrpk7FJMS2ET"><span class="scope-tag scope-required" data-page-node-id="8mwYZeUMUNlYKF0TyvI19e">必含</span></td></tr>
+                <tr data-page-node-id="XI8QtJEF02qMb1LqwPlGNd"><td data-page-node-id="n8UhBmcwH2iX0Z4x10EOgV"><span class="field-name" data-page-node-id="S8wurwgoKLZtiPSUhjSpZN">game_type</span></td><td data-page-node-id="gAIDQ3qPxx8wkkTe9Dc5jN">游戏模式</td><td data-page-node-id="pfflK0TRCUXaDPeYOdWVGO"><span class="type-tag type-string" data-page-node-id="gPZ6Ha7zmGxNhBYscq6QTI">文本</span></td><td data-page-node-id="BNBZzANeB6lNOa2siC317L">0=故事 / 1=挑战（数字型文本）</td><td class="example" data-page-node-id="h9CJfP36y6jI0PK751cugh">1</td><td data-page-node-id="XAM0AUfkiGiGGmI0whDGXn"><span class="scope-tag scope-common" data-page-node-id="FFR4eYoRvbqz2VF5lR7p0Y">通用</span></td></tr>
+                <tr data-page-node-id="NYIzZYAjU8C1sy3gcTGtW6"><td data-page-node-id="Y3C7YqCtCctuA7IuvK4Xx2"><span class="field-name" data-page-node-id="7OrCxiwIbXLAP4xvXijaH2">player_number</span></td><td data-page-node-id="yEzOAF9pMsQwf87GaNyjZB">游戏人数</td><td data-page-node-id="XbQdzD7IIibLVlg11EeHEP"><span class="type-tag type-string" data-page-node-id="W2DzsUfwZb2u0UVhFgnBSB">文本</span></td><td data-page-node-id="o8BwMyx5vQgK3c1XXsFLTQ">1=单人 / 2=双人（数字型文本）</td><td class="example" data-page-node-id="mMGz9vAvdAULFKvlP5Kohn">2</td><td data-page-node-id="eFbunn0TxFz6V3mwdXuGFH"><span class="scope-tag scope-common" data-page-node-id="RNqKZw8MabvF5AIQAeyUBD">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- Event 4: continue_game -->
-    <div class="event-block" id="sec-continue-game">
-        <div class="event-title">continue_game（回到游戏）</div>
-        <div class="event-desc">玩家从暂停状态恢复游戏时上报（无 user_info，沿用顶层 user_id 列表）。</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-continue-game" data-page-node-id="rj3xU6Mr1A2ntA60woqNpO">
+        <div class="event-title" data-page-node-id="cEEQCO3sYpBRzLrbXAOx1X">continue_game（回到游戏）</div>
+        <div class="event-desc" data-page-node-id="uBwcG3DGAg9NeH2oEPlGLk">玩家从暂停状态恢复游戏时上报（无 user_info，沿用顶层 user_id 列表）。</div>
+        <table data-page-node-id="5YXyE2C6nt8fT5zFYYIcPC">
+            <colgroup data-page-node-id="KqOTYp4ICQKY6AOVdn2bz3"><col data-page-node-id="nOvWQXudNLrvwUVZEVAKLz"><col data-page-node-id="6FvXySgdPstDHVX5lKJSDF"><col data-page-node-id="6PX93exx2kPIJsTTChnaAU"><col data-page-node-id="Mc3T2ZDdQYo6SFr6dJoK0R"><col data-page-node-id="x2QhwN1KAzHOSzUYZM8pZ8"><col data-page-node-id="sbm2HVgVABq2dy3GSYXuKx"></colgroup>
+            <thead data-page-node-id="LP3dBDJPF2Pk5tOdlYa0Eo">
+                <tr data-page-node-id="upy6yZj9FBnLp2jEGXwFif"><th data-page-node-id="CFgOhKQaKnbTJ3x7sFLega">属性名</th><th data-page-node-id="ODjG7EH3e07NeLW2u3qEcC">显示名</th><th data-page-node-id="lBU2SY2o1rmUNxbFEaKhRE">类型</th><th data-page-node-id="NjIakPmVgKZswhd0ZEw6kJ">说明</th><th data-page-node-id="4zESo9dwdHHTtyB113jyxO">示例</th><th data-page-node-id="QNFoco8UO4RxAUpHYfDeUp">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1061</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次游玩唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=故事 / 1=挑战（数字型文本）</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1=单人 / 2=双人（数字型文本）</td><td class="example">2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            <tbody data-page-node-id="f4Ij8v2FiRAQxw2aExp4ao">
+                <tr data-page-node-id="AiR0D1P3DQnIJ2pXlMP7O4"><td data-page-node-id="Eybzj1zgvIDqEljvDaAZSR"><span class="field-name" data-page-node-id="mjtyzJCPBGu6NWKZ2RMXrA">game_id</span></td><td data-page-node-id="IrrVdzLEzsCItg8pUyovKZ">游戏ID</td><td data-page-node-id="afIkDUstVIXaHbDbS6pGNu"><span class="type-tag type-string" data-page-node-id="deM0gHp9KdOIG1iWsK4whF">文本</span></td><td data-page-node-id="RVvkAw1JLvQmyZBGREzZJo">产品唯一编号</td><td class="example" data-page-node-id="mgXbLE8sJ0yCNn1k7TPbmY">1061</td><td data-page-node-id="M8AAjApRzEJ8nE0DSuqf5Y"><span class="scope-tag scope-required" data-page-node-id="9czEnhrr0wplUimnJfUEeg">必含</span></td></tr>
+                <tr data-page-node-id="RDCLDqneCxNoDtTMUJD8xM"><td data-page-node-id="mz0WW1dA87eXBEwJ6GMChQ"><span class="field-name" data-page-node-id="lFiMsE3nLqJHzQk3QdToB8">user_id</span></td><td data-page-node-id="TEYXEGx1B9IS2KayBNiDBL">人脸角色ID</td><td data-page-node-id="RNUaHI9R2pwDMgJqA2TtZL"><span class="type-tag type-list" data-page-node-id="1mAro6pCbdkpw65lVGjUBQ">列表</span></td><td data-page-node-id="NORlMesoG9TT28PFOnxAq9">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="zEVsD8g3WPb2pweWgjGIGC">["135","136"]</td><td data-page-node-id="SZIakztSJdFdLmUm32rmia"><span class="scope-tag scope-required" data-page-node-id="9MarjIeZ3xxF9jxVmdg9ib">必含</span></td></tr>
+                <tr data-page-node-id="bsZHNh3YoktylBIq3zQAu7"><td data-page-node-id="JGzAVngChtFJQyImJkvqT8"><span class="field-name" data-page-node-id="IxnHZCfhT7hoNjSt3HApDJ">session_id</span></td><td data-page-node-id="yHjakDCfnBzEysB1SfjrJO">会话ID</td><td data-page-node-id="mOB46GOMBI1ID4aFB5WDJV"><span class="type-tag type-string" data-page-node-id="YPVQmfiu1j7liCYP5TiqwW">文本</span></td><td data-page-node-id="sv8G6e0wfIqUjOqbn5SIxw">单次游玩唯一标识</td><td class="example" data-page-node-id="Dp1V10RcoYPBgSGTliiaDY">s_987654321</td><td data-page-node-id="ow8rxhh19lsjK6NalNLSoy"><span class="scope-tag scope-required" data-page-node-id="6aEgs5b83TSrZnV8b59jTJ">必含</span></td></tr>
+                <tr data-page-node-id="8ivys3f5dI2OnlmMbpCBsV"><td data-page-node-id="UnvH1UFrmwJkwmH28XeaSH"><span class="field-name" data-page-node-id="yx4PvCkFf0fCwhynCep2HV">timestamp</span></td><td data-page-node-id="GbIGHvReMbu49PCcSpTRdS">时间戳</td><td data-page-node-id="HfgwBZmmkNRvfmP5XVZ4X0"><span class="type-tag type-time" data-page-node-id="MmZEpOed5VsssYu7a8RP6S">时间</span></td><td data-page-node-id="uGZrScegmGfGL7rGJ5Gv5q">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="gabRCb1pnCvrSyGJ24hTK5">2026-05-26T09:35:00+08:00</td><td data-page-node-id="NDzs7vOfGrHgsX4d5z5Q4i"><span class="scope-tag scope-required" data-page-node-id="aeGiJxWT0F978IuGmGriA2">必含</span></td></tr>
+                <tr data-page-node-id="E6IDKnCmeBQ9GLwG3sVDYw"><td data-page-node-id="NQOLEHBY2u7oI8vGH1l08n"><span class="field-name" data-page-node-id="VdKuBtGmn4vQNKsMFbnkwt">game_type</span></td><td data-page-node-id="6XHoynsNj4CWp8oBXULOx3">游戏模式</td><td data-page-node-id="LW8tnencPN6kOyNYVXIMC6"><span class="type-tag type-string" data-page-node-id="MWrdBndM589GQp4ehdIN6n">文本</span></td><td data-page-node-id="C6Hjo0BDSRgpGFAVd4xewL">0=故事 / 1=挑战（数字型文本）</td><td class="example" data-page-node-id="4ybofJfGyP5TReir4dcUaG">1</td><td data-page-node-id="gpK0zb5bYms0AoW11SZ6lD"><span class="scope-tag scope-common" data-page-node-id="5BEnro5jiFXz2HEw8YrCEC">通用</span></td></tr>
+                <tr data-page-node-id="9CFVl8xbi6T60sM3eH11XW"><td data-page-node-id="STvTSomHhDKD29H0D8JlH8"><span class="field-name" data-page-node-id="WGnATzIGUdXNkezAgttpLB">player_number</span></td><td data-page-node-id="GNF5LzcQFc9MjDlGSTb5hw">游戏人数</td><td data-page-node-id="fG7ysbpgU0piHmcA8FCgh2"><span class="type-tag type-string" data-page-node-id="B118dBi6DXhTkST9YzZffF">文本</span></td><td data-page-node-id="WvAWIQ2P91cXBuqk4fMrLK">1=单人 / 2=双人（数字型文本）</td><td class="example" data-page-node-id="nMpU3dLe1TqcAL96d2lxEW">2</td><td data-page-node-id="9gqH6XFkPEBuwJowegITM2"><span class="scope-tag scope-common" data-page-node-id="kqsMvmHYR6W2JtGdto0GQe">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
-    <div style="text-align:center;color:#999;font-size:13px;padding:20px 0;">
+    <div style="text-align:center;color:#999;font-size:13px;padding:20px 0;" data-page-node-id="8Bvkq4TjiAg3KoFkfXzMLb">
         1061《奇妙萌可之闪耀流星》| 项目埋点规范 | 对齐跨项目统一标准（naming_standards.html）
     </div>
 </div>
     <!-- ======== 悬浮目录组件 ======== -->
-    <div class="toc-fab" id="tocFab">
-        <div class="toc-panel" id="tocPanel">
-            <div class="toc-title">页面目录</div>
-            <a class="toc-link toc-back" href="naming_standards.html">← 返回命名规范</a>
-            <a class="toc-link" href="#sec-enter-game">enter_game</a>
-            <a class="toc-link" href="#sec-end-game">end_game</a>
-            <a class="toc-link" href="#sec-pause-game">pause_game</a>
-            <a class="toc-link" href="#sec-continue-game">continue_game</a>
+    <div class="toc-fab" id="tocFab" data-page-node-id="sWCuUGBY2BCvjFlmMV2jCM">
+        <div class="toc-panel" id="tocPanel" data-page-node-id="3CVp3iIo6JwAW7NlzhYQSB">
+            <div class="toc-title" data-page-node-id="vemfZim3EbThujptyPkbWj">页面目录</div>
+            <a class="toc-link toc-back" href="naming_standards.html" data-page-node-id="yPlYGmDcfSVOH5tdPREatD">← 返回命名规范</a>
+            <a class="toc-link" href="#sec-enter-game" data-page-node-id="4AXBTZxaMaOY4XOEAt8Ffv">enter_game</a>
+            <a class="toc-link" href="#sec-end-game" data-page-node-id="xDkdRp1dHtE9999RzfNCv7">end_game</a>
+            <a class="toc-link" href="#sec-pause-game" data-page-node-id="VF2R4tFyToYvOn0XZgIlXZ">pause_game</a>
+            <a class="toc-link" href="#sec-continue-game" data-page-node-id="rpjaRWYV89sw3B0wskLAFw">continue_game</a>
         </div>
-        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
-        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录" data-page-node-id="Vykynl9Sd9FapRGA40ocjm">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部" data-page-node-id="1ddrKExnYHQ2G0tJ64LGD0">↑</button>
     </div>
     <script>
     (function () {

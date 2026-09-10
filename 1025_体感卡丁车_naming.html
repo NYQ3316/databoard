@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="qKthEL1XfeKvRdGROv2UBg">
+<head data-page-node-id="eeC52siDk2MiD6yhqNmYUT">
+    <meta charset="UTF-8" data-page-node-id="lb3ioCCC3Ag6OElCa5Czi0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="iRYRt67h5V357aEsuQFXYD">
     <title>1025《体感卡丁车》事件与属性命名</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -92,190 +92,373 @@
         .example { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: #595959; word-break: break-all; }
         .sub-field td:first-child { padding-left: 28px; }
         .sub-field .field-name { background: #f0fdf4; color: #166534; }
+    
+        /* ======== 深色主题：深蓝夜空 navy（自动跟随系统深浅色） ======== */
+        html { color-scheme: light dark; }
+        @media (prefers-color-scheme: dark) {
+            body { background: #0b1220; color: #cbd5e1; }
+            .container { color: #cbd5e1; }
+
+            /* 顶栏：品牌色暗化，保留项目辨识度 */
+            .header { background: linear-gradient(135deg, #7b5a24 0%, #734d21 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .header h1, .header h2, .header h3, .header .subtitle, .header .meta,
+            .header p, .header div, .header span { color: #f1f5f9; }
+            .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
+            .back-btn:hover { background: rgba(255,255,255,0.22); }
+            .back-link { color: #60a5fa; }
+            .back-link:hover { color: #93c5fd; }
+
+            /* 卡片 / 区块 */
+            .event-section, .event-block, .info-bar, .legend, .note-box {
+                background: #131c31; box-shadow: 0 2px 12px rgba(0,0,0,0.45);
+            }
+            .info-bar, .legend { color: #94a3b8; }
+            .info-bar strong, .legend strong { color: #f1f5f9; }
+            .event-header { border-bottom-color: #1e293b; }
+            .event-header .left h2 { color: #f1f5f9; }
+            .event-header .left .ename { color: #93c5fd; background: transparent; }
+            .event-header .left .edesc { color: #94a3b8; }
+            .event-title { color: #f1f5f9; border-bottom-color: #334155; }
+            .event-desc { background: #0f172a; color: #94a3b8; border-left-color: #334155; }
+            .tag-badge { background: rgba(74,222,128,0.15); color: #86efac; }
+            .note-title { color: #f1f5f9; }
+
+            /* 表格 */
+            th { color: #94a3b8; background: #0f172a; border-bottom-color: #1e293b; }
+            td { border-bottom-color: #1e293b; }
+            th, td { border-bottom-color: #1e293b; }
+            tr:hover, tr:hover td { background: #1e293b; }
+            .field-name { color: #93c5fd; background: transparent; }
+            .example { color: #94a3b8; }
+
+            /* 类型 / 范围标签：淡色半透明徽章 + 亮字（不做实色填充） */
+            .type-tag.type-string { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+            .type-tag.type-int { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .type-tag.type-float { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+            .type-tag.type-bool { background: rgba(45,212,191,0.15); color: #5eead4; }
+            .type-tag.type-list { background: rgba(74,222,128,0.15); color: #86efac; }
+            .type-tag.type-object { background: rgba(244,114,182,0.15); color: #f9a8d4; }
+            .type-tag.type-time { background: rgba(251,113,133,0.15); color: #fda4af; }
+            .scope-tag.scope-common { background: rgba(74,222,128,0.15); color: #86efac; }
+            .scope-tag.scope-project { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .scope-tag.scope-required { background: rgba(248,113,113,0.15); color: #fca5a5; }
+            .scope-tag.scope-new { background: rgba(148,163,184,0.18); color: #cbd5e1; }
+            /* 提示行 */
+            .note-row, .note-row td { background: #1e293b; color: #fcd34d; }
+
+            /* 强制覆盖 HTML 内联写死的深色文字 */
+            div[style], p[style], span[style], td[style], th[style],
+            h1[style], h2[style], h3[style], strong[style] { color: #cbd5e1 !important; }
+            .header [style], .event-header [style] { color: #f1f5f9 !important; }
+            .note-row [style], .note-row td[style] { color: #fcd34d !important; }
+        }
+    
+        /* ======== 悬浮目录组件 ======== */
+        html { scroll-behavior: smooth; }
+        .event-section, .event-block { scroll-margin-top: 16px; }
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 188px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+        @media (prefers-color-scheme: dark) {
+            .toc-btn { background: #131c31; color: #f1f5f9; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-btn:hover { background: #1e293b; border-color: #60a5fa; }
+            .toc-panel { background: #131c31; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-title { color: #94a3b8; }
+            .toc-link { color: #cbd5e1; }
+            .toc-link:hover { background: #1e293b; }
+            .toc-link.active { color: #93c5fd; border-left-color: #60a5fa; background: #1e293b; }
+            .toc-back { border-bottom-color: #1e293b; }
+        }
+        @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
+        @media print { .toc-fab { display: none; } }
     </style>
 </head>
-<body>
-<div class="container">
-    <a class="back-link" href="naming_standards.html">&larr; 返回命名规范</a>
-    <div class="header">
-        <h1>🏎️ 1025《体感卡丁车》事件与属性命名</h1>
-        <div class="meta">体感竞速游戏 · 1~4人 · 挑战模式 / 大奖赛模式 · 事件共 5 个</div>
+<body data-page-node-id="TO2BEYWigyGLEDYyCcyCWY">
+<div class="container" data-page-node-id="TpTXUVlBHuJI3ytf2qMY71">
+    <a class="back-link" href="naming_standards.html" data-page-node-id="2iWNSJMVuOST9CEzFFIwLs">&larr; 返回命名规范</a>
+    <div class="header" data-page-node-id="g53w49QAcdJDZgUdHnYUHP">
+        <h1 data-page-node-id="Xe7wCXL2R1FASeKFDsmmix">🏎️ 1025《体感卡丁车》事件与属性命名</h1>
+        <div class="meta" data-page-node-id="ZRnaqh6CXHzmJv1uTeqHCx">体感竞速游戏 · 1~4人 · 挑战模式 / 大奖赛模式 · 事件共 5 个</div>
     </div>
 
     <!-- ===== Event 1: enter_game ===== -->
-    <div class="event-block">
-        <div class="event-title">enter_game（进入游戏）</div>
-        <div class="event-desc">玩家完成赛道、难度、角色、卡丁车选择后确认进入比赛时触发</div>
-        <table>
-            <colgroup>
-                <col style="width: 170px">
-                <col style="width: 110px">
-                <col style="width: 80px">
-                <col style="width: auto">
-                <col style="width: 200px">
-                <col style="width: 90px">
+    <div class="event-block" id="sec-enter-game" data-page-node-id="6U6JZvV41flBlQqb5NAEMK">
+        <div class="event-title" data-page-node-id="uDu6WoOdVyEBqHeUikIdfb">enter_game（进入游戏）</div>
+        <div class="event-desc" data-page-node-id="hjGQ2SpCS7LDqL95QIYsak">玩家完成赛道、难度、角色、卡丁车选择后确认进入比赛时触发</div>
+        <table data-page-node-id="pscy6Q9ecfMGDbuyr0VJgg">
+            <colgroup data-page-node-id="nvREuiYkyyKG9q9AYPcB3c">
+                <col style="width: 170px" data-page-node-id="feElrU6EpivyF0jET0WtBp">
+                <col style="width: 110px" data-page-node-id="HZXdYImlTqXcLQXLr6F9ws">
+                <col style="width: 80px" data-page-node-id="AdtdH7nJdlxpsdkc6TxxOP">
+                <col style="width: auto" data-page-node-id="c1xDYC0TgONg5JnbSFRIqe">
+                <col style="width: 200px" data-page-node-id="DzpegTjO47TsDRmPyoQcwR">
+                <col style="width: 90px" data-page-node-id="DOwS91ZFIkU5Dm0VB7sKYF">
             </colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            <thead data-page-node-id="TM5BQuiPAlo0PTTm1v5SK6">
+                <tr data-page-node-id="ZUSiLeYKU7yjUHQDLAdru4"><th data-page-node-id="jtvPDgBxwnw2NrCD77OUOl">属性名</th><th data-page-node-id="3BNwTuLAqYHyIAKmvaqgY2">显示名</th><th data-page-node-id="KwtB634i9RFfZq8Hre1sBJ">类型</th><th data-page-node-id="91Fe2RIzWvXs6pZP4BImcS">说明</th><th data-page-node-id="2MHRJcb83OSFCNvQq2GPdH">示例</th><th data-page-node-id="On5gGmCeA3ZqcgD3HBkTA0">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1025</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>默认模式 / 杯赛模式</td><td class="example">0=默认 / 1=杯赛</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1~4 人</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">map_id</span></td><td>赛道ID</td><td><span class="type-tag type-string">文本</span></td><td>所选赛道唯一标识</td><td class="example">map_01（草原赛车场）</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
-                <tr><td><span class="field-name">difficulty</span></td><td>难度等级</td><td><span class="type-tag type-string">文本</span></td><td>对应 50cc/100cc/150cc</td><td class="example">50 / 100 / 150</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr class="note-row">
-                    <td colspan="6">
-                        <strong>📦 对象组字段：</strong>以下字段为封装在 <code>user_info</code> 对象组中的各角色明细数据，
-                        <code>user_info</code> 为对象数组，每个对象以 <code>user_id</code>（文本类型）标识角色，
+            <tbody data-page-node-id="VGG6dZpuifIbZHksR9VDaH">
+                <tr data-page-node-id="fPlEtprB51ZzQsol8OpBxq"><td data-page-node-id="NO2QtJw1dE7GCQ9C2ghtGz"><span class="field-name" data-page-node-id="WdjqtGABzLlhAz57wrRvrT">game_id</span></td><td data-page-node-id="EYQUN1GXnhmHFZv7dGDnmH">游戏ID</td><td data-page-node-id="kIEOFB6CoAt4DVwUqAwdAk"><span class="type-tag type-string" data-page-node-id="CyUIIFhKUjDWzOgMFGRFcU">文本</span></td><td data-page-node-id="zQHDHrGFGBOOKHxtHo9KzN">产品唯一编号</td><td class="example" data-page-node-id="95R0GxtRlMbDiGJ5CIyw1F">1025</td><td data-page-node-id="rsIH8iDOFTJrK8Ztf89x1C"><span class="scope-tag scope-required" data-page-node-id="fLmrDVBziLXBIEw1NRYa7b">必含</span></td></tr>
+                <tr data-page-node-id="XXvYXLMzC67IParJdDgwy3"><td data-page-node-id="rTV3u9jdW3DBo4OAD7DSsU"><span class="field-name" data-page-node-id="9cFhzpB8lOEbUGdQ56lHEc">session_id</span></td><td data-page-node-id="BfE7uPAMN2cSkosYPYt6rk">会话ID</td><td data-page-node-id="QsmaSjaXXCWuUkViIPmnMU"><span class="type-tag type-string" data-page-node-id="jg2aaGNV1ots0CeLO6UzVt">文本</span></td><td data-page-node-id="yYXSu8deD0tJmFXlxvmS7b">单次对局唯一标识</td><td class="example" data-page-node-id="w9tj5eWXVuMqVDiOayrM22">s_987654321</td><td data-page-node-id="t6a3wQAkJONGOK6A4PqHbG"><span class="scope-tag scope-required" data-page-node-id="UeUSjNclxIXmAsn3cn5CBd">必含</span></td></tr>
+                <tr data-page-node-id="Dfdi8NtYlfskIHFb14tL4s"><td data-page-node-id="xn4JQxmIT2fPGyA4LsOTSD"><span class="field-name" data-page-node-id="2DQvdQRcs6GAiyWv2hTh9K">timestamp</span></td><td data-page-node-id="jaRCZjGumRjIligHpBgJPc">时间戳</td><td data-page-node-id="IXDjnf5ICi7Y9VO8tRrKsD"><span class="type-tag type-time" data-page-node-id="PeGJbVpGCUMC3pXFi6xaAW">时间</span></td><td data-page-node-id="erNYBlp424UBZBgBXNWkO8">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="gxwU5ynKPivdqEnUHuYpIK">2026-05-26T09:35:00+08:00</td><td data-page-node-id="JlWzq2pPWl69zxeYtzhtbi"><span class="scope-tag scope-required" data-page-node-id="8zJcWmvhrz1Htxh8gmIT8a">必含</span></td></tr>
+                <tr data-page-node-id="Q8Uw0qFu8NEQkO6OkjQqog"><td data-page-node-id="yhnic4WvHMk6DCu2TVVgoi"><span class="field-name" data-page-node-id="TU8vmwwa34SnfOCO3hSj40">game_type</span></td><td data-page-node-id="e1yOho4bUshFn7fxhGv19b">游戏模式</td><td data-page-node-id="J8mdrCHWMS8PZUf28sdWBs"><span class="type-tag type-string" data-page-node-id="prlQ3bnSgfKtB7QYlTU1Gg">文本</span></td><td data-page-node-id="ZF6IC47b8B5hKSMmQmein6">默认模式 / 杯赛模式</td><td class="example" data-page-node-id="PW0EbRrXUQDNopEwRgsODd">0=默认 / 1=杯赛</td><td data-page-node-id="4MR1EtlxCCrO7sIf30dKtK"><span class="scope-tag scope-common" data-page-node-id="1gWH6cKLia9PCv8yNk47jB">通用</span></td></tr>
+                <tr data-page-node-id="Dp36ZGg8cX3X6zzrXTXje3"><td data-page-node-id="HZSUsVxID6msVzaSTgw6e4"><span class="field-name" data-page-node-id="eNcFKXlAhuJXTHFh48mdsM">player_count</span></td><td data-page-node-id="yQrWOMqMjwZO7PrC1oQrQP">游戏人数</td><td data-page-node-id="ukMXRyeyuR2q5M6VNgfr6o"><span class="type-tag type-string" data-page-node-id="6tVyWwHbYCYTyP68O83GXj">文本</span></td><td data-page-node-id="ylxTBUFbImwyAQy262BkSE">1~4 人</td><td class="example" data-page-node-id="pp6DPXtcEMgvOjUuJh6Ln5">1 / 2 / 3 / 4</td><td data-page-node-id="rqzSdCeWDCfCETvIEGB5sB"><span class="scope-tag scope-common" data-page-node-id="LDzXzcYnaXsbiLKi7OMWHV">通用</span></td></tr>
+                <tr data-page-node-id="rsVx3Ye0Vulns5Sdn02BA0"><td data-page-node-id="xWiYPgEqpBTmPWvuikg9Ex"><span class="field-name" data-page-node-id="yFD3lNaBxUilqVN4k6bCnF">map_id</span></td><td data-page-node-id="Bicmftl0lbSf08LpF8NEvi">赛道ID</td><td data-page-node-id="A897kext38Y7iOCyAY8ogn"><span class="type-tag type-string" data-page-node-id="p37LDE6qBaDqEFeVeHxVSV">文本</span></td><td data-page-node-id="XufI4lJA4Hwm6Szg8QbviN">所选赛道唯一标识</td><td class="example" data-page-node-id="LUemnE7fquq3L3troluy0T">map_01（草原赛车场）</td><td data-page-node-id="1qeKqdv7Jl8wMRhpQppv8W"><span class="scope-tag scope-project" data-page-node-id="nayB52lAOF2JPiEzEYLrwa">项目特有</span></td></tr>
+                <tr data-page-node-id="0TciAjqkPLoiB0cidJjRDr"><td data-page-node-id="cOT8hiyVzN5Fl9ASrXLxCe"><span class="field-name" data-page-node-id="ViJ2JFPDCLwcUvJbGsRKms">difficulty</span></td><td data-page-node-id="4GNPm6bMgDJ5YLzxqEEqXo">难度等级</td><td data-page-node-id="dtKdiZ54PySzZXB5pdjOKO"><span class="type-tag type-string" data-page-node-id="yZ6ECaIvzO9nYsIbxvN1rZ">文本</span></td><td data-page-node-id="0wUcpQ6wjhurVlSHogBnn0">对应 50cc/100cc/150cc</td><td class="example" data-page-node-id="oVaW6GeRGQIeghEFWDAu35">50 / 100 / 150</td><td data-page-node-id="EXrldXZCa9dvVAhBTikzdI"><span class="scope-tag scope-common" data-page-node-id="AIUdBvQ9ENgR0h5fMQQoGW">通用</span></td></tr>
+                <tr class="note-row" data-page-node-id="mXVX98hWZ5FJzSEULDDgQc">
+                    <td colspan="6" data-page-node-id="I8iM2uFabGm2tejBAh2I8P">
+                        <strong data-page-node-id="CC7nwNZ5LE8qzdvbLOZgXv">📦 对象组字段：</strong>以下字段为封装在 <code data-page-node-id="6L5Wxxa4CZUgJmA40kRwIM">user_info</code> 对象组中的各角色明细数据，
+                        <code data-page-node-id="0V2WaGfzY4QD1Jl6rkEnbI">user_info</code> 为对象数组，每个对象以 <code data-page-node-id="4KVH2nQ319GYwx6WnBKU8E">user_id</code>（文本类型）标识角色，
                         包含该角色的角色选择和卡丁车选择数据。
                     </td>
                 </tr>
-                <tr>
-                    <td><span class="field-name">user_info</span></td>
-                    <td>各角色配置数据</td>
-                    <td><span class="type-tag type-object">对象组</span></td>
-                    <td>对象数组，每个对象包含 user_id（文本）及各角色的 role_id / kart_id</td>
-                    <td class="example">[{"user_id":135,"role_id":"role_01","kart_id":"kart_01"},{"user_id":136,"role_id":"role_02","kart_id":"kart_03"}]</td>
-                    <td><span class="scope-tag scope-project">项目特有</span></td>
+                <tr data-page-node-id="1gbFyHP11z9sasxgELQVoG">
+                    <td data-page-node-id="PdJA0qsM8x8sxCrQo0NFgC"><span class="field-name" data-page-node-id="pKTaF84ZS4QjYapflrmL8r">user_info</span></td>
+                    <td data-page-node-id="nVR2puGmJy3HBVt4goa9Yr">各角色配置数据</td>
+                    <td data-page-node-id="zh9UgNAUAZL9rlahh8r0nG"><span class="type-tag type-object" data-page-node-id="fDrXW1EFQo0kN0qyakhoRD">对象组</span></td>
+                    <td data-page-node-id="qoXV0sXFNCmhqS1axdlSpO">对象数组，每个对象包含 user_id（文本）及各角色的 role_id / kart_id</td>
+                    <td class="example" data-page-node-id="R4QvgE2ljR1qq4B3xjuEvX">[{"user_id":135,"role_id":role_01,"kart_id":kart_01},{"user_id":136,"role_id":role_02,"kart_id":kart_03}]</td>
+                    <td data-page-node-id="ykieY81Fhj3iM4EqE6nJbo"><span class="scope-tag scope-project" data-page-node-id="YDIfyveXwglmMF1SjLuJAY">项目特有</span></td>
                 </tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.user_id</span></td><td>↳ 角色ID</td><td><span class="type-tag type-string">文本</span></td><td>该玩家的人脸角色标识</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.role_id</span></td><td>↳ 车手ID</td><td><span class="type-tag type-string">文本</span></td><td>该玩家所选车手</td><td class="example">role_01（小熊）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.kart_id</span></td><td>↳ 卡丁车ID</td><td><span class="type-tag type-string">文本</span></td><td>该玩家所选卡丁车</td><td class="example">kart_01（闪电卡丁）</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="sub-field" data-page-node-id="Wngkx8vFy7M2tC8uKJR1gD"><td data-page-node-id="iliD2d11TEry2MppCtnrCm"><span class="field-name" data-page-node-id="a8MrGXrQKbRcJ05jXcdalL">user_info.user_id</span></td><td data-page-node-id="Uhm0gaHYMEiJLSQlaB7Nzp">↳ 角色ID</td><td data-page-node-id="F0eUsell9BEO3phrTxClrB"><span class="type-tag type-string" data-page-node-id="E52OwoPzkKsyQNP0Hp2NXn">文本</span></td><td data-page-node-id="dBLLHvV30Jy9I0QHKgaGkH">该玩家的人脸角色标识</td><td class="example" data-page-node-id="6XV8NmcSVLMtQyDIxQoURv">135</td><td data-page-node-id="HHZsiHlWnhX7sqBeQwt4Cq"><span class="scope-tag scope-project" data-page-node-id="8Bdlrs4S8GU6bHWi97ASCm">项目特有</span></td></tr>
+                <tr class="sub-field" data-page-node-id="pwwZKhBtab6KD5qjHaM2lM"><td data-page-node-id="NTu90rL2bWv7Do73FB4NPt"><span class="field-name" data-page-node-id="0Ko6evV7C2KsTPQjY29VIa">user_info.role_id</span></td><td data-page-node-id="dUohY4jMsTF4za2BZQlLnV">↳ 车手ID</td><td data-page-node-id="lMfAdnJSqaUkgfQblEid7V"><span class="type-tag type-string" data-page-node-id="iww35rDwuzS3Gk1fyGF6Kq">文本</span></td><td data-page-node-id="k2LNcJZivo2HGZASrcoa5L">该玩家所选车手</td><td class="example" data-page-node-id="edE6p7Yz2f1zqr2NgYR1Ur">role_01（小熊）</td><td data-page-node-id="eyMTLMX64GGnKOIEHBesG0"><span class="scope-tag scope-common" data-page-node-id="0SZDjV56iB0eDT3SInY2Es">通用</span></td></tr>
+                <tr class="sub-field" data-page-node-id="FuU9DrLMZmdQYKecAqHtlN"><td data-page-node-id="OuAjHOxicdBWnnI9iPjPON"><span class="field-name" data-page-node-id="dlIqclSTEcC8tPlkECdgSD">user_info.kart_id</span></td><td data-page-node-id="WC0i4YajGyUS5v3V2MkfjW">↳ 卡丁车ID</td><td data-page-node-id="4PSiUfFsAXFe34FQKn3mta"><span class="type-tag type-string" data-page-node-id="IUANsFTVFevHEYHfAGiAGw">文本</span></td><td data-page-node-id="JGSjzBDedhSAuD5aA95lPS">该玩家所选卡丁车</td><td class="example" data-page-node-id="BrOCGtdjaAcgHjGT35DE7E">kart_01（闪电卡丁）</td><td data-page-node-id="ojdoMCy9LbwvuA93gxoCFr"><span class="scope-tag scope-project" data-page-node-id="mDkyRCb8SbzmigpIYYuyVD">项目特有</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- ===== Event 2: end_game ===== -->
-    <div class="event-block">
-        <div class="event-title">end_game（退出游戏 / 对局结束）</div>
-        <div class="event-desc">比赛自然结束（全部到达终点 / 超时）进入结算界面时触发</div>
-        <table>
-            <colgroup>
-                <col style="width: 170px">
-                <col style="width: 110px">
-                <col style="width: 80px">
-                <col style="width: auto">
-                <col style="width: 200px">
-                <col style="width: 90px">
+    <div class="event-block" id="sec-end-game" data-page-node-id="OzbuEijFCY5prIvCl1n6fo">
+        <div class="event-title" data-page-node-id="WhdCemSMwvI4u8NOyJpM2F">end_game（退出游戏 / 对局结束）</div>
+        <div class="event-desc" data-page-node-id="mr6KFt5YwOwqCfs9byiTQD">比赛自然结束（全部到达终点 / 超时）进入结算界面时触发</div>
+        <table data-page-node-id="sZ35YOqEtgEqsymWOQyTEJ">
+            <colgroup data-page-node-id="nGCW9tyzeh2qSgIANaqlSI">
+                <col style="width: 170px" data-page-node-id="MMWmM01YQwWGXip15eymyK">
+                <col style="width: 110px" data-page-node-id="RZOj427P6M9TqfBqNcFKdk">
+                <col style="width: 80px" data-page-node-id="PLY1QOGtcjNFvzLXWTWzR7">
+                <col style="width: auto" data-page-node-id="PHWM8jx4LR9KENyBgoPJDg">
+                <col style="width: 200px" data-page-node-id="S150rv0nJM6YwR5m1Mbs1u">
+                <col style="width: 90px" data-page-node-id="cd6DxKqE87D29SsEww2gcz">
             </colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            <thead data-page-node-id="iSDOkbDSG1VDDBRpHIGxY5">
+                <tr data-page-node-id="piA9ilFIECRIFAzNDuWtAE"><th data-page-node-id="rxnlPyBbpMq6UTSfxuoTcY">属性名</th><th data-page-node-id="LqBX8lT5REpxsP8HpSxKnA">显示名</th><th data-page-node-id="xPO6DoIeRDoDoJXMOSYJoW">类型</th><th data-page-node-id="vDfna6e7nDdQo08Gz1rucR">说明</th><th data-page-node-id="s9PI8tWh8mBmHAnkERFmyK">示例</th><th data-page-node-id="2pLPTiNRtslJez1aCCt9rz">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1025</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>与 enter_game 同一 session</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>默认模式 / 杯赛模式</td><td class="example">0=默认 / 1=杯赛</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1~4 人</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">map_id</span></td><td>赛道ID</td><td><span class="type-tag type-string">文本</span></td><td>本局所用赛道</td><td class="example">map_01</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
-                <tr><td><span class="field-name">difficulty</span></td><td>难度等级</td><td><span class="type-tag type-string">文本</span></td><td>本局所选难度</td><td class="example">50 / 100 / 150</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr class="note-row">
-                    <td colspan="6">
-                        <strong>📦 对象组字段：</strong>以下字段为封装在 <code>user_info</code> 对象组中的各角色明细数据，
-                        <code>user_info</code> 为对象数组，每个对象以 <code>user_id</code>（文本类型）标识角色，
+            <tbody data-page-node-id="z6sVBfZYeWbDkhHq3xeOLa">
+                <tr data-page-node-id="kdZf7TQWEXWJ3faamrBcSs"><td data-page-node-id="Ju0mmjgiJI3LVyqtyOhsQp"><span class="field-name" data-page-node-id="aeNLhqblChTSlnHHStFe2p">game_id</span></td><td data-page-node-id="9JmdseR6RvOcXADYSYla05">游戏ID</td><td data-page-node-id="Vu2PySVcTJZHtXxM4FXty1"><span class="type-tag type-string" data-page-node-id="zS28ynrzNIXLqa6FeyVcrP">文本</span></td><td data-page-node-id="LDxf4fHZMbs85Z5aVVr3rd">产品唯一编号</td><td class="example" data-page-node-id="mCBHVDwpCLCGfKXa21cshF">1025</td><td data-page-node-id="3FZAhQ7ufaVGfEb28jiCA8"><span class="scope-tag scope-required" data-page-node-id="rqbQrIF81dE3ERvBtXKn2T">必含</span></td></tr>
+                <tr data-page-node-id="v4pAX4KubqBcIKAPTSweLY"><td data-page-node-id="dFdiOOlpZNWiZPBuAGZJgZ"><span class="field-name" data-page-node-id="28NzdfgBX4v1Tb5DOIM0Hz">session_id</span></td><td data-page-node-id="uQHsCYVpyCMkSPxsk0lZuA">会话ID</td><td data-page-node-id="d7Bgqw2tpPSixPtCrNaTpt"><span class="type-tag type-string" data-page-node-id="stN8E6q6Cs93H4QeumxsBE">文本</span></td><td data-page-node-id="Mfh0tGYdwZvcSczZtgPa9u">与 enter_game 同一 session</td><td class="example" data-page-node-id="66Y2OyDGYcHmQGHFufP8PU">s_987654321</td><td data-page-node-id="BNFsKQIPA4T4PQfEDKDw8s"><span class="scope-tag scope-required" data-page-node-id="P8MObH4ivtjVpYlyYqrnO9">必含</span></td></tr>
+                <tr data-page-node-id="FSNFXTOPyhjIyckxg2Z29o"><td data-page-node-id="7VzZchIJ4OKC8VwBX5P835"><span class="field-name" data-page-node-id="S3Ek64u4G4Nvl66zPBQyU9">timestamp</span></td><td data-page-node-id="rPIRkHqQMiXDxw5ztfEB5k">时间戳</td><td data-page-node-id="1FEYvi5jhLOL57gcxMA64H"><span class="type-tag type-time" data-page-node-id="dz8VQFQz6NfOM4Lpm7jwci">时间</span></td><td data-page-node-id="3BTcHcJNWnpgGXLxlppTPP">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="bW5z0XVxGBAwgcvVVvxBuE">2026-05-26T09:35:00+08:00</td><td data-page-node-id="xFQg1T41ekTN3fYGAmplvf"><span class="scope-tag scope-required" data-page-node-id="XVjHWicXBCsda8G8dBDrVP">必含</span></td></tr>
+                <tr data-page-node-id="vTGbZERgKfPoCqxdbIfVg1"><td data-page-node-id="ersPhXO3NZth9R1rPhz1RM"><span class="field-name" data-page-node-id="foU1xEOQLYHLgY2WzLDSIC">game_type</span></td><td data-page-node-id="krPdermLClwBIUqIsB1JAb">游戏模式</td><td data-page-node-id="u8gFGDx8Dd3YGApOwD0pSl"><span class="type-tag type-string" data-page-node-id="G6HjHWV7DOwZL3bABT2eOa">文本</span></td><td data-page-node-id="EATNr8eGwsSgTH24qLDrSp">默认模式 / 杯赛模式</td><td class="example" data-page-node-id="Owu4TlSEnp1t6U1dGgRKKa">0=默认 / 1=杯赛</td><td data-page-node-id="T8hvRZeGYlF3jTDezTuFFC"><span class="scope-tag scope-common" data-page-node-id="vh3eGCNmBUoVppeXdGtpoM">通用</span></td></tr>
+                <tr data-page-node-id="Jh1KNPAKfwlNNn0pAFrItv"><td data-page-node-id="EyKeXvIruFJulXSICowZZO"><span class="field-name" data-page-node-id="r32W4lV0x3D3AJ3SuCV2Ek">player_count</span></td><td data-page-node-id="skqIfnJaQ399UxoIfEY0kV">游戏人数</td><td data-page-node-id="xMcrvfpoLSn99LJChpatuR"><span class="type-tag type-string" data-page-node-id="K3K8JlYYRdt2ynGbIUMSAz">文本</span></td><td data-page-node-id="GPZQvs1ig80nqPTMk4nhm8">1~4 人</td><td class="example" data-page-node-id="GTE2LiC5p8B5805Vyl987r">1 / 2 / 3 / 4</td><td data-page-node-id="JIDUlaMfMuqGJIkJGa1OLn"><span class="scope-tag scope-common" data-page-node-id="GUc7kx32mwaOrRzXBEc1H8">通用</span></td></tr>
+                <tr data-page-node-id="UpBn5D02dEFn3TAB8Td5w1"><td data-page-node-id="vb1VGG0YptnQ1oqMLExQjm"><span class="field-name" data-page-node-id="NfQOVojw91JUOKe0eCPAp6">map_id</span></td><td data-page-node-id="v77jnT7AN8mQRYENIvGLiK">赛道ID</td><td data-page-node-id="Cp75Ric6Lo374F8ai2Ta2W"><span class="type-tag type-string" data-page-node-id="eGeppVCeDnOP8q6zZxFb2G">文本</span></td><td data-page-node-id="jKXQSGaqwUuEGbHcRrZyK5">本局所用赛道</td><td class="example" data-page-node-id="wFaNPfCvc9a9szpTapocxz">map_01</td><td data-page-node-id="RdiKLJx2ZWMtaUis8gNJqE"><span class="scope-tag scope-project" data-page-node-id="xXFzS5k3i7GfoEjZgbt35N">项目特有</span></td></tr>
+                <tr data-page-node-id="s1W9OnesaHzsxykKZm4YMo"><td data-page-node-id="HAqlXu1Aal2tFWFhaG7EZZ"><span class="field-name" data-page-node-id="MdGW3lATQ4z7wxFGcAG2Do">difficulty</span></td><td data-page-node-id="69i5YiDSMk15Q6yqvU6NXM">难度等级</td><td data-page-node-id="QmhkAbqXBI9GAwUCxza4h2"><span class="type-tag type-string" data-page-node-id="8iB5alTj9X8sfmfEWxFr6F">文本</span></td><td data-page-node-id="NtJ7x0ULNIGwrZPfMk2qgA">本局所选难度</td><td class="example" data-page-node-id="D8oOY0jqCF2x2lVD9pSRwj">50 / 100 / 150</td><td data-page-node-id="UDJt1hgUoEyVfahXVKcSQA"><span class="scope-tag scope-common" data-page-node-id="wSnAkf9xDL8HDTdh5fSVSS">通用</span></td></tr>
+                <tr class="note-row" data-page-node-id="Yuzk4sGM2C5GhGW1OQw4AV">
+                    <td colspan="6" data-page-node-id="ZD6D5RNuk9VBVoWOrlcmub">
+                        <strong data-page-node-id="VJhkWFhilkOpaJL66ist8L">📦 对象组字段：</strong>以下字段为封装在 <code data-page-node-id="b13q1vbeLXxCckTt7uszb1">user_info</code> 对象组中的各角色明细数据，
+                        <code data-page-node-id="oH5fzMKM4wHBKaUjPSHPn7">user_info</code> 为对象数组，每个对象以 <code data-page-node-id="HSx4uFM1TQ7W2DSPBDsTH7">user_id</code>（文本类型）标识角色，
                         包含该角色的名次、最佳圈速、平均圈速数据。
                     </td>
                 </tr>
-                <tr>
-                    <td><span class="field-name">user_info</span></td>
-                    <td>各角色结算数据</td>
-                    <td><span class="type-tag type-object">对象组</span></td>
-                    <td>对象数组，每个对象包含 user_id（文本）及各角色的 player_rank / best_lap / avg_lap</td>
-                    <td class="example">[{"user_id":135,"player_rank":1,"best_lap":72800,"avg_lap":90667},{"user_id":136,"player_rank":3,"best_lap":81500,"avg_lap":102300}]</td>
-                    <td><span class="scope-tag scope-project">项目特有</span></td>
+                <tr data-page-node-id="EooGHrZ5o3eQATzItxGU7I">
+                    <td data-page-node-id="Ji8E8IC3L3XV6hp4CBozX1"><span class="field-name" data-page-node-id="V76z49kZHusxAAjURejK2w">user_info</span></td>
+                    <td data-page-node-id="FLFj3t0wzx0GEIHNacV2Gd">各角色结算数据</td>
+                    <td data-page-node-id="Nz95mBKCYsAx804bj1bj7r"><span class="type-tag type-object" data-page-node-id="Ab0YILHY3u6EJrkkGNZt9y">对象组</span></td>
+                    <td data-page-node-id="QB681oCihO3xAZHsGzsLDa">对象数组，每个对象包含 user_id（文本）及各角色的 player_rank / best_lap / avg_lap</td>
+                    <td class="example" data-page-node-id="pgLf6NoPLmTkUPfxvGKpkq">[{"user_id":135,"player_rank":1,"best_lap":72800,"avg_lap":90667},{"user_id":136,"player_rank":3,"best_lap":81500,"avg_lap":102300}]</td>
+                    <td data-page-node-id="uMlOfoEQZnFLV4iTMdBlww"><span class="scope-tag scope-project" data-page-node-id="8mMEv70KY6LnZUMbFalU5r">项目特有</span></td>
                 </tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.user_id</span></td><td>↳ 角色ID</td><td><span class="type-tag type-string">文本</span></td><td>该玩家的人脸角色标识</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.player_rank</span></td><td>↳ 玩家名次</td><td><span class="type-tag type-string">文本</span></td><td>最终名次（1~8），未完成记 0</td><td class="example">"1"~"8" / "0"</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.best_lap</span></td><td>↳ 最佳圈速</td><td><span class="type-tag type-int">数值</span></td><td>该玩家本局单圈最快用时（毫秒）</td><td class="example">72800（1分12.8秒）</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.avg_lap</span></td><td>↳ 平均圈速</td><td><span class="type-tag type-int">数值</span></td><td>该玩家总用时÷圈数（毫秒）</td><td class="example">90667（1分30.67秒）</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="sub-field" data-page-node-id="nQWReqI1dv1X1vc9bgoHY2"><td data-page-node-id="a9Mp9cFEjuBCC47lg7mUdS"><span class="field-name" data-page-node-id="egmF3ltBJpKVJ7tSfmjs1h">user_info.user_id</span></td><td data-page-node-id="S7Vv7dTbVmKy0weSEadMts">↳ 角色ID</td><td data-page-node-id="b7FSr8Iu3knoNFdjjGK5Q1"><span class="type-tag type-string" data-page-node-id="1PM9VqMErFAb8s0oLdoPlM">文本</span></td><td data-page-node-id="R1lS9vBmQEhxHeEoCSeIhz">该玩家的人脸角色标识</td><td class="example" data-page-node-id="UMDSk73VAZerHA0U1QRHvE">135</td><td data-page-node-id="F66jzLuY16fSkyVO7h4GPR"><span class="scope-tag scope-project" data-page-node-id="hVxgJcy5DYfAqgODX9iCkI">项目特有</span></td></tr>
+                <tr class="sub-field" data-page-node-id="JqoTGDOuM97YAvJ8mUhYgW"><td data-page-node-id="IFJlCLe7ncfVrMJalpYh2f"><span class="field-name" data-page-node-id="eejsLyYy5dh4D4PeCZCrLU">user_info.player_rank</span></td><td data-page-node-id="2MhwsCr0OGzIADATeESzDj">↳ 玩家名次</td><td data-page-node-id="jH0uZBNJCZ7QENoc6Fv4Wq"><span class="type-tag type-string" data-page-node-id="bcOzdRok8CbmgoLjdRxWXa">文本</span></td><td data-page-node-id="2Y1QLHWsBEFL8b7OgcQmXA">最终名次（1~8），未完成记 0</td><td class="example" data-page-node-id="yzCfEoLySb5tc639Nwg3yC">"1"~"8" / "0"</td><td data-page-node-id="N9FyquLbLKdgpdGInoC7h9"><span class="scope-tag scope-project" data-page-node-id="buyZ7H3QHOOeab1TtsA9YS">项目特有</span></td></tr>
+                <tr class="sub-field" data-page-node-id="lqkrAlRs30NCFdu5pC4P5l"><td data-page-node-id="sGZZojg4mDEywv9fDVeG9E"><span class="field-name" data-page-node-id="E58DV4yjSCdLwK0EpyOFUv">user_info.best_lap</span></td><td data-page-node-id="XGIxzEnFm4eyB7CRkyf0XH">↳ 最佳圈速</td><td data-page-node-id="J18G11F5ywMUTrWk6Rp3pv"><span class="type-tag type-int" data-page-node-id="1TJTKnLsVcNzGMIrzV8jRF">数值</span></td><td data-page-node-id="et7bEu0nd14P6yNEegPEWk">该玩家本局单圈最快用时（毫秒）</td><td class="example" data-page-node-id="QktDW19c4odvK1sZ7fXTyf">72800（1分12.8秒）</td><td data-page-node-id="L2igdLabUCYq4dvdsWi3Xi"><span class="scope-tag scope-project" data-page-node-id="EMXl0W6jUckst5YJykcAx5">项目特有</span></td></tr>
+                <tr class="sub-field" data-page-node-id="js87jkDBpG721NkYy5k2AQ"><td data-page-node-id="4A2N4c87MZ2r4TzbXhaybA"><span class="field-name" data-page-node-id="xHLjXNC8FqNRkKijTXnYOI">user_info.avg_lap</span></td><td data-page-node-id="Dyh8pCoHdlWnxCvywUrrPH">↳ 平均圈速</td><td data-page-node-id="CG3ETlHjqur2cXG5nHEyrM"><span class="type-tag type-int" data-page-node-id="sSjwWZvaT0qYC88a5G19FZ">数值</span></td><td data-page-node-id="TiwsAU4tTeEO6A5zA07idj">该玩家总用时÷圈数（毫秒）</td><td class="example" data-page-node-id="5Y3TMjKjiGPnR1YqgzfUaY">90667（1分30.67秒）</td><td data-page-node-id="OdjEEHQtFZjr00v8AOuv9a"><span class="scope-tag scope-project" data-page-node-id="Czc2Btli8k0IcxGwnTFQPY">项目特有</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- ===== Event 3: pause_game ===== -->
-    <div class="event-block">
-        <div class="event-title">pause_game（暂停游戏）</div>
-        <div class="event-desc">玩家在比赛中触发暂停时上报</div>
-        <table>
-            <colgroup>
-                <col style="width: 170px">
-                <col style="width: 110px">
-                <col style="width: 80px">
-                <col style="width: auto">
-                <col style="width: 200px">
-                <col style="width: 90px">
+    <div class="event-block" id="sec-pause-game" data-page-node-id="PLsaVC0BcKMp8i8d2vxQEj">
+        <div class="event-title" data-page-node-id="CvOWt9qgtY0JInoBaH0HWf">pause_game（暂停游戏）</div>
+        <div class="event-desc" data-page-node-id="LU6UYA7CNGlL3MzDmOKd3D">玩家在比赛中触发暂停时上报</div>
+        <table data-page-node-id="f4c4lxXMX20FC8t16mmt6M">
+            <colgroup data-page-node-id="4ChAZVZ0dxD6n6RxuFxwhJ">
+                <col style="width: 170px" data-page-node-id="ysSHCJJfHvPgIbt0FRkmhH">
+                <col style="width: 110px" data-page-node-id="NDXG4e01i0IIHGf3r7oYzv">
+                <col style="width: 80px" data-page-node-id="Ngs76KSRFKOt0SyyhUhC2Z">
+                <col style="width: auto" data-page-node-id="dgNZ54fr4ITFuq5Su0wQxy">
+                <col style="width: 200px" data-page-node-id="hZlEEU73kkEM8ExN7HNj7C">
+                <col style="width: 90px" data-page-node-id="ocVPUjrmwjnJ0muVYStbUC">
             </colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            <thead data-page-node-id="YiRoFACKb9jop54d9MhXBw">
+                <tr data-page-node-id="v0N0s2zyLHmUb5VMyO2VGd"><th data-page-node-id="kvgcgydzXLaOCgznBjP4g2">属性名</th><th data-page-node-id="TnjZzCyXXSXAscUDSeUHqE">显示名</th><th data-page-node-id="0bieBWPYxq1hLnvYrU4PL5">类型</th><th data-page-node-id="ptEUIJEye4khIbLCVU228S">说明</th><th data-page-node-id="uxeuDALlCIH43sA4Ee07uu">示例</th><th data-page-node-id="ndzD87pSQgKGlXz12o9JWP">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1025</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=默认 / 1=杯赛</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1~4 人</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            <tbody data-page-node-id="mnIioUuBYgq51pmcKVXT68">
+                <tr data-page-node-id="H0rOkJBkjfQ5fLqjJIdNI9"><td data-page-node-id="Ic8cjuXEO4yPcac6Kp7ZlU"><span class="field-name" data-page-node-id="tRPypsJRqW0b5PQB8IRKPs">game_id</span></td><td data-page-node-id="dnNTbdClmlF9XEtkHKHONM">游戏ID</td><td data-page-node-id="Rn00R72C8bDJL9OdKIc6we"><span class="type-tag type-string" data-page-node-id="gw0KbXhC6hyFHiutufhwUc">文本</span></td><td data-page-node-id="vdI4KQrj3GDw2HEbGQ7B8C">产品唯一编号</td><td class="example" data-page-node-id="rKBC9s2V9SuQzIBmkyS7tT">1025</td><td data-page-node-id="j9ugBgAE9X4LcfLv359Gkg"><span class="scope-tag scope-required" data-page-node-id="LA0guMUvsVDrUC4B2jCF2V">必含</span></td></tr>
+                <tr data-page-node-id="dJqkP1Kh8PYsJDCrLrZxLF"><td data-page-node-id="lHXaVEo4TFbIN4uBv4ihPm"><span class="field-name" data-page-node-id="V4V4SoHutD126budUx6W8c">user_id</span></td><td data-page-node-id="aNy52ATs0bEJL8XYqZSoq2">人脸角色ID</td><td data-page-node-id="6454ebmx5Vsu9eP8CpfSnk"><span class="type-tag type-list" data-page-node-id="iAX6LjCVasDnQVOPmj2KWR">列表</span></td><td data-page-node-id="Ly22fLdEbHa0GziTYbIRPu">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="WGMT0cCdgjSuA1k8uMCUMs">["135","136"]</td><td data-page-node-id="YcvLmRaW5UxP1UvAaZ0pEv"><span class="scope-tag scope-required" data-page-node-id="hFmHMdIiaGcGa5kFSqQcEp">必含</span></td></tr>
+                <tr data-page-node-id="TPxEBMH5mJWrjk8kwSqCW3"><td data-page-node-id="MEEvwBStc936eocB7Y2VU1"><span class="field-name" data-page-node-id="xhv24HgOeIAXFELClc36Lm">session_id</span></td><td data-page-node-id="bwLyi82NQAxqVB7uRG6xu8">会话ID</td><td data-page-node-id="igu7wgoWayFDH7gHyPp9Rc"><span class="type-tag type-string" data-page-node-id="zGTWoXDMNnA4pFzM0zLKwE">文本</span></td><td data-page-node-id="ZeAgwOVXkB9JZAITIRTWtc">单次对局唯一标识</td><td class="example" data-page-node-id="eAqkYfKFfX7f8SB0Dnrb6g">s_987654321</td><td data-page-node-id="YFoE8aaiStvQ8hByfOvEJT"><span class="scope-tag scope-required" data-page-node-id="wRuZZ5S1TybZu04xk7MNiT">必含</span></td></tr>
+                <tr data-page-node-id="gOPBPESBzNtCZvhhd7vOo3"><td data-page-node-id="g3IQAWnf7Hn1jmeOocJvFa"><span class="field-name" data-page-node-id="sAPamvut2tDhSiHmLESyY5">timestamp</span></td><td data-page-node-id="zAWcQvbyAYpL6p6oxQteMR">时间戳</td><td data-page-node-id="5Y4XOT6dCcKRSuNBaaIfb3"><span class="type-tag type-time" data-page-node-id="4iJQK7XEHPgJTWX8n0A5HS">时间</span></td><td data-page-node-id="IUTxqaU6LvZpIqWnzx55ZP">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="0VtD3TYtCOg4QgWIW33oAE">2026-05-26T09:35:00+08:00</td><td data-page-node-id="F2GzDELS5rtFpAQjJMA45k"><span class="scope-tag scope-required" data-page-node-id="RMilCUpbGt4r5Uze1D6rN3">必含</span></td></tr>
+                <tr data-page-node-id="v7Jf8JBbGUcSgQc5Z7MIpZ"><td data-page-node-id="AH8AGTyR04yQ6jvvRTGXdc"><span class="field-name" data-page-node-id="5gwN2B8gfi6EgXC6azp7qW">game_type</span></td><td data-page-node-id="X64LBX528nKNCBCXTFkAW8">游戏模式</td><td data-page-node-id="rEGkwFLqVejxnm74u3zDoM"><span class="type-tag type-string" data-page-node-id="tnaXl3AjFXhhDjQNvN0Wmp">文本</span></td><td data-page-node-id="ilMBrJAPi7gKElq1Rvzeag">当前游戏模式</td><td class="example" data-page-node-id="vaycY3U3CWBSHSlJtp5jUm">0=默认 / 1=杯赛</td><td data-page-node-id="AWiTfCfCsasIg7EP8gcehr"><span class="scope-tag scope-common" data-page-node-id="2AwbFmoaRlqVua8d0peusx">通用</span></td></tr>
+                <tr data-page-node-id="m0PVbUj1FZPtQusjTnnWCF"><td data-page-node-id="F66TSeCDNyTuWFZHJcfXWL"><span class="field-name" data-page-node-id="zTbyAbWR23o2QrEsHviXaa">player_count</span></td><td data-page-node-id="Vq6JWk4MiPZXsDhMhAXGJP">游戏人数</td><td data-page-node-id="JDhDEXzRBXzdopXVkGFJ9X"><span class="type-tag type-string" data-page-node-id="RcWJPOYlnuLavDxO58jXUS">文本</span></td><td data-page-node-id="cO4DXbgPOUqU0JaWxvQa9B">1~4 人</td><td class="example" data-page-node-id="r9aHq0lULtM2EbkV0JYXHe">1 / 2 / 3 / 4</td><td data-page-node-id="yBouXLKAjLgceK42dIJfVt"><span class="scope-tag scope-common" data-page-node-id="i6n3vbbpIZNE7QV4Ivp3Lk">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- ===== Event 4: continue_game ===== -->
-    <div class="event-block">
-        <div class="event-title">continue_game（回到游戏）</div>
-        <div class="event-desc">玩家从暂停状态恢复比赛时触发</div>
-        <table>
-            <colgroup>
-                <col style="width: 170px">
-                <col style="width: 110px">
-                <col style="width: 80px">
-                <col style="width: auto">
-                <col style="width: 200px">
-                <col style="width: 90px">
+    <div class="event-block" id="sec-continue-game" data-page-node-id="4uApey6eLk4MhmrDXaRkiL">
+        <div class="event-title" data-page-node-id="Eldp1BrTz2MC5wHGAePGHS">continue_game（回到游戏）</div>
+        <div class="event-desc" data-page-node-id="m7lAG3mfAKN1tpX8yDufaB">玩家从暂停状态恢复比赛时触发</div>
+        <table data-page-node-id="NV3RZYNlr1vQU4NZBFEQQq">
+            <colgroup data-page-node-id="dZg2ltyTEmzMCUY6O6pm2w">
+                <col style="width: 170px" data-page-node-id="BL37FG2gx1b8sfTbbJSpEH">
+                <col style="width: 110px" data-page-node-id="gXyjeekKTqfFgQ1XRidBjX">
+                <col style="width: 80px" data-page-node-id="FkiglNsiB8E2XiCl75JomD">
+                <col style="width: auto" data-page-node-id="Pc2w8utB6E6V5aUSe2R4vt">
+                <col style="width: 200px" data-page-node-id="g3Jp5hs0IAibRHDyOukF4C">
+                <col style="width: 90px" data-page-node-id="P7gBNvrtzbwooWzkp38qJI">
             </colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            <thead data-page-node-id="5OSubMqzxlJ5YBxwdyyrZF">
+                <tr data-page-node-id="pRM7zvDFRgkUFA2WZxcmFJ"><th data-page-node-id="vscrfq0zB7fTldVCdAOXMb">属性名</th><th data-page-node-id="EAJMFtGCxPMIj2uVjJVlRF">显示名</th><th data-page-node-id="nbipylW3bEFJEZ2HogTDom">类型</th><th data-page-node-id="rzDnaao7dnyPjebRKp6Aaf">说明</th><th data-page-node-id="tPv3B3Tw8LtyjlVM2SOZAg">示例</th><th data-page-node-id="6TINhgSig5i5l3y0ewcyCL">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1025</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式</td><td class="example">0=默认 / 1=杯赛</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1~4 人</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            <tbody data-page-node-id="YpRr6HrG9k5KYmpkSaAeiR">
+                <tr data-page-node-id="UYUEKJN9dSvrUXD5EOBWh7"><td data-page-node-id="wDgVmURbcOj2V2lpbu69um"><span class="field-name" data-page-node-id="RLN8icdiAH64j4X8yqLx2E">game_id</span></td><td data-page-node-id="nc3JUcy6TzvWre17in6Soz">游戏ID</td><td data-page-node-id="VGy91PO7s7adKRRtGsgDht"><span class="type-tag type-string" data-page-node-id="ez6K8TvgQuzMe4y6dJHaxw">文本</span></td><td data-page-node-id="Urai93wwktnCLsUwHJ3XIx">产品唯一编号</td><td class="example" data-page-node-id="5QN0dJruAQ4usvJ5znDl1I">1025</td><td data-page-node-id="s9McEZA0qmXYvqM0ay76bZ"><span class="scope-tag scope-required" data-page-node-id="K3lCxLe03UcO2fFhziY0Yw">必含</span></td></tr>
+                <tr data-page-node-id="Nn7Y2ydH3OEn9q7sfVUX2l"><td data-page-node-id="B8jLzBDxECo9ONVWchESwK"><span class="field-name" data-page-node-id="nHxRjYAeIvTaLMjF4KL5v6">user_id</span></td><td data-page-node-id="UiUmOSrwvjVLPeDTpDGrL3">人脸角色ID</td><td data-page-node-id="R58s51qcvmXGJdykAACGql"><span class="type-tag type-list" data-page-node-id="wWCAfjYnQ34Yo8wJn85OzY">列表</span></td><td data-page-node-id="acKB6oUYx2wKUUELWZ0g0H">所有参与角色ID，元素为文本类型</td><td class="example" data-page-node-id="rcIlT973P6ndxHJQh6oQrr">["135","136"]</td><td data-page-node-id="uw50l2J2jdFPi2sQnXkM5e"><span class="scope-tag scope-required" data-page-node-id="5BT8cL4aPhxhzh31Q6ZvhT">必含</span></td></tr>
+                <tr data-page-node-id="fzcpWeS0i405ZQVn5Kr6Cf"><td data-page-node-id="AX1pIeS41C7s6PDbNEGkpa"><span class="field-name" data-page-node-id="3sWOHBdD5AIiJXcK6ZTb6O">session_id</span></td><td data-page-node-id="qcXkWyjzX68KVpbgzcKJym">会话ID</td><td data-page-node-id="iztaRxVWuI3RLW1Sn8CTNo"><span class="type-tag type-string" data-page-node-id="FsoCa95oH983P75SvOSnlu">文本</span></td><td data-page-node-id="KTPVQSGY4ti3FHrT0hXVZd">单次对局唯一标识</td><td class="example" data-page-node-id="0D1jG6kLnoQEBHTIu30EkX">s_987654321</td><td data-page-node-id="LZmRGcF6QrjJELjAqqHbnb"><span class="scope-tag scope-required" data-page-node-id="0tBb4zmxhdkwawQBOEOkVP">必含</span></td></tr>
+                <tr data-page-node-id="vy0owhwvKzcPGKUYIdm0ap"><td data-page-node-id="N6QV7Oe4OSAEMDkc7IxShg"><span class="field-name" data-page-node-id="0BWiSMippAfV4klpZ3thBV">timestamp</span></td><td data-page-node-id="yrecriDGjPq2fIiBmRmiL2">时间戳</td><td data-page-node-id="HWaRfkPfSv0CMMSHOQWAIX"><span class="type-tag type-time" data-page-node-id="tYIkCOB2mNmvCuqwd1nJLb">时间</span></td><td data-page-node-id="XyXwg1jFuo101sjeTe0yPO">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="npjrIOMa1yLWux2yDQU4WD">2026-05-26T09:35:00+08:00</td><td data-page-node-id="pNOF8qyWdSBwBlBEhAURHO"><span class="scope-tag scope-required" data-page-node-id="9Zp06EQjeG1R2YLxWcNquT">必含</span></td></tr>
+                <tr data-page-node-id="wLmZKFvf8n61xIfTaLQaGM"><td data-page-node-id="n6DiQrmF0HP18qPliLGcXT"><span class="field-name" data-page-node-id="jVU4u3MVKMJgCkOiIbV0cF">game_type</span></td><td data-page-node-id="PtJ5wdptGxlMgNN4x2cLVH">游戏模式</td><td data-page-node-id="3oWihiCeiHpOLiihO57a4T"><span class="type-tag type-string" data-page-node-id="dJKKz2XbDxWC5mWOw9niEZ">文本</span></td><td data-page-node-id="UZ3uSHE69aS3tuQHLrU65y">当前游戏模式</td><td class="example" data-page-node-id="AIxTkJTuF9oYJsFZAS4aqu">0=默认 / 1=杯赛</td><td data-page-node-id="LaibKRZuNpHofTvR6HMrQM"><span class="scope-tag scope-common" data-page-node-id="VAeaNMnuKueWCX44bnwKLL">通用</span></td></tr>
+                <tr data-page-node-id="r1k2jftsE9FVI0sgKGQ8N8"><td data-page-node-id="mojWgih77jk0ayCqPV4sUo"><span class="field-name" data-page-node-id="aDUwBx5BZAa0EgeIKohKJA">player_count</span></td><td data-page-node-id="6osjBZELlQBba8gL3Lp58o">游戏人数</td><td data-page-node-id="KWxltDeRibonCfwIqZiB2Q"><span class="type-tag type-string" data-page-node-id="Yys6n2JpnH80AStY1UPaVC">文本</span></td><td data-page-node-id="BoPaZltngppAyRppSczfvD">1~4 人</td><td class="example" data-page-node-id="KsNp0HUuJtgdsouexkJ2uv">1 / 2 / 3 / 4</td><td data-page-node-id="CWh9mrhDH8LWLi8Az7GWOo"><span class="scope-tag scope-common" data-page-node-id="GPnR5EprqV3HXXITWs38LP">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- ===== Event 5: nfc_insert ⭐ 新增 ===== -->
-    <div class="event-block" style="border-left: 4px solid #722ed1;">
-        <div class="event-title">nfc_insert（插入NFC卡）⭐ 新增</div>
-        <div class="event-desc">玩家将实体 NFC 卡放置在感应区/读卡器上时触发，用于识别所选角色或卡丁车</div>
-        <table>
-            <colgroup>
-                <col style="width: 170px">
-                <col style="width: 110px">
-                <col style="width: 80px">
-                <col style="width: auto">
-                <col style="width: 200px">
-                <col style="width: 90px">
+    <div class="event-block" id="sec-nfc-insert" style="border-left: 4px solid #722ed1;" data-page-node-id="vO63rXQjAqsomGFT6CDxD7">
+        <div class="event-title" data-page-node-id="i9oLQ6ANLFscfEzQVCRrda">nfc_insert（插入NFC卡）⭐ 新增</div>
+        <div class="event-desc" data-page-node-id="ETlKdEU0CqsSFgTqAb0Xw4">玩家将实体 NFC 卡放置在感应区/读卡器上时触发，用于识别所选角色或卡丁车</div>
+        <table data-page-node-id="6J3c5JoduHHUV3Ara8HEQE">
+            <colgroup data-page-node-id="rvXWxS4Z4uVmHkGJoQ9GnT">
+                <col style="width: 170px" data-page-node-id="qDdPI0VXJUYaFZ5lE5v0dy">
+                <col style="width: 110px" data-page-node-id="3cI0FZVJEjgxKAYBZHYUIN">
+                <col style="width: 80px" data-page-node-id="fWcIwdfBlizSfbrHsQktez">
+                <col style="width: auto" data-page-node-id="HvxYB0izj9r4cQAXMw5Sbu">
+                <col style="width: 200px" data-page-node-id="ED3Ow8DgeGZL2GHx4e9QXq">
+                <col style="width: 90px" data-page-node-id="wn1d4phhGycbV8GxDkSntU">
             </colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            <thead data-page-node-id="e1vU0b1RbuqUqo9EnoYrJc">
+                <tr data-page-node-id="HvumxR2uECZWGIMdM1LwSh"><th data-page-node-id="ZEiqgrzAW1OF5Si35dOFNr">属性名</th><th data-page-node-id="ZXFBpfu6VE2zEx65wumWq3">显示名</th><th data-page-node-id="tGl34v1Q6V5wcPkhXUbomb">类型</th><th data-page-node-id="KgEbLAjzYYeeELui0EYQsh">说明</th><th data-page-node-id="afyvfVqe1epWlkBjIqKBqZ">示例</th><th data-page-node-id="L6na5FCniUmmzuvGsi8Aky">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1025</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>刷卡人标识，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次对局唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">role_id</span></td><td>车手ID</td><td><span class="type-tag type-string">文本</span></td><td>该 NFC 卡对应的车手（角色卡场景填写）</td><td class="example">role_01（小熊）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">kart_id</span></td><td>卡丁车ID</td><td><span class="type-tag type-string">文本</span></td><td>该 NFC 卡对应的卡丁车（卡丁车卡场景填写）</td><td class="example">kart_01（闪电卡丁）</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+            <tbody data-page-node-id="JDRiScak7DjGzSF19Vlijb">
+                <tr data-page-node-id="WpmU63zqs6RP7Qld7mCN25"><td data-page-node-id="KiCUdKPYuymC8aCbCfAjxG"><span class="field-name" data-page-node-id="PMunPPEbA0oqeLbNeGH6e4">game_id</span></td><td data-page-node-id="RajomKxBxOeCAdDhlicIex">游戏ID</td><td data-page-node-id="PznWRDOCJNmi4lb7mz6oT8"><span class="type-tag type-string" data-page-node-id="ZTLYTsWIfjzHKe3kxolYwi">文本</span></td><td data-page-node-id="9ryC5vjL36RSX9dPRu8Cq8">产品唯一编号</td><td class="example" data-page-node-id="4iTOTDXFIQkAUcqsP9EmQJ">1025</td><td data-page-node-id="1xkLfsYYoHsZdiRmx28Rr3"><span class="scope-tag scope-required" data-page-node-id="annYT0ZrGFUzsFR4pIGHGs">必含</span></td></tr>
+                <tr data-page-node-id="34Ug1sKuHPfB6BhVcykTCv"><td data-page-node-id="Re01GejVFjXHkAai0mxMGE"><span class="field-name" data-page-node-id="dSL5EBOtZEQjZR62UyTyBx">user_id</span></td><td data-page-node-id="akMhHYbmo5FRvVuWhvCbGY">人脸角色ID</td><td data-page-node-id="GHqP3D9CDKRtM3yt5ZBTGJ"><span class="type-tag type-list" data-page-node-id="KXYg68n9oFcsMwb7Ftg9m6">列表</span></td><td data-page-node-id="YOO4EO8Jv48zd3pHPWhBz8">刷卡人标识，元素为文本类型</td><td class="example" data-page-node-id="XP2m3kGe9hsKDHRx2TDfIJ">["135"]</td><td data-page-node-id="edlNC0UBYbx0s7LQ6d0wVm"><span class="scope-tag scope-required" data-page-node-id="4TjjOb5124JWuR3tC1DJmz">必含</span></td></tr>
+                <tr data-page-node-id="qU5Xe7m1NQQH9xAeKfMEfB"><td data-page-node-id="28nA1ccWOtsOuELzJqcojE"><span class="field-name" data-page-node-id="bm9yIfxrpIwGxO4t12QQS4">session_id</span></td><td data-page-node-id="IrddAFQ0usB26lmOhtoESC">会话ID</td><td data-page-node-id="XsfDZo3lj5t8NvrLYQbudi"><span class="type-tag type-string" data-page-node-id="IdeTjpVdy9BzNHegC4FEHz">文本</span></td><td data-page-node-id="zvlFkhR4zVHlHYo4XhVrH9">单次对局唯一标识</td><td class="example" data-page-node-id="VDR3iDtQV0bOspjGrAsblC">s_987654321</td><td data-page-node-id="FDijLzrDUNHBGkYqArwkey"><span class="scope-tag scope-required" data-page-node-id="iPWXcZws0wXxMIwOA65oln">必含</span></td></tr>
+                <tr data-page-node-id="0K8oHbCB0JKrxegOlGEoX7"><td data-page-node-id="9WM4ULMlbkFGFjwBgEu3Su"><span class="field-name" data-page-node-id="XVFogRODF7OBrmYjOkIqUH">timestamp</span></td><td data-page-node-id="xF0morUduWbXvNR9d1Esua">时间戳</td><td data-page-node-id="DbjAw0qSanCNEbaBisvFLV"><span class="type-tag type-time" data-page-node-id="2ZoXqrMl1Tz1SgCv5exyLg">时间</span></td><td data-page-node-id="hwMDqctPPSQvQqimvkVoYT">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="DxGb83y3TcZfc7uGBaJsWU">2026-05-26T09:35:00+08:00</td><td data-page-node-id="4loCj62sEKV6MOuDZ9fPcd"><span class="scope-tag scope-required" data-page-node-id="UfDKn3FD3EscYcfNUG9uDr">必含</span></td></tr>
+                <tr data-page-node-id="jHjBP4yUtHn6emxTk66Rf2"><td data-page-node-id="x24CpOeMrtapleJrQf3OmC"><span class="field-name" data-page-node-id="c3yW6ziuYxK6NYuH95hifi">role_id</span></td><td data-page-node-id="h4cdtGcvB01eKZ0UJQXmgA">车手ID</td><td data-page-node-id="YTCxjqNuG0xHPs2roW3qiQ"><span class="type-tag type-string" data-page-node-id="AAkGNCo8Jzn9mMK8YkssLZ">文本</span></td><td data-page-node-id="KoilWSi3VG7leEABJLCLmj">该 NFC 卡对应的车手（角色卡场景填写）</td><td class="example" data-page-node-id="dRhKfi9UPExWw2MgBDZC9E">role_01（小熊）</td><td data-page-node-id="xTkAZjbCmOXlotKB9qfVPr"><span class="scope-tag scope-common" data-page-node-id="maYoqFcoJvFNYBdjbiM7Ov">通用</span></td></tr>
+                <tr data-page-node-id="VM2A6EvV1ZWBDB14IdBBHx"><td data-page-node-id="CfK6d2ADUfQ3PCkHl8pfvW"><span class="field-name" data-page-node-id="fKlY1BAVO8kWoIkEapbMoR">kart_id</span></td><td data-page-node-id="U45gpCf7LtKkN9gIIG3A38">卡丁车ID</td><td data-page-node-id="8TFGZco5xwTQyhp2zQ5FeO"><span class="type-tag type-string" data-page-node-id="hODd1dZAS7e1QFy0tvzRoZ">文本</span></td><td data-page-node-id="PNsTxogHgMvFPo3Eqp091R">该 NFC 卡对应的卡丁车（卡丁车卡场景填写）</td><td class="example" data-page-node-id="yYd3JG2VkjKpjhydB8Khkk">kart_01（闪电卡丁）</td><td data-page-node-id="r2a75riTnvEuPGfkNSwiIm"><span class="scope-tag scope-project" data-page-node-id="eXq7NAuA9RAOCNvd7H6TKp">项目特有</span></td></tr>
             </tbody>
         </table>
     </div>
 
 </div>
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="naming_standards.html">← 返回命名规范</a>
+            <a class="toc-link" href="#sec-enter-game">enter_game</a>
+            <a class="toc-link" href="#sec-end-game">end_game</a>
+            <a class="toc-link" href="#sec-pause-game">pause_game</a>
+            <a class="toc-link" href="#sec-continue-game">continue_game</a>
+            <a class="toc-link" href="#sec-nfc-insert">nfc_insert</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        // 只把 # 锚点链接纳入滚动高亮；返回链接是外链，跳过
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+        var KEY = 'ns1025_toc_open';
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+
+        function setActive(i) {
+            anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); });
+        }
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '\u2715' : '\u2630';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+        anchors.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActive(i);
+                lock = i; clearTimeout(lockTimer);
+                lockTimer = setTimeout(function () { lock = -1; spy(); }, 700);
+            });
+        });
+
+        ['wheel', 'touchstart'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+                if (lock !== -1) { lock = -1; clearTimeout(lockTimer); spy(); }
+            }, { passive: true });
+        });
+
+        var lock = -1, lockTimer = null;
+        function spy() {
+            if (lock !== -1) return;
+            var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+            var cur = -1, lastVisible = -1;
+            targets.forEach(function (t, i) {
+                if (!t || t.offsetParent === null) return;
+                lastVisible = i;
+                if (t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1) cur = 0;
+            if (atBottom && lastVisible !== -1) cur = lastVisible;
+            setActive(cur);
+        }
+
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+        apply(); spy();
+    })();
+    </script>
 </body>
 </html>
