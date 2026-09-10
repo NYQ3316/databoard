@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN" data-page-node-id="MoF2WF6C0j57GZqaaVUzbi">
+<head data-page-node-id="fxF8DDJeWmYXufhj0ILEst">
+    <meta charset="UTF-8" data-page-node-id="pCjsy3gffZRCDRBQ08cr4Z">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="0YtMh8nqAk4hotryaPUKBD">
     <title>1018《镜之修行》事件与属性命名</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -87,153 +87,338 @@
         }
         .legend strong { color: #333; }
         .legend-item { display: inline-flex; align-items: center; gap: 6px; margin-right: 20px; margin-bottom: 6px; }
+    
+        /* ======== 深色主题：深蓝夜空 navy（自动跟随系统深浅色） ======== */
+        html { color-scheme: light dark; }
+        @media (prefers-color-scheme: dark) {
+            body { background: #0b1220; color: #cbd5e1; }
+            .container { color: #cbd5e1; }
+
+            /* 顶栏：品牌色暗化，保留项目辨识度 */
+            .header { background: linear-gradient(135deg, #48298e 0%, #292b8e 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .header h1, .header h2, .header h3, .header .subtitle, .header .meta,
+            .header p, .header div, .header span { color: #f1f5f9; }
+            .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
+            .back-btn:hover { background: rgba(255,255,255,0.22); }
+            .back-link { color: #60a5fa; }
+            .back-link:hover { color: #93c5fd; }
+
+            /* 卡片 / 区块 */
+            .event-section, .event-block, .info-bar, .legend, .note-box {
+                background: #131c31; box-shadow: 0 2px 12px rgba(0,0,0,0.45);
+            }
+            .info-bar, .legend { color: #94a3b8; }
+            .info-bar strong, .legend strong { color: #f1f5f9; }
+            .event-header { border-bottom-color: #1e293b; }
+            .event-header .left h2 { color: #f1f5f9; }
+            .event-header .left .ename { color: #93c5fd; background: transparent; }
+            .event-header .left .edesc { color: #94a3b8; }
+            .event-title { color: #f1f5f9; border-bottom-color: #334155; }
+            .event-desc { background: #0f172a; color: #94a3b8; border-left-color: #334155; }
+            .tag-badge { background: rgba(74,222,128,0.15); color: #86efac; }
+            .note-title { color: #f1f5f9; }
+
+            /* 表格 */
+            th { color: #94a3b8; background: #0f172a; border-bottom-color: #1e293b; }
+            td { border-bottom-color: #1e293b; }
+            th, td { border-bottom-color: #1e293b; }
+            tr:hover, tr:hover td { background: #1e293b; }
+            .field-name { color: #93c5fd; background: transparent; }
+            .example { color: #94a3b8; }
+
+            /* 类型 / 范围标签：淡色半透明徽章 + 亮字（不做实色填充） */
+            .type-tag.type-string { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+            .type-tag.type-int { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .type-tag.type-float { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+            .type-tag.type-bool { background: rgba(45,212,191,0.15); color: #5eead4; }
+            .type-tag.type-list { background: rgba(74,222,128,0.15); color: #86efac; }
+            .type-tag.type-object { background: rgba(244,114,182,0.15); color: #f9a8d4; }
+            .type-tag.type-time { background: rgba(251,113,133,0.15); color: #fda4af; }
+            .scope-tag.scope-common { background: rgba(74,222,128,0.15); color: #86efac; }
+            .scope-tag.scope-project { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .scope-tag.scope-required { background: rgba(248,113,113,0.15); color: #fca5a5; }
+            .scope-tag.scope-new { background: rgba(148,163,184,0.18); color: #cbd5e1; }
+            /* 提示行 */
+            .note-row, .note-row td { background: #1e293b; color: #fcd34d; }
+
+            /* 强制覆盖 HTML 内联写死的深色文字 */
+            div[style], p[style], span[style], td[style], th[style],
+            h1[style], h2[style], h3[style], strong[style] { color: #cbd5e1 !important; }
+            .header [style], .event-header [style] { color: #f1f5f9 !important; }
+            .note-row [style], .note-row td[style] { color: #fcd34d !important; }
+        }
+    
+        /* ======== 悬浮目录组件 ======== */
+        html { scroll-behavior: smooth; }
+        .event-section, .event-block { scroll-margin-top: 16px; }
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 188px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+        @media (prefers-color-scheme: dark) {
+            .toc-btn { background: #131c31; color: #f1f5f9; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-btn:hover { background: #1e293b; border-color: #60a5fa; }
+            .toc-panel { background: #131c31; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-title { color: #94a3b8; }
+            .toc-link { color: #cbd5e1; }
+            .toc-link:hover { background: #1e293b; }
+            .toc-link.active { color: #93c5fd; border-left-color: #60a5fa; background: #1e293b; }
+            .toc-back { border-bottom-color: #1e293b; }
+        }
+        @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
+        @media print { .toc-fab { display: none; } }
     </style>
 </head>
-<body>
-<div class="container">
-    <a class="back-link" href="naming_standards.html">&larr; 返回命名规范</a>
-    <div class="header">
-        <h1>🧘 1018《镜之修行》事件与属性命名</h1>
-        <div class="meta">瑜伽 / 普拉提 / 冥想 · 体式训练 · 冥想</div>
+<body data-page-node-id="hlNSQeb6eTgXgUP0Bv9Qge">
+<div class="container" data-page-node-id="IwQHWfcrb1Kw9Szln4iVwP">
+    <a class="back-link" href="naming_standards.html" data-page-node-id="J3HcMos4s8sYev2TxcBxDf">&larr; 返回命名规范</a>
+    <div class="header" data-page-node-id="TGBIDDNxEqHvEHymhLeP1K">
+        <h1 data-page-node-id="TA7UfymRxrUQdg4qWCHzp9">🧘 1018《镜之修行》事件与属性命名</h1>
+        <div class="meta" data-page-node-id="FRBG7UR9SIpLGDtHPhC8KV">瑜伽 / 普拉提 / 冥想 · 体式训练 · 冥想</div>
     </div>
 
-    <div class="legend">
-        <strong>图例说明</strong>
-        <div style="margin-top:8px;">
-            <span class="legend-item"><span class="scope-tag scope-required">必含</span> 基础字段必填</span>
-            <span class="legend-item"><span class="scope-tag scope-common">通用</span> naming_standards.html 中已有定义</span>
-            <span class="legend-item"><span class="scope-tag scope-project">项目</span> 1018 项目自定义字段</span>
+    <div class="legend" data-page-node-id="SktZzjzUxsunVAHuZ7V6S3">
+        <strong data-page-node-id="mTrb6qJbpjI83SOPmbHALg">图例说明</strong>
+        <div style="margin-top:8px;" data-page-node-id="HNqEp7JnKqDW4ZeUS2xjCw">
+            <span class="legend-item" data-page-node-id="2r4nIO1ao1r1pPVJvkZmLD"><span class="scope-tag scope-required" data-page-node-id="iFlbYs0zBG5iWTBo6JqDhM">必含</span> 基础字段必填</span>
+            <span class="legend-item" data-page-node-id="gJeK7uBWkWpsGPPodH6Ww9"><span class="scope-tag scope-common" data-page-node-id="4mWN7bIfJ3ZRWg7FUz6wDD">通用</span> naming_standards.html 中已有定义</span>
+            <span class="legend-item" data-page-node-id="SkISBYPYsiEhwkPacX3pwz"><span class="scope-tag scope-project" data-page-node-id="F2HBoc0JBWXy2ypTwkNDxT">项目</span> 1018 项目自定义字段</span>
         </div>
     </div>
 
     <!-- Event 1: enter_game -->
-    <div class="event-block">
-        <div class="event-title">enter_game（进入游戏/关卡）</div>
-        <div class="event-desc">玩家确认进入一次训练（串联课程/体式/冥想）时触发。串联课程与冥想的具体内容在此事件中记录。</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-enter-game" data-page-node-id="T70n1An7A7ymV6PWVME7AX">
+        <div class="event-title" data-page-node-id="hNGngus0adMz5RmNuhdYNk">enter_game（进入游戏/关卡）</div>
+        <div class="event-desc" data-page-node-id="btDT8r7DX1U3w0JyQ9EN83">玩家确认进入一次训练（串联课程/体式/冥想）时触发。串联课程与冥想的具体内容在此事件中记录。</div>
+        <table data-page-node-id="SiotBQKkcGsQdQ9DCaColh">
+            <colgroup data-page-node-id="NkKqHiG9KYEisQnfWywUMp"><col data-page-node-id="54oceEoT925EZA23RCaV1E"><col data-page-node-id="jFLqDZ6y92HWOLl5S3EC8e"><col data-page-node-id="hMY56TjjNbGnK7CAbd683E"><col data-page-node-id="omlHXaXqpDXNxk0EFQWBGd"><col data-page-node-id="x5X0gUNf0i6wQYjPI5t8CD"><col data-page-node-id="nP2rCMH2qVtkynB8qJ78fD"></colgroup>
+            <thead data-page-node-id="8yqUliHzagnGZVWWaCuRtH">
+                <tr data-page-node-id="7NXHIjbQ6B1lsGeu8OukAe"><th data-page-node-id="wn1DOOM9dsWZUGx0non2ro">属性名</th><th data-page-node-id="FECd9M0RVA79phu7GWsHEC">显示名</th><th data-page-node-id="jaby9wKiSx9gL4DFbDPzzR">类型</th><th data-page-node-id="FVitcoWM8zqveXKynHX8q0">说明</th><th data-page-node-id="cC8D1ZQeTfuTYHZOREqvkw">示例</th><th data-page-node-id="IlmqZ0uyiFthRfsEApG7Ru">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">level_id</span></td><td>训练ID</td><td><span class="type-tag type-string">文本</span></td><td>串联课程/体式训练/冥想课程唯一标识</td><td class="example">course_01</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">difficulty</span></td><td>训练难度</td><td><span class="type-tag type-string">文本</span></td><td>0=简单 / 1=普通 / 2=困难</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name field-project">meditation_type</span></td><td>冥想类型ID</td><td><span class="type-tag type-string">文本</span></td><td>冥想类型自增ID（game_type=2 时有效）</td><td class="example">1</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name field-project">background_id</span></td><td>冥想背景ID</td><td><span class="type-tag type-string">文本</span></td><td>冥想背景自增ID（game_type=2 时有效）</td><td class="example">2</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name field-project">audio_id</span></td><td>冥想音频ID</td><td><span class="type-tag type-string">文本</span></td><td>冥想音频自增ID（game_type=2 时有效）</td><td class="example">3</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+            <tbody data-page-node-id="Rk4FEF0T2c5wuAOo9sX8q4">
+                <tr data-page-node-id="0y4BusdoAd0If6haVFgH43"><td data-page-node-id="TeljQ8jCmTB5Bb204BGHN8"><span class="field-name" data-page-node-id="XMMGcHXYWJdEcOC2WqETGT">game_id</span></td><td data-page-node-id="AaSvTEHVKXxri82yH5vAMi">游戏ID</td><td data-page-node-id="Na6zvYeQQGAXqF7GMsNzzs"><span class="type-tag type-string" data-page-node-id="or1XajwrWJaYjhWW3kSqxu">文本</span></td><td data-page-node-id="aWA9WpiGpv8PxhHppMIXiI">产品唯一编号</td><td class="example" data-page-node-id="kyQ7Ig2A8dZODQt9HLaBRS">1018</td><td data-page-node-id="RgvkDf5rzC6SalgGIrj0WN"><span class="scope-tag scope-required" data-page-node-id="iaNf5dincX0uWPsEXo8qnR">必含</span></td></tr>
+                <tr data-page-node-id="vwHKUdjBm3QcZo9GI4beKj"><td data-page-node-id="1pCahBapbxtHAUZSOZJysk"><span class="field-name" data-page-node-id="9QITjWiG04zPNCApPYKUiz">user_id</span></td><td data-page-node-id="JrvIexqnpApFGM3m1SIquo">人脸角色ID</td><td data-page-node-id="kUIHjL5DtAW4Apl5M3o7KA"><span class="type-tag type-list" data-page-node-id="FTGDHlBwtkGQJ8ZJfns7ri">列表</span></td><td data-page-node-id="LVxtG4Gt5X3vZlpQWKkwjS">所有参与角色ID</td><td class="example" data-page-node-id="Uc2H1WMm7levMs20BRZXBT">["135"]</td><td data-page-node-id="g2vjQadikxhbq8FuWLJ6ph"><span class="scope-tag scope-required" data-page-node-id="H6UwWOnFwMoqaXxUmU4zyc">必含</span></td></tr>
+                <tr data-page-node-id="3FT9VOL3oYpZVXFFFlzGd2"><td data-page-node-id="uO5F85nY1znSzZWOBGckMU"><span class="field-name" data-page-node-id="GzrJxH0IV6G192MQ5QsZUW">session_id</span></td><td data-page-node-id="k3B9dmHusBTBVii9TCIVoX">会话ID</td><td data-page-node-id="rNk5WrDY0CQAJKjOFEB6jC"><span class="type-tag type-string" data-page-node-id="fHckFlMSp7dW6ZYO65pmny">文本</span></td><td data-page-node-id="v86K6bOMU40xxBsnPxqGHs">单次启动唯一标识</td><td class="example" data-page-node-id="3AiECr2yAsr6lWR0T6KpjO">s_987654321</td><td data-page-node-id="yX1nU94AMhwGFxOfiYEtSE"><span class="scope-tag scope-required" data-page-node-id="95InFvFx2cVNP3J7EPDw7W">必含</span></td></tr>
+                <tr data-page-node-id="yF4kdohCz02W2qUGc6f5HY"><td data-page-node-id="J7OBIOHDEuNL0TckJiqaiG"><span class="field-name" data-page-node-id="EtkADgukvdO8ONSsGyOWDQ">timestamp</span></td><td data-page-node-id="QoVpph7E1s0XojGqBla4zq">时间戳</td><td data-page-node-id="CqjDvRA6bYtyVIl29wifBp"><span class="type-tag type-time" data-page-node-id="IcRkDIsHSlWqSMP6EJjYp4">时间</span></td><td data-page-node-id="GGyyGcEyB8wQMO997Oxptx">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="0vGJO6JxN4CUfyYd5YNh3H">2026-05-26T09:35:00+08:00</td><td data-page-node-id="J6qUEIP1rJUQgHAVGXyhGG"><span class="scope-tag scope-required" data-page-node-id="rEqxAALts3HyyRtaqvR61I">必含</span></td></tr>
+                <tr data-page-node-id="gSyIOOqVTKDjaOAmfV3LTe"><td data-page-node-id="5bxAWQk9SjesxO3mMlARJn"><span class="field-name" data-page-node-id="jYC2GPzDrbeZ4KbgHcaQmD">game_type</span></td><td data-page-node-id="vWhkJWDenZQFHRfJGPZPHD">训练模式</td><td data-page-node-id="5hgOo9u1FDYk1Sx0hNvVWe"><span class="type-tag type-string" data-page-node-id="TPaQ8N2BJHPXxqjTw2ZSbt">文本</span></td><td data-page-node-id="Fai30vJGD7TEwisAWY7hRg">0=串联课程 / 1=体式 / 2=冥想</td><td class="example" data-page-node-id="kEyOTgro3AyP1nyvMB4s2v">1</td><td data-page-node-id="60RpdmtAUxHCgOG6oLix6W"><span class="scope-tag scope-common" data-page-node-id="9FwZIUShbx4zhOneQqZhkC">通用</span></td></tr>
+                <tr data-page-node-id="rMU1jQx51oBatfHw764ntN"><td data-page-node-id="EL4gChSWaMGDrCPLYhv5N5"><span class="field-name" data-page-node-id="1MM0mGogpeiZXpIzdS6JY7">player_number</span></td><td data-page-node-id="VHSvaJDlAIiHcr5bBJVQF4">游戏人数</td><td data-page-node-id="PQDJJswQfa1NOrXny72ESe"><span class="type-tag type-string" data-page-node-id="FhNlMZh4w9tyY4xRCCLdIA">文本</span></td><td data-page-node-id="kbac8pEH5TCSH7TQfDS3Nl">参与本次训练的玩家人数</td><td class="example" data-page-node-id="KtvpoeBorfgAcihUAC1Ar0">1</td><td data-page-node-id="amrIX54Z3zOad3LDwZGLJB"><span class="scope-tag scope-common" data-page-node-id="OBmASDZ2GZHOcxPhGGin1c">通用</span></td></tr>
+                <tr data-page-node-id="Rc1VibJgeWN0e5ylCo28h5"><td data-page-node-id="64jHFJlttn3ty3ERQdAGlY"><span class="field-name" data-page-node-id="mrRPbZP9k5PQMdUkNjthRJ">level_id</span></td><td data-page-node-id="6ZcOOQJHawXwl3wUmTiGS0">训练ID</td><td data-page-node-id="NpUCI9g1SscHSkHPJ7wMxl"><span class="type-tag type-string" data-page-node-id="kKepjnaj8ealMXGJUiFSDK">文本</span></td><td data-page-node-id="GSAWqa1WpTvCzAEPApsHzd">串联课程/体式训练/冥想课程唯一标识</td><td class="example" data-page-node-id="mgcEutJJPqqLS2WEafPAAr">course_01</td><td data-page-node-id="HkuPIH7j9UmZuCA6vjBQXE"><span class="scope-tag scope-common" data-page-node-id="n077p9bi803vBkCV8sgB4D">通用</span></td></tr>
+                <tr data-page-node-id="TS49PkRMvyNi3snTjahGeF"><td data-page-node-id="AWgV5zbwvGNHQCeZHDJ4bt"><span class="field-name" data-page-node-id="AO3NvQknvT7vpRgHFrm1ry">difficulty</span></td><td data-page-node-id="fkSJNhLgJkcltWMeEaOXl6">训练难度</td><td data-page-node-id="hirrktgJp3cl4FwyUQxEtu"><span class="type-tag type-string" data-page-node-id="e9VD8wOgFAzlpUR9NtstMz">文本</span></td><td data-page-node-id="xpcMIot7kwFE4S2JI2gJLa">0=简单 / 1=普通 / 2=困难</td><td class="example" data-page-node-id="zQJMk3ER2rNpk0FFqAngDM">0</td><td data-page-node-id="K14fJXqDJevcWc8i46Zn7m"><span class="scope-tag scope-common" data-page-node-id="1U7WXDEa9T7vLLaZGRoSzY">通用</span></td></tr>
+                <tr data-page-node-id="dDoFUaFGKsz7krK8IHlMjB"><td data-page-node-id="gKtlXjCBSTQrUWYifapSvo"><span class="field-name field-project" data-page-node-id="L8gis4tWJWfSrpsS978BtR">meditation_type</span></td><td data-page-node-id="UjCyEWL1nlEYdiidHuctZp">冥想类型ID</td><td data-page-node-id="1ChFGRcpvH6P5LDNxn4Ul7"><span class="type-tag type-string" data-page-node-id="hM4fFtf2F5dMPUuKDTq6HU">文本</span></td><td data-page-node-id="6jBYZlAYCimyzwGiM4ijJn">冥想类型自增ID（game_type=2 时有效）</td><td class="example" data-page-node-id="Ji31AquMp08pPTsYnSwNWo">1</td><td data-page-node-id="r6S5RL6kCCVtTQ5xlIDLqu"><span class="scope-tag scope-project" data-page-node-id="qk3Xc2FTViMEkC61ypFyge">项目</span></td></tr>
+                <tr data-page-node-id="ZHsq3sER8fbriatzjW611q"><td data-page-node-id="MUBzVkZFDFzersAZc2jRWO"><span class="field-name field-project" data-page-node-id="QKr0f8AogvPVdq84OXyzO1">background_id</span></td><td data-page-node-id="BOBe3YMCFZRhklDwtZjfay">冥想背景ID</td><td data-page-node-id="1XaCVJ0CUEbuaMnl8kF9Ce"><span class="type-tag type-string" data-page-node-id="wCgHYh06LDH1RtX1VsSRJm">文本</span></td><td data-page-node-id="jt2PL2LeGEmL0Owsq79VIE">冥想背景自增ID（game_type=2 时有效）</td><td class="example" data-page-node-id="knNR23CLkdcnT0qQlmQTaC">2</td><td data-page-node-id="caU0rhGxK08cVt4DKtTDe3"><span class="scope-tag scope-project" data-page-node-id="SbZFFWauV7Sj15GEMjuGB1">项目</span></td></tr>
+                <tr data-page-node-id="WGzSJKFZMo33RXml5QyF6E"><td data-page-node-id="GPBwEWOXJTc54bSrE5ZnA6"><span class="field-name field-project" data-page-node-id="epNamTLuoEyacrR6mEhMxl">audio_id</span></td><td data-page-node-id="nmBSuL8YOXjaAFHhP6G7av">冥想音频ID</td><td data-page-node-id="K9xa90WbF2GARQzAYwqGad"><span class="type-tag type-string" data-page-node-id="oq8W1uK57HXHSRT25ihrpu">文本</span></td><td data-page-node-id="9w74FjvqBsCyn0NKWbWOmy">冥想音频自增ID（game_type=2 时有效）</td><td class="example" data-page-node-id="og3nL9f5V6yBWlF7jVoGBz">3</td><td data-page-node-id="BGP7bKS6WWtuGCSoLm78q3"><span class="scope-tag scope-project" data-page-node-id="kEsHONxxpyAWkQM5wFTmsA">项目</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- Event 2: end_game -->
-    <div class="event-block">
-        <div class="event-title">end_game（退出游戏/关卡）</div>
-        <div class="event-desc">一次训练自然结束时触发（串联课程/体式/冥想）。通过 session_id 关联成功状态，不单独记录 result 与 calories。</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-end-game" data-page-node-id="gjGjLFTB9z3U2nkS4REKlD">
+        <div class="event-title" data-page-node-id="vexUjrarD4Y101wjhPJAcG">end_game（退出游戏/关卡）</div>
+        <div class="event-desc" data-page-node-id="vIu3Dc0bJyNOIIxs3encQl">一次训练自然结束时触发（串联课程/体式/冥想）。通过 session_id 关联成功状态，不单独记录 result 与 calories。</div>
+        <table data-page-node-id="gIPET9xcO06u1338nStMeO">
+            <colgroup data-page-node-id="tOySYrekGR60vMulPLAKqU"><col data-page-node-id="XFySjiDNdpcMNmldiHINrZ"><col data-page-node-id="ve3Tt4XaHMRBHqXyP2CmaR"><col data-page-node-id="yH5jSmJuL19DBh4cEQKVlS"><col data-page-node-id="bt5AJ2OV9euSc9WahQDNFC"><col data-page-node-id="SUHTVk8PW2dLp7xF4gHqqI"><col data-page-node-id="z0hJ9s5tIdrCXXLazjvNak"></colgroup>
+            <thead data-page-node-id="Vw1D9gKvs6uW3lP76LtwFb">
+                <tr data-page-node-id="lUciYq9r1JRs7FVXTu5mog"><th data-page-node-id="cq6E9wfGTRvAAtvpCk6xbx">属性名</th><th data-page-node-id="cf7b35Yi9OfEfYD8IPmAPw">显示名</th><th data-page-node-id="lthXuyKxnrfh98TKpD15sm">类型</th><th data-page-node-id="A76ZTC3MH9tY0OM9izEaiO">说明</th><th data-page-node-id="Ff5EPdx2dA2MDvFBQTuGXH">示例</th><th data-page-node-id="s2zDQZ3pnmkbnqrfpdIAmV">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">score</span></td><td>总得分</td><td><span class="type-tag type-int">数值</span></td><td>本次训练累计得分（体式/串联课程有效，冥想无）</td><td class="example">88</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            <tbody data-page-node-id="BM6HkO1trcWbqcnHivcmkA">
+                <tr data-page-node-id="rbtQUXiMJ2t19gqhl9AlBv"><td data-page-node-id="ghmpCZDRpXif4zW4LHSCQE"><span class="field-name" data-page-node-id="CeYTdEJCLO0ztKauNR1rb4">game_id</span></td><td data-page-node-id="i3wfwIlhl4QIx6GnlTE7Fj">游戏ID</td><td data-page-node-id="cQ9eyY7pkYHtAx8F382HiO"><span class="type-tag type-string" data-page-node-id="vGoefiBR5sTHzdF4PDmhsm">文本</span></td><td data-page-node-id="wXpNE4ae2apT4GGezbc3yD">产品唯一编号</td><td class="example" data-page-node-id="vnBWpMzQIDwrwLLPY3EPFN">1018</td><td data-page-node-id="WdKDR1TNQ9IK2CglzDZ99q"><span class="scope-tag scope-required" data-page-node-id="FSs3phFVJfBZXHOzl2YiVd">必含</span></td></tr>
+                <tr data-page-node-id="mZd8isOiL3h6yqm2FmjWOV"><td data-page-node-id="WJcGyWgnueQnSrsr9fCjEZ"><span class="field-name" data-page-node-id="jIJAPwUcbSbEzgKTUGcpAw">user_id</span></td><td data-page-node-id="Rr0Xk6n3yyO9BIoT6fAXOQ">人脸角色ID</td><td data-page-node-id="G9oVk5ToJXSZjrpOlA5rjQ"><span class="type-tag type-list" data-page-node-id="bLCy9i9Gc0oAattmXlACsV">列表</span></td><td data-page-node-id="X38BYPQn4XMesGkKfMSqyg">所有参与角色ID</td><td class="example" data-page-node-id="gGxojpMmU7TSWEMmVzGCDt">["135"]</td><td data-page-node-id="LEf75PP9ndTvQDw3b4cyZI"><span class="scope-tag scope-required" data-page-node-id="nMh7pYxVWprkaYGWvHXpSB">必含</span></td></tr>
+                <tr data-page-node-id="ChL9TLCVRzxKV7dLkcNbVy"><td data-page-node-id="bEFAwX5OyRA3pD0f4Il4bJ"><span class="field-name" data-page-node-id="6LdiCm0Luvi1AcrXAC3gv4">session_id</span></td><td data-page-node-id="JxPhPDLnoyoGatjoQJT1ze">会话ID</td><td data-page-node-id="EiVkLNDNcFhHLnbO6T9Cwp"><span class="type-tag type-string" data-page-node-id="DYH3RCRY6eyapngEAgETTB">文本</span></td><td data-page-node-id="ktKgF1gvkkDbFzaW40dnkz">单次启动唯一标识</td><td class="example" data-page-node-id="iYm4BXpLswWC4IoReHokSl">s_987654321</td><td data-page-node-id="l4pW0hPjI2dCqV2u9kKlEW"><span class="scope-tag scope-required" data-page-node-id="L1VlvjgYjpxXutE99L8Iwt">必含</span></td></tr>
+                <tr data-page-node-id="4VuNk5dxVn4yelO9NGzaWK"><td data-page-node-id="K4R3Z6PLaNsGe7rGu6HUCz"><span class="field-name" data-page-node-id="RhxQwJZwM1kSA7tyQptElI">timestamp</span></td><td data-page-node-id="D23E7obHUiMcGi70dm7Xkh">时间戳</td><td data-page-node-id="7GX085Myc2JoJ9xhEUfcCU"><span class="type-tag type-time" data-page-node-id="JHymzSLopDQCWbbb2KRiGT">时间</span></td><td data-page-node-id="9iU16A2zw8Rf1bVRn5ALMb">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="VmfRB1dAnBnV0llE0n3YqM">2026-05-26T09:35:00+08:00</td><td data-page-node-id="hGiiKw8o3hpRF4aUJ0Cdbp"><span class="scope-tag scope-required" data-page-node-id="BY8lFYhPuSGHk00gZn5D9h">必含</span></td></tr>
+                <tr data-page-node-id="3LNFHD6ZKlAhubjcsZqH7u"><td data-page-node-id="XZxDvVK6flWyBmjSonF1W2"><span class="field-name" data-page-node-id="oZQTd5Y4TLcrdBulXQtBDu">game_type</span></td><td data-page-node-id="0ep46oty09Quy2qNu6IkaI">训练模式</td><td data-page-node-id="1Dhz2PSnmBAP4PTvytnGAS"><span class="type-tag type-string" data-page-node-id="4d0BbRYgpeX6Ht2gYszjVK">文本</span></td><td data-page-node-id="hy9yQwHOnVyClAoejTiCjf">0=串联课程 / 1=体式 / 2=冥想</td><td class="example" data-page-node-id="AGJjetghDBdi81ljxjy6bj">1</td><td data-page-node-id="DgSuRhVb1TFWvGgA54xrbp"><span class="scope-tag scope-common" data-page-node-id="nITh9kLMuzXWKH3MZk0mI8">通用</span></td></tr>
+                <tr data-page-node-id="qO0iFmSJW8TVkRP7pKRUqE"><td data-page-node-id="2pCscL031YGgGRhR8djLCw"><span class="field-name" data-page-node-id="cBHgL4qXTrvE4UpeG0pFJt">player_number</span></td><td data-page-node-id="TaCyOTWak01mSntvei3C4T">游戏人数</td><td data-page-node-id="T9BLvU1S6JU7AYL3rCwMaQ"><span class="type-tag type-string" data-page-node-id="D6mIFNVcWzMIx2YWt0NLzl">文本</span></td><td data-page-node-id="o6lNDLq9nRBtfgUUtWCXd4">参与本次训练的玩家人数</td><td class="example" data-page-node-id="wfZhLv3HBRuP8XC5wkYyFX">1</td><td data-page-node-id="kI2NALw3oZtw4SjjAN43Fq"><span class="scope-tag scope-common" data-page-node-id="6fkyOCDwLVH1ENVpqS4QFn">通用</span></td></tr>
+                <tr data-page-node-id="QwViw500Z9HQthsorfFT8C"><td data-page-node-id="pIWE9Sd2NGgoEjUb2wiTNe"><span class="field-name" data-page-node-id="iphJc0bLqFCpVzCQJd0Gcr">score</span></td><td data-page-node-id="fMiSA3s06VdUfCc3jIowNy">总得分</td><td data-page-node-id="yQPs874dhoB4yVP5idW8o4"><span class="type-tag type-int" data-page-node-id="EHBxydluqhVh2VTWqFujXM">数值</span></td><td data-page-node-id="Uh4mLclVvPR76XwdXnTeTn">本次训练累计得分（体式/串联课程有效，冥想无）</td><td class="example" data-page-node-id="Ir07xV5Kq7IJ5HTBHyPuRF">88</td><td data-page-node-id="hiCF2uHPPxJBttdkH6aerG"><span class="scope-tag scope-common" data-page-node-id="Tx5WBzTpIqcgSgCyLti5Nd">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- Event 3: pause_game -->
-    <div class="event-block">
-        <div class="event-title">pause_game（游戏暂停）</div>
-        <div class="event-desc">玩家在训练过程中触发暂停时上报</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-pause-game" data-page-node-id="kLXbVLxueRFXLoMlIF03yv">
+        <div class="event-title" data-page-node-id="w0vzi54AwHGHv2P2Uw6NLp">pause_game（游戏暂停）</div>
+        <div class="event-desc" data-page-node-id="EmYWJWqPx9WlTd4ViPqcxu">玩家在训练过程中触发暂停时上报</div>
+        <table data-page-node-id="nbADHun46HT7Upn7CFPaDC">
+            <colgroup data-page-node-id="iecB6LC6T9MT8WOTIGErpN"><col data-page-node-id="c2xKzLKKKw4HeBBe9iyIO1"><col data-page-node-id="y5KhnruNWp2QM8AbonM80E"><col data-page-node-id="6KRcPJwxk1qnp8a6rCMelr"><col data-page-node-id="gFWcD26EdeIuCVsOrJ8Xg6"><col data-page-node-id="bR7JOcAciE3uNcb6CiksUb"><col data-page-node-id="FXDQackESBmwStVKwfJXYi"></colgroup>
+            <thead data-page-node-id="riXEYs7GDVXKXu6OyO7n9L">
+                <tr data-page-node-id="Xbw1r0NVuAqtTqSr9CFUFW"><th data-page-node-id="NcEKWMOHNASGOkXAaq2yyk">属性名</th><th data-page-node-id="wpRDKuu5urJ33gX9waBGga">显示名</th><th data-page-node-id="crVB5Fowk1wSOuYBRiZwiR">类型</th><th data-page-node-id="quBiIGGKO2GVMDylp68hqV">说明</th><th data-page-node-id="HXBlBVgbPpLrsARpymF1o0">示例</th><th data-page-node-id="7Jw98EyeCSvGDb3eiUmyaK">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            <tbody data-page-node-id="Alg4md3rA9ZsFmQotYS8oq">
+                <tr data-page-node-id="K0AVX0UxDDAqDUIcEsvaRE"><td data-page-node-id="tX0IhdjIKQqXv3QNVgmr2K"><span class="field-name" data-page-node-id="0wuYa7WQVEvrhcuBSyMEHI">game_id</span></td><td data-page-node-id="08dF2L7H4ATtAvj4QmpKRV">游戏ID</td><td data-page-node-id="s6gvr2NEB75EIu4CeW3D83"><span class="type-tag type-string" data-page-node-id="RsNNi1Si4y6ANaG0deFt6A">文本</span></td><td data-page-node-id="kNZna8TyWyFJBHpt2Z0Mxs">产品唯一编号</td><td class="example" data-page-node-id="qOs7OBjJli1erxHIfK9Vgw">1018</td><td data-page-node-id="BDDMCpl4Gw4Gb2FvJ00TRv"><span class="scope-tag scope-required" data-page-node-id="GGeIHt3yV5mVrc92zzJ4FL">必含</span></td></tr>
+                <tr data-page-node-id="d9QZKj1R56oYVDS8QhuVPb"><td data-page-node-id="qd6JXXmzHQBPXeuMQ2ByRQ"><span class="field-name" data-page-node-id="nWrbUXHpFQ8BzdtiWkaBbz">user_id</span></td><td data-page-node-id="Npu4fxjC4UnW4AcT1qxQTQ">人脸角色ID</td><td data-page-node-id="t4amArS0jwVHVFRMHj9o8t"><span class="type-tag type-list" data-page-node-id="goE5xAxu0iDoMJtq4QV0gO">列表</span></td><td data-page-node-id="DBGYHsRha8dOqrkLIhzFPv">所有参与角色ID</td><td class="example" data-page-node-id="pnVavfg6fFa4xPB4LMCI1Y">["135"]</td><td data-page-node-id="meLnegCMSVlzLOjw1DAZfm"><span class="scope-tag scope-required" data-page-node-id="9riHr64V8SclQCZd6eLJJa">必含</span></td></tr>
+                <tr data-page-node-id="tu7uFRvn8NWfNqxAPLw1ZO"><td data-page-node-id="9d5aSu9vWAYMqSV7aUSFaS"><span class="field-name" data-page-node-id="ZGRrZbSyIdvogmjWPPfqaq">session_id</span></td><td data-page-node-id="TM7yfKpAoW6BuHOoF16s8z">会话ID</td><td data-page-node-id="JLazrH1KJjjQ0rXcIoB8Dw"><span class="type-tag type-string" data-page-node-id="FBAVffOJkxbN9DTux3wFld">文本</span></td><td data-page-node-id="Ae4ugZKDxvmj7skeXT7RC6">单次启动唯一标识</td><td class="example" data-page-node-id="961TzAyFrATlKFUihy2Kqb">s_987654321</td><td data-page-node-id="kieijiUcCbGUHSec8XDGq0"><span class="scope-tag scope-required" data-page-node-id="3OtCN1syyLjdFqmkjwVJ5X">必含</span></td></tr>
+                <tr data-page-node-id="JmBwxMQ5ONy2TYjMzMcRTR"><td data-page-node-id="sShnGjiPgIAWJLVBBzwbjE"><span class="field-name" data-page-node-id="sxiB89EcaMmhyumwrQJmOS">timestamp</span></td><td data-page-node-id="aAggpS8GWz9HgDBdHgSes8">时间戳</td><td data-page-node-id="GEr7Tb3zO9YOuOhVMN3FNw"><span class="type-tag type-time" data-page-node-id="lcBcjGSIF4pAPdQfbWRNmC">时间</span></td><td data-page-node-id="QCXvjESaw7n7pPExD4rsBJ">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="NlP08u8AqLLQPkIAu1DWTE">2026-05-26T09:35:00+08:00</td><td data-page-node-id="FAjo9IedMImswnca59ldOH"><span class="scope-tag scope-required" data-page-node-id="M69H6yRK8EKnVaC69gufH0">必含</span></td></tr>
+                <tr data-page-node-id="VDZNlI4EZt8Wks6DB3nq0A"><td data-page-node-id="WplSlyHmb05B0E0PaoISbY"><span class="field-name" data-page-node-id="FIbBA8wRtCmIr6KGT26B9p">game_type</span></td><td data-page-node-id="vjprCiszPl3TwCMc0Fn03S">训练模式</td><td data-page-node-id="j4DHIGgv1zqxKCgPY0gssC"><span class="type-tag type-string" data-page-node-id="s4hRNgLFdsx1q0nG3LJRrz">文本</span></td><td data-page-node-id="ONCoqvDbG7dQJzWHM7wF8e">0=串联课程 / 1=体式 / 2=冥想</td><td class="example" data-page-node-id="S7gIxchzyxv858sfWEBbBp">1</td><td data-page-node-id="fJweNA3TMGWYi6TYqA88hj"><span class="scope-tag scope-common" data-page-node-id="B2lZjfXqXLb1E0Prp2doDO">通用</span></td></tr>
+                <tr data-page-node-id="wOovR2lrIA7cO87IXzMeXZ"><td data-page-node-id="J8rto3yR1rE0eprgPzH6Wt"><span class="field-name" data-page-node-id="4VoByd6tJ0lK5GcRDbforF">player_number</span></td><td data-page-node-id="troZdCnjLEKU5IeHgXF1bi">游戏人数</td><td data-page-node-id="F55pmKUFRLHb5KM9BvH4Xc"><span class="type-tag type-string" data-page-node-id="MrPGFeYjmjTwijNoQFHXRn">文本</span></td><td data-page-node-id="toAK2Ck4zV1PfiQ2lunsZ3">参与本次训练的玩家人数</td><td class="example" data-page-node-id="2g8LmjnUE5A8u22HB6XGNT">1</td><td data-page-node-id="bEEFx8bLUU16KFhVQB8ymU"><span class="scope-tag scope-common" data-page-node-id="b1jxnIj88jLMCv3qBhZErD">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- Event 4: continue_game -->
-    <div class="event-block">
-        <div class="event-title">continue_game（回到游戏）</div>
-        <div class="event-desc">玩家从暂停状态恢复训练时上报</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-continue-game" data-page-node-id="dY3JQZrogu1SQSIykPQrrb">
+        <div class="event-title" data-page-node-id="ViRkWEOACrjeeNpVKAnfQX">continue_game（回到游戏）</div>
+        <div class="event-desc" data-page-node-id="BTLYc23UjvS8DicsQRWNgO">玩家从暂停状态恢复训练时上报</div>
+        <table data-page-node-id="IfEMX8MIB0cqgefLSMvXH3">
+            <colgroup data-page-node-id="w01F8hvoizhqgF0MdkHZ43"><col data-page-node-id="ljKXuC9rnDaRZBmLtJq0sd"><col data-page-node-id="0QQwMm8028gRVFXjgByP2Q"><col data-page-node-id="kLjEzuYi1mgJaNI3mvv3cW"><col data-page-node-id="iXKjbxAqVIsEW5Rt89FncW"><col data-page-node-id="OxqQX4WlOVOnDG3ZHvS6my"><col data-page-node-id="9ZCI9FP7o4X6n4K18VKxmZ"></colgroup>
+            <thead data-page-node-id="dXAHXSGVKah4D3eyDEPArl">
+                <tr data-page-node-id="RyxDr8Erdvyrt431sPOOJO"><th data-page-node-id="Cdawmuc45DQTWGsSZC3CyN">属性名</th><th data-page-node-id="pSnx8EebyzhZxQia4SUNS1">显示名</th><th data-page-node-id="JZG3xq3XdAHT319PHAIl8N">类型</th><th data-page-node-id="kRsKcexgyqOW3UBv0DuQmo">说明</th><th data-page-node-id="oFCifQNND1Oj8yWDPOhUvs">示例</th><th data-page-node-id="pkmB7B6LJROdAt9IqxCs84">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>0=串联课程 / 1=体式 / 2=冥想</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            <tbody data-page-node-id="0pKmajdICkwYU3XED6ij0T">
+                <tr data-page-node-id="Le1hLP5dByZezpR3PgAmA7"><td data-page-node-id="Nobf1DiFpA8UneueZVz2qL"><span class="field-name" data-page-node-id="K24WgvlZGo9hOY8HkRTHtI">game_id</span></td><td data-page-node-id="CAAGpvKCziUpsmiRXyxm34">游戏ID</td><td data-page-node-id="5uK5ToiavadcFtE9kgWxZE"><span class="type-tag type-string" data-page-node-id="oVZF42iHSTJGX8VvjDoQzw">文本</span></td><td data-page-node-id="sffmougTyEBj549WXaaDc4">产品唯一编号</td><td class="example" data-page-node-id="isnQMsS3b3MYHJSHicAPBm">1018</td><td data-page-node-id="yfAo09CgoiMiVd2jqEL3di"><span class="scope-tag scope-required" data-page-node-id="lOCNYThgTEqsGN10iVHkyj">必含</span></td></tr>
+                <tr data-page-node-id="3jz5SUNqSSPM6YvBe1tLJg"><td data-page-node-id="F0wCUAa7xBqdYC7oBV4T2Y"><span class="field-name" data-page-node-id="fMEGn2QxWjqHC6GYUtl9oL">user_id</span></td><td data-page-node-id="QBxuFmjxl1jNcSDzuNxDPW">人脸角色ID</td><td data-page-node-id="tSluUwFWcu7HCQJawKGB7c"><span class="type-tag type-list" data-page-node-id="q65ogYDk6uzlA64df3fthA">列表</span></td><td data-page-node-id="xxAZQ20aNwSX7Btw3XTxAx">所有参与角色ID</td><td class="example" data-page-node-id="jSPciJWm6Be7V4MFg0cIHV">["135"]</td><td data-page-node-id="LZtOeMCaTGNTItmEjciY1r"><span class="scope-tag scope-required" data-page-node-id="7U5W3YBDUCA2v17SeA6WFt">必含</span></td></tr>
+                <tr data-page-node-id="q5tQSyRTCTZB2M1BWauGsg"><td data-page-node-id="11TAM3WD98CclAihZDEtrb"><span class="field-name" data-page-node-id="JrdEJ3or6d8vULhdxy60mQ">session_id</span></td><td data-page-node-id="62dJjTJuKAvIyUZFracZNG">会话ID</td><td data-page-node-id="0Rvb5RuLwSkd9nm20kZogw"><span class="type-tag type-string" data-page-node-id="EioQoflh8euzHqwWljqVJ6">文本</span></td><td data-page-node-id="35EpY4TFdDgxHpnFooHMIm">单次启动唯一标识</td><td class="example" data-page-node-id="ILWq6Z5lIXgu7VTlSKCFO7">s_987654321</td><td data-page-node-id="0xsSbNLSV9ChvGVGJ6KHeV"><span class="scope-tag scope-required" data-page-node-id="RR4gKepll7RjsdOQPFFizC">必含</span></td></tr>
+                <tr data-page-node-id="M75APCYL9npH3FDMC12S5t"><td data-page-node-id="Wv5jDeclOlAmGAftgBTUqm"><span class="field-name" data-page-node-id="tbTI344Zyugip0XFmsCBzV">timestamp</span></td><td data-page-node-id="UEz31uGw5rEVqTm0VdZuFC">时间戳</td><td data-page-node-id="zfctmEsMSk63wtyLnDiuBp"><span class="type-tag type-time" data-page-node-id="KfmzLEuMkzvnw6viZFYvtJ">时间</span></td><td data-page-node-id="1KPQIaEN7n1xDfQryEklcc">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="QfLBz1AZMuKqweCBid8MSa">2026-05-26T09:35:00+08:00</td><td data-page-node-id="iUvBDw0BTAMIfuZaF5esZa"><span class="scope-tag scope-required" data-page-node-id="EtXCv9jiMGO4xg1RZtxilx">必含</span></td></tr>
+                <tr data-page-node-id="0ta5N449Zpbn6yFrPT4tnX"><td data-page-node-id="1efs1PoDnUscUqSFYFf3W1"><span class="field-name" data-page-node-id="ykF4HXCnrA28SDhn00BFH0">game_type</span></td><td data-page-node-id="aYtPVHg2KvSCUPHiFJ4G4y">训练模式</td><td data-page-node-id="trdjC5lA7mc8gLA6aZp2ie"><span class="type-tag type-string" data-page-node-id="DrgzCUslglbsfCkgIAdEXp">文本</span></td><td data-page-node-id="BbuCZYfICHDzNrN0s2xf2V">0=串联课程 / 1=体式 / 2=冥想</td><td class="example" data-page-node-id="g4eNG0wtT9bVkJyouNQABl">1</td><td data-page-node-id="7hXlvLJP3cUZjxvjOLAq9p"><span class="scope-tag scope-common" data-page-node-id="eJWjTY0GIKsjAuwra4WGAU">通用</span></td></tr>
+                <tr data-page-node-id="yeLzAofxku6sYfT8IDaW8H"><td data-page-node-id="5BRKaWgyv07sU0EPtN6Hgh"><span class="field-name" data-page-node-id="N4zu21PsBDveAobsLepfb5">player_number</span></td><td data-page-node-id="kyOlQ2OxewhaPGqA81QImi">游戏人数</td><td data-page-node-id="jH4QCcfQbWFy7lJnnLhVJy"><span class="type-tag type-string" data-page-node-id="45HcdABiFN7rNzhurf1BWW">文本</span></td><td data-page-node-id="wdHYT0IvD5lnKhRnFItHGB">参与本次训练的玩家人数</td><td class="example" data-page-node-id="BmLUFZ6vDq2Zfw3ZIcsEp1">1</td><td data-page-node-id="xSZwy9PHSIg1cSPgenVDNq"><span class="scope-tag scope-common" data-page-node-id="dGGg8bPUUcHQyBghzE7KDp">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- Event 5: mini_game_start -->
-    <div class="event-block">
-        <div class="event-title">mini_game_start（体式开始）</div>
-        <div class="event-desc">一次体式训练单元开始时触发。</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-mini-game-start" data-page-node-id="Hl9Jua4hexTnVMa4Pfi5nL">
+        <div class="event-title" data-page-node-id="480Xk60HHnqIFKmGcFfbmm">mini_game_start（体式开始）</div>
+        <div class="event-desc" data-page-node-id="aCLpHEDeyypmzrA6Uz5QzL">一次体式训练单元开始时触发。</div>
+        <table data-page-node-id="g4UjaDiW7xLg3wDcyfUJbE">
+            <colgroup data-page-node-id="MaYZz6AwJLXLM7qDZsZJws"><col data-page-node-id="O6ZYxCY0UDEz6OfAC8BrGk"><col data-page-node-id="MhsOjTbTfbR9FZsuNv6oXj"><col data-page-node-id="pvKPWgUd48RjJSUpPCKLkg"><col data-page-node-id="Rky7aMWrrnvx3RQRm0NNQO"><col data-page-node-id="uYOr3ZhnF8UAxtLmXGdoQo"><col data-page-node-id="iXWLqnCrzlG3VPUriZBfYF"></colgroup>
+            <thead data-page-node-id="eWIHVbJrvVBIwH0EdrGaNC">
+                <tr data-page-node-id="zMH5ulJWJ5gqBXAmrXGr5n"><th data-page-node-id="scI5KxmFvjn7o5AsI0f9AB">属性名</th><th data-page-node-id="zCP0OxsmEElkdE120cAlrX">显示名</th><th data-page-node-id="ecaMlqCwGVrQzNgka9IBzL">类型</th><th data-page-node-id="TqvFCDGJ5nOZjOPLebMqS1">说明</th><th data-page-node-id="FZDznet5uQgWdbUuduoSIe">示例</th><th data-page-node-id="Q9RRyZSu2Gi9ychvS9q5wp">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>固定为 1=体式</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">difficulty</span></td><td>训练难度</td><td><span class="type-tag type-string">文本</span></td><td>0=简单 / 1=普通 / 2=困难</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name field-project">act_id</span></td><td>动作ID</td><td><span class="type-tag type-string">文本</span></td><td>1~1000=瑜伽动作 / 1001~2000=普拉提动作</td><td class="example">56</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+            <tbody data-page-node-id="zlTKXER3aVdzzACWxUnoMA">
+                <tr data-page-node-id="Cuz7EHnwj8kWWsASOfuC5R"><td data-page-node-id="oqx1fBTD8qp74VqunOQnOj"><span class="field-name" data-page-node-id="8hhd82uChdl7HZn44d7Iwx">game_id</span></td><td data-page-node-id="RkE2QvZfOXDS9VdZgnHKiG">游戏ID</td><td data-page-node-id="jK7Zwpziask6ZpYEsyHZJ9"><span class="type-tag type-string" data-page-node-id="2TlgwxHYwxpZknKHjnXH0R">文本</span></td><td data-page-node-id="nPF8ywHVT3yrIjlP8Bm96G">产品唯一编号</td><td class="example" data-page-node-id="X5MAwbWXrMKxMzWmboVmLo">1018</td><td data-page-node-id="AOHCeXiHMRkNFsHyzWGsUd"><span class="scope-tag scope-required" data-page-node-id="9Kmzzp7qx8lgq5mGbkpCzQ">必含</span></td></tr>
+                <tr data-page-node-id="vAoK6NICdpANzAL6eDHoce"><td data-page-node-id="gqxbRc0qDFcI121b24LGgJ"><span class="field-name" data-page-node-id="WaLHUvPCtUFVYSdAdCTTNN">user_id</span></td><td data-page-node-id="unKIpUbXnroOBkEWv1ZjmO">人脸角色ID</td><td data-page-node-id="eN9tJGSGkVT389OiOxAYAb"><span class="type-tag type-list" data-page-node-id="jCx7ts5KK7KG9G71G3NNye">列表</span></td><td data-page-node-id="xef3ilyVHqu8iX0SMeMSgL">所有参与角色ID</td><td class="example" data-page-node-id="fZf6FPQeloCkZazVHfrYaU">["135"]</td><td data-page-node-id="1u6iVmtGDCNrIKCxLAmToI"><span class="scope-tag scope-required" data-page-node-id="bDfAbpWcpACCs6tKeKhbDR">必含</span></td></tr>
+                <tr data-page-node-id="4rpAxCA3hPiAa5FApmrluP"><td data-page-node-id="hJrvRwlSIA1IWHazPAQAY9"><span class="field-name" data-page-node-id="Y2rctmU6Xd9FPsXscm7By4">session_id</span></td><td data-page-node-id="ytXJqspGqUyfkJij1PqgYT">会话ID</td><td data-page-node-id="fJkMCbbSroSR7V030CfFjP"><span class="type-tag type-string" data-page-node-id="c7fNfZiCSOEL6SSxXaFYdM">文本</span></td><td data-page-node-id="DWscCKS2ycWwjbRYgYdv3m">单次启动唯一标识</td><td class="example" data-page-node-id="2ZmKtdqk9awxNr6ef103KI">s_987654321</td><td data-page-node-id="NRFi6FJjkZ8DJblbUoVHCG"><span class="scope-tag scope-required" data-page-node-id="oipQDtJyteCFrk0iwQ7Yxw">必含</span></td></tr>
+                <tr data-page-node-id="mcbAtkdCDEBlE1KfYbEKnG"><td data-page-node-id="8pMjHSoNlX0FbuGM1d0fF2"><span class="field-name" data-page-node-id="OP6ggVv6XcYt0s1kf5HziQ">timestamp</span></td><td data-page-node-id="jupG5kCstB5HF6AY2Kh0h1">时间戳</td><td data-page-node-id="iWdXbusCt0lTRaevXZYEei"><span class="type-tag type-time" data-page-node-id="53L3HZpKSWynMgew3lDQin">时间</span></td><td data-page-node-id="JOADh0ziOoTvANxuwqZqN6">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="vXlzKpHCmh8xyMmBQahwVE">2026-05-26T09:35:00+08:00</td><td data-page-node-id="TbRCnga83VAL9lI7FKFDPj"><span class="scope-tag scope-required" data-page-node-id="dc4Tda905O5FDgMFygXBXz">必含</span></td></tr>
+                <tr data-page-node-id="SHKe6CJ8UCWwNvWIH91FZd"><td data-page-node-id="z77m738cqaDG3DFW3T8agO"><span class="field-name" data-page-node-id="21hKiDO2w6Es2Q6GCRM0XS">game_type</span></td><td data-page-node-id="fTgk7xnpl7Bs5NBJjna9X9">训练模式</td><td data-page-node-id="1MXZHzA7rDpQmliJZvtsZg"><span class="type-tag type-string" data-page-node-id="SBQBnqxgBsvmjdODu2mZFu">文本</span></td><td data-page-node-id="zjfWv9DFKknrhzvnLbUgRo">固定为 1=体式</td><td class="example" data-page-node-id="fW4iQdYbZIOr1EBEfRwHhO">1</td><td data-page-node-id="fvZrqxtAsZ1EJHs62zM8Co"><span class="scope-tag scope-common" data-page-node-id="tNaJFfLRyFeoLkYDNL205F">通用</span></td></tr>
+                <tr data-page-node-id="oFnCCBEpEXwwz3dMmWk1x9"><td data-page-node-id="ZVEWkCMjGDdSeJbCVHbabi"><span class="field-name" data-page-node-id="mvMT0v9nsPHNnOScf6Bwxa">player_number</span></td><td data-page-node-id="XYgXG5HrCVinDZ8NB3EDr8">游戏人数</td><td data-page-node-id="D3fU9ey5aGTFZN5t3DDMBg"><span class="type-tag type-string" data-page-node-id="G2UPM5u49jUrpyy66UukSh">文本</span></td><td data-page-node-id="g632M9hXtOtPbEafkuLj3b">参与本次训练的玩家人数</td><td class="example" data-page-node-id="U73BJ0foepEz3n6yTbLRfL">1</td><td data-page-node-id="gr5DJKmFiDCXl5xyFBh4Jv"><span class="scope-tag scope-common" data-page-node-id="2UT9UBpeBPeAehxYHsWVOu">通用</span></td></tr>
+                <tr data-page-node-id="MrzswFz7dQKzj295bDvj0a"><td data-page-node-id="jdb9lYHCU7nsi3K2rk0wlx"><span class="field-name" data-page-node-id="P0sVlMD5ACKOmf10tzTCNZ">difficulty</span></td><td data-page-node-id="cXFVYJ4tG96mZ1F1SjXRMi">训练难度</td><td data-page-node-id="k0QooAOppBQuD6LIEftK3Z"><span class="type-tag type-string" data-page-node-id="aZUaHJdaiMOFWvTOKCcs07">文本</span></td><td data-page-node-id="QKwysDCB0V1ZqOPBc8XAlk">0=简单 / 1=普通 / 2=困难</td><td class="example" data-page-node-id="vL0Lco4YvBVGlkuvFvSNJC">0</td><td data-page-node-id="nMWQY4rgyexH1SCuZM1KKF"><span class="scope-tag scope-common" data-page-node-id="yUYfKKEPLSOLNKafsEU5ck">通用</span></td></tr>
+                <tr data-page-node-id="yjW1FJDq53QQPiT5RuzuPo"><td data-page-node-id="WcxWEmtB1zTvGzxku4VQBx"><span class="field-name field-project" data-page-node-id="AenYPUW2V0sL3rWTzQAbdW">act_id</span></td><td data-page-node-id="kafUt9C8PSVcNySkbSLH0u">动作ID</td><td data-page-node-id="Bzw0Vi98EhpEqdPPAxERSr"><span class="type-tag type-string" data-page-node-id="KgLBgGy6G51GCWsoLqEKMa">文本</span></td><td data-page-node-id="N5HppPjpKUdL9dwXwT3kPb">1~1000=瑜伽动作 / 1001~2000=普拉提动作</td><td class="example" data-page-node-id="FEPS7OUqKp4OwsqdbtiDTL">56</td><td data-page-node-id="F4lTmTx8P9i5SImpeqlff3"><span class="scope-tag scope-project" data-page-node-id="v1toAUgWEX2fBvYfJQD8od">项目</span></td></tr>
             </tbody>
         </table>
     </div>
 
     <!-- Event 6: mini_game_end -->
-    <div class="event-block">
-        <div class="event-title">mini_game_end（体式结束）</div>
-        <div class="event-desc">一次体式训练单元完成，进入总结界面时触发。仅保留得分，不记录动作ID、卡路里、评级等。如需关联具体体式，通过 session_id 关联 mini_game_start。</div>
-        <table>
-            <colgroup><col><col><col><col><col><col></colgroup>
-            <thead>
-                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+    <div class="event-block" id="sec-mini-game-end" data-page-node-id="FzTiPowl1UtIkS8xQBY2gg">
+        <div class="event-title" data-page-node-id="zk5d5sp1QEKPUSCCPd7RqH">mini_game_end（体式结束）</div>
+        <div class="event-desc" data-page-node-id="V4HcURehjvWLifLHMU9Pwy">一次体式训练单元完成，进入总结界面时触发。仅保留得分，不记录动作ID、卡路里、评级等。如需关联具体体式，通过 session_id 关联 mini_game_start。</div>
+        <table data-page-node-id="hPZX8wHlAs2EK1qLA1MkPN">
+            <colgroup data-page-node-id="W61TKx8MJqU7YWYL36S0wH"><col data-page-node-id="XJ5D7NF85lBNCzRHUJQfXt"><col data-page-node-id="2oNHClczY4bWQ1Q6YI4ZdJ"><col data-page-node-id="uiI62uztp9P6R4OgAGkDGn"><col data-page-node-id="UrEPr1aikub7EVHmVmzStW"><col data-page-node-id="khvFIG5PjuiTpm34BJx3YZ"><col data-page-node-id="YJWQbgx9DwElpftRrNLqsQ"></colgroup>
+            <thead data-page-node-id="nVuSRKI5sk0ZyqU8AWqxaS">
+                <tr data-page-node-id="uYxC2Hr7TYnY3psQOr639v"><th data-page-node-id="Jp2sJOkYiRL4azhk7fCHhs">属性名</th><th data-page-node-id="iXa5Lfakofk3RmlEoOC90A">显示名</th><th data-page-node-id="nMN7kcr6TIvvqhhlBGJgLb">类型</th><th data-page-node-id="cRWtwwAK2cB6LX6OOG3VX3">说明</th><th data-page-node-id="GrDIS8EOGwoPCKiUrzujzf">示例</th><th data-page-node-id="djG4b6B6apLecUWizUv0qr">来源</th></tr>
             </thead>
-            <tbody>
-                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1018</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>单次启动唯一标识</td><td class="example">s_987654321</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（Unix毫秒）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>训练模式</td><td><span class="type-tag type-string">文本</span></td><td>固定为 1=体式</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">score</span></td><td>体式得分</td><td><span class="type-tag type-int">数值</span></td><td>本次体式训练总得分</td><td class="example">88</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            <tbody data-page-node-id="WejgA25ZatLJbTGCWkFH27">
+                <tr data-page-node-id="ttfojkmFu1dFsTE0Zpxsbv"><td data-page-node-id="A5FlH4rKFBNpbDknQg3FLz"><span class="field-name" data-page-node-id="BZIJrmroFEHrYCuVqCxITX">game_id</span></td><td data-page-node-id="fUGHYBXFcGut0KKzpiAeJi">游戏ID</td><td data-page-node-id="BmF00z4JRVASdSddygWbFO"><span class="type-tag type-string" data-page-node-id="mcpH3ET6AhRGQuaLE9GsTx">文本</span></td><td data-page-node-id="aJA1fcdsnpf8UufzGl6xhN">产品唯一编号</td><td class="example" data-page-node-id="oVzbIYDmD3SZT25gPPGUeX">1018</td><td data-page-node-id="GtYBwJsZ9G9M7AUYq1VFXQ"><span class="scope-tag scope-required" data-page-node-id="acpRQ9zXx6DRTxGFIt9Ptg">必含</span></td></tr>
+                <tr data-page-node-id="sevlsC3wK8082tIOzXeEGa"><td data-page-node-id="DzfSyq51krF8m076NR9hIQ"><span class="field-name" data-page-node-id="6MwO24hMgvPBCdHMZ6CGSo">user_id</span></td><td data-page-node-id="vEpfEzrFcGSrGed2697xxG">人脸角色ID</td><td data-page-node-id="1UGJHSva0dV20uWXOUEj89"><span class="type-tag type-list" data-page-node-id="MPlDFZVqyv1OtBeYA9pUTJ">列表</span></td><td data-page-node-id="tgoXub9YpppaivXUimk1Z2">所有参与角色ID</td><td class="example" data-page-node-id="aKmahvzoaLGZuTWPmscMMB">["135"]</td><td data-page-node-id="iBvRal6NCQ2edDDFDAjmYZ"><span class="scope-tag scope-required" data-page-node-id="GN6k4WeKbrxvodtCHpXjx6">必含</span></td></tr>
+                <tr data-page-node-id="NCzSUOA0Fr4SS7BFCBq2pJ"><td data-page-node-id="E97bSHz3JuJyPpVEVVj7EQ"><span class="field-name" data-page-node-id="ZZmaCOw2AxHQP3rguvu9RU">session_id</span></td><td data-page-node-id="hX2yfXZ7nCSxU1MvQFoyWP">会话ID</td><td data-page-node-id="Jw8FleCUmnLqWj2TTlGQkG"><span class="type-tag type-string" data-page-node-id="gwctPRxXqBrXZ7CChFo4sS">文本</span></td><td data-page-node-id="VU233fNICDvPiycuKpoNvF">单次启动唯一标识</td><td class="example" data-page-node-id="nSuzdOfktuxlSsThcxliRf">s_987654321</td><td data-page-node-id="CFeOLo6SEhGYj4TJWZqHTK"><span class="scope-tag scope-required" data-page-node-id="gDyFlyijKwF4ZtmlQzcDom">必含</span></td></tr>
+                <tr data-page-node-id="aqtm2cLPlGlt8vGTaD7Inl"><td data-page-node-id="wB79ZG85VKe3WseQP7egtz"><span class="field-name" data-page-node-id="JRfR8vcu02q3Wa4G1nk9KV">timestamp</span></td><td data-page-node-id="tbYCIyLOXnLoXaSlXRCfDn">时间戳</td><td data-page-node-id="3aEnnOXh8qTFDTcvcJvaDj"><span class="type-tag type-time" data-page-node-id="jdtmhDgN1nmccWA8FMVkF6">时间</span></td><td data-page-node-id="l33CdnEiujOgN0Sk7ZFGVz">事件发生时间（Unix毫秒）</td><td class="example" data-page-node-id="eYsHIL8agNAYSmFveEyvS2">2026-05-26T09:35:00+08:00</td><td data-page-node-id="Cqb20lMtIApwrD9MfMfaqF"><span class="scope-tag scope-required" data-page-node-id="rnC9ZodF1IJAKBi5OhE6O5">必含</span></td></tr>
+                <tr data-page-node-id="Ib4WP1IYzYzv6pE2H4ITAV"><td data-page-node-id="jJMckMDNd57v6IID9Pf7ES"><span class="field-name" data-page-node-id="I3xbYN8UkgnVmJZyHlFRF6">game_type</span></td><td data-page-node-id="JWvlnLqA9MbDA3cxt0Q5By">训练模式</td><td data-page-node-id="Yh0kNS4HlwKSmgZ70hlIfU"><span class="type-tag type-string" data-page-node-id="EUm2Ki01CWJZlr4PwH3lEe">文本</span></td><td data-page-node-id="vhta012BlvppbDUTlPd7gh">固定为 1=体式</td><td class="example" data-page-node-id="DCBGhiAhpfCEFm7Cv8mADn">1</td><td data-page-node-id="qBhQg946omO2UxiHRX82fi"><span class="scope-tag scope-common" data-page-node-id="HZzm0dGJMeZAH60HHWAg07">通用</span></td></tr>
+                <tr data-page-node-id="Da1Y4BBSCIJjnPjQ2CKhgD"><td data-page-node-id="zRsVzaixcdueLI1l2d0Uxc"><span class="field-name" data-page-node-id="tGMu7L0ICBSpl6O9hAaNfB">player_number</span></td><td data-page-node-id="inizwAw9K9gnb2mzMeo35g">游戏人数</td><td data-page-node-id="esMfVItK94xFocc9cMFMGd"><span class="type-tag type-string" data-page-node-id="W8u0ks4DJfL3PnCvSW4EMb">文本</span></td><td data-page-node-id="PSLcmySooI82ayGXPo5wwh">参与本次训练的玩家人数</td><td class="example" data-page-node-id="azwXCQ1OhddyPwvmn9dEZf">1</td><td data-page-node-id="KOKXPt8B1TiLKQcJf98hMd"><span class="scope-tag scope-common" data-page-node-id="N1y64TSl2FrdEvc28ooVxU">通用</span></td></tr>
+                <tr data-page-node-id="DdoED4fsJQulJ1uGiwinYc"><td data-page-node-id="d4J9j6C1UDvXvHUa4rEfFm"><span class="field-name" data-page-node-id="BlkGAaCDDznINQcKGZrK1D">score</span></td><td data-page-node-id="59T0Zdxmvx8AUtsEc6EldN">体式得分</td><td data-page-node-id="wHGDtXfvspdrLn9Y5ZT5xf"><span class="type-tag type-int" data-page-node-id="ounfWj5ZjMYyGHQHLDC5L4">数值</span></td><td data-page-node-id="kZHEKheAzyyawriYSFtEAn">本次体式训练总得分</td><td class="example" data-page-node-id="WLfy4BkhdWfvZC0FcKfzBn">88</td><td data-page-node-id="yG0KdAgbWMZruGorsehGmr"><span class="scope-tag scope-common" data-page-node-id="dsFJuFEFngfiHcrkySFJru">通用</span></td></tr>
             </tbody>
         </table>
     </div>
 </div>
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab" data-page-node-id="sirarKfhbaBO5TrXOh22uG">
+        <div class="toc-panel" id="tocPanel" data-page-node-id="WmYaaEw1o2KjgxSfRaW4mK">
+            <div class="toc-title" data-page-node-id="2OCmIBSvYTzQtIUmD8Jyz1">页面目录</div>
+            <a class="toc-link toc-back" href="naming_standards.html" data-page-node-id="mFOUmRPBXzpV1eTQ3sVzjy">← 返回命名规范</a>
+            <a class="toc-link" href="#sec-enter-game" data-page-node-id="vuKj9v5Au90AmFPjAFgJku">enter_game</a>
+            <a class="toc-link" href="#sec-end-game" data-page-node-id="av5VRviIJqt0J3iq5mIKDR">end_game</a>
+            <a class="toc-link" href="#sec-pause-game" data-page-node-id="ymufCRJr9zxFFnxhMvAGAG">pause_game</a>
+            <a class="toc-link" href="#sec-continue-game" data-page-node-id="q2F2hUn7jJ9f71GgMNdjN0">continue_game</a>
+            <a class="toc-link" href="#sec-mini-game-start" data-page-node-id="v8UGmhBeCbEalJMWopp8BC">mini_game_start</a>
+            <a class="toc-link" href="#sec-mini-game-end" data-page-node-id="1NBan6E5nOTXrrjIi6BtFo">mini_game_end</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录" data-page-node-id="pvftuhnDNbEWBTJE9JcGxw">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部" data-page-node-id="jDzYBrndodExt3zE6iLODl">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        // 只把 # 锚点链接纳入滚动高亮；返回链接是外链，跳过
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+        var KEY = 'ns1018_toc_open';
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+
+        function setActive(i) {
+            anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); });
+        }
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '\u2715' : '\u2630';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+        anchors.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActive(i);
+                lock = i; clearTimeout(lockTimer);
+                lockTimer = setTimeout(function () { lock = -1; spy(); }, 700);
+            });
+        });
+
+        ['wheel', 'touchstart'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+                if (lock !== -1) { lock = -1; clearTimeout(lockTimer); spy(); }
+            }, { passive: true });
+        });
+
+        var lock = -1, lockTimer = null;
+        function spy() {
+            if (lock !== -1) return;
+            var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+            var cur = -1, lastVisible = -1;
+            targets.forEach(function (t, i) {
+                if (!t || t.offsetParent === null) return;
+                lastVisible = i;
+                if (t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1) cur = 0;
+            if (atBottom && lastVisible !== -1) cur = lastVisible;
+            setActive(cur);
+        }
+
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+        apply(); spy();
+    })();
+    </script>
+
 </body>
 </html>

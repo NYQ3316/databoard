@@ -326,6 +326,11 @@
             .toc-panel { width: 168px; }
         }
         @media print { .toc-fab { display: none; } }
+    
+        /* 页头署名（低调，不抢主标题） */
+        .contact-hint { opacity: 0.8; margin-left: 8px; font-weight: 400; }
+        /* 目录里的返回项：细线分隔，不做色块 */
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid var(--border); border-radius: 8px 8px 0 0; }
     </style>
 </head>
 <body data-page-node-id="s16qhIie3orSP9YCnfrktQ">
@@ -334,7 +339,7 @@
         <div class="header" data-page-node-id="fRbccJH88itGiAsohgOSDF">
             <div data-page-node-id="iB8F8CuRqjgUO9JtQ7CwHK">
                 <h1 data-page-node-id="7MdaxH7XPJdoBN0bs2xklG">📋 埋点命名规范</h1>
-                <div class="subtitle" data-page-node-id="RCqdLwA6cHXbDpTrzeYtGi">跨项目统一标准 | 基础字段 + 事件模板 + 属性命名</div>
+                <div class="subtitle" data-page-node-id="RCqdLwA6cHXbDpTrzeYtGi">跨项目统一标准 | 基础字段 + 事件模板 + 属性命名<span class="contact-hint">· 如有问题 @Nicholas</span></div>
             </div>
             <a class="back-btn" href="index.html" data-page-node-id="r7pJJvmpjW5f7l1Rfw3law">&larr; 返回看板总览</a>
         </div>
@@ -638,6 +643,7 @@
     <div class="toc-fab" id="tocFab">
         <div class="toc-panel" id="tocPanel">
             <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="index.html">← 返回看板总览</a>
             <a class="toc-link" href="#sec-events">📐 事件命名规范</a>
             <a class="toc-link" href="#sec-base">🔒 基础字段</a>
             <a class="toc-link" href="#sec-common">🔧 通用业务属性</a>
@@ -653,8 +659,10 @@
         var topBtn = document.getElementById('tocTop');
         if (!panel || !toggle) return;
 
-        var links   = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
-        var targets = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        // 只把 # 锚点链接纳入滚动高亮；返回看板是外链，保持正常跳转
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
         var KEY = 'ns_toc_open';
 
         // 宽屏默认展开，窄屏默认折叠；用户手动切换后记住选择
@@ -673,9 +681,9 @@
 
         var lock = -1, lockTimer = null;
         function setActive(i) {
-            links.forEach(function (a, k) { a.classList.toggle('active', k === i); });
+            anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); });
         }
-        links.forEach(function (a, i) {
+        anchors.forEach(function (a, i) {
             a.addEventListener('click', function (e) {
                 e.preventDefault();
                 var t = targets[i];

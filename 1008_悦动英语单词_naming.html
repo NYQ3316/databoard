@@ -159,6 +159,50 @@
             .header [style], .event-header [style] { color: #f1f5f9 !important; }
             .note-row [style], .note-row td[style] { color: #fcd34d !important; }
         }
+    
+        /* ======== 悬浮目录组件 ======== */
+        html { scroll-behavior: smooth; }
+        .event-section, .event-block { scroll-margin-top: 16px; }
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 188px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+        @media (prefers-color-scheme: dark) {
+            .toc-btn { background: #131c31; color: #f1f5f9; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-btn:hover { background: #1e293b; border-color: #60a5fa; }
+            .toc-panel { background: #131c31; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-title { color: #94a3b8; }
+            .toc-link { color: #cbd5e1; }
+            .toc-link:hover { background: #1e293b; }
+            .toc-link.active { color: #93c5fd; border-left-color: #60a5fa; background: #1e293b; }
+            .toc-back { border-bottom-color: #1e293b; }
+        }
+        @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
+        @media print { .toc-fab { display: none; } }
     </style>
 </head>
 <body data-page-node-id="W1ewVpbrb0u2AmP0TyZAbG">
@@ -184,7 +228,7 @@
         </div>
 
         <!-- Event 1: enter_game -->
-        <div class="event-section" data-page-node-id="LzCdv5PUve5hoC6W23cJ8V">
+        <div class="event-section" id="sec-enter-game" data-page-node-id="LzCdv5PUve5hoC6W23cJ8V">
             <div class="event-header" data-page-node-id="BHMRWGHEIMmfjUBBhCez4g">
                 <div class="left" data-page-node-id="EzU3fGoKjBGr1uQ9Z5f0cf">
                     <h2 data-page-node-id="QTFzd45uQnraq08W4CJ2R5">事件一：<span class="ename" data-page-node-id="geitpPfI2U2ZLDQJtkNQa7">enter_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="H1Xcj3tHQ5GHRspE4DqNFq">进入游戏/关卡</span></h2>
@@ -214,7 +258,7 @@
         </div>
 
         <!-- Event 2: end_game -->
-        <div class="event-section" data-page-node-id="oxe4CUFIY3RR6bCqR3yAL5">
+        <div class="event-section" id="sec-end-game" data-page-node-id="oxe4CUFIY3RR6bCqR3yAL5">
             <div class="event-header" data-page-node-id="yBwGEI8Z0jLUFZO2czEM2N">
                 <div class="left" data-page-node-id="PRqTVeUMo1vdZUqhPTvtty">
                     <h2 data-page-node-id="44XgS237c0vhNaqEoIq0CK">事件二：<span class="ename" data-page-node-id="5TsOiRbdMJhKf5C8Mw9Ldb">end_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="UamsYH4BSqUIMRBpvYDGJd">退出游戏/关卡</span></h2>
@@ -256,7 +300,7 @@
         </div>
 
         <!-- Event 3: quiz_start -->
-        <div class="event-section" data-page-node-id="2kr7ygn5Vt4WkADzbURgVr">
+        <div class="event-section" id="sec-quiz-start" data-page-node-id="2kr7ygn5Vt4WkADzbURgVr">
             <div class="event-header" data-page-node-id="ijVX3qbETZmBxmLtkweEgw">
                 <div class="left" data-page-node-id="esay2AyIRxYfyyFAPIuzHT">
                     <h2 data-page-node-id="uvlGKfwK45E6TTMjdang6u">事件三：<span class="ename" data-page-node-id="EgSDtkEDdHw90iHdkL378G">quiz_start</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="97qP3qVYGi6GhdQJfUiGDM">开始语音宝箱</span></h2>
@@ -287,7 +331,7 @@
         </div>
 
         <!-- Event 4: single_answer -->
-        <div class="event-section" data-page-node-id="jc2ixhZqPS3V09EqDQPYWb">
+        <div class="event-section" id="sec-single-answer" data-page-node-id="jc2ixhZqPS3V09EqDQPYWb">
             <div class="event-header" data-page-node-id="UAGMrFCw6HfjywLgw743P9">
                 <div class="left" data-page-node-id="2UbVfCQo5cXnngQ2qTp3Pw">
                     <h2 data-page-node-id="GW5EaghVuYA8ri1hZj6sJe">事件四：<span class="ename" data-page-node-id="gnHLOIVF7OETtzM3n8V1NR">single_answer</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="BqtkmJFzuB0YbHUBg0WlEx">结束语音宝箱</span></h2>
@@ -318,7 +362,7 @@
         </div>
 
         <!-- Event 5: pause_game -->
-        <div class="event-section" data-page-node-id="YzTqfru0JpXrcsD2z3O1Rd">
+        <div class="event-section" id="sec-pause-game" data-page-node-id="YzTqfru0JpXrcsD2z3O1Rd">
             <div class="event-header" data-page-node-id="s5Ltg8FUkivfSzZPBcYM4W">
                 <div class="left" data-page-node-id="5QUSld8r1Nr4eEoKjCuyLH">
                     <h2 data-page-node-id="fBX1egwK4EUUgI85qy2FP4">事件五：<span class="ename" data-page-node-id="U27EWSf2NLAS8dEYrbm2Lm">pause_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="Hd4rjPBfLVept9TVF32xIK">暂停游戏</span></h2>
@@ -346,7 +390,7 @@
         </div>
 
         <!-- Event 6: continue_game -->
-        <div class="event-section" data-page-node-id="ea8YPIMmdxcNSPCpGXY5kR">
+        <div class="event-section" id="sec-continue-game" data-page-node-id="ea8YPIMmdxcNSPCpGXY5kR">
             <div class="event-header" data-page-node-id="gGw8YuYkj6EfhCsHNDtoGt">
                 <div class="left" data-page-node-id="7zV1BVW7YFiDGbZ9dG3wGt">
                     <h2 data-page-node-id="vFe4pClNZyR4F6oTLDtCHe">事件六：<span class="ename" data-page-node-id="WurE4O9TK3BTJls8598iR5">continue_game</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="7EBfW4SBBXKe2cc6gbY3Da">回到游戏</span></h2>
@@ -374,7 +418,7 @@
         </div>
 
         <!-- Event 7: VIP_show -->
-        <div class="event-section" data-page-node-id="YdjP7nbyCLreROBYT3kRoy">
+        <div class="event-section" id="sec-vip-show" data-page-node-id="YdjP7nbyCLreROBYT3kRoy">
             <div class="event-header" data-page-node-id="8wm7yg8Nv5LXsD6H2n9kqB">
                 <div class="left" data-page-node-id="Tzj9NzjqFwrILI6NToSr4E">
                     <h2 data-page-node-id="EAkt5CiQ5CwkgdMXBiQxyb">事件七：<span class="ename" data-page-node-id="jbCE5iryMKxaxyAkEVRsfg">VIP_show</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;" data-page-node-id="P7uvEIspmC5lBwAATa7kAC">时间订阅弹窗</span></h2>
@@ -407,5 +451,87 @@
             1008《悦动英语单词》| 项目埋点规范 | 对齐跨项目统一标准 | 复用 quiz_start / single_answer 通用事件
         </div>
     </div>
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="naming_standards.html">← 返回命名规范</a>
+            <a class="toc-link" href="#sec-enter-game">enter_game</a>
+            <a class="toc-link" href="#sec-end-game">end_game</a>
+            <a class="toc-link" href="#sec-quiz-start">quiz_start</a>
+            <a class="toc-link" href="#sec-single-answer">single_answer</a>
+            <a class="toc-link" href="#sec-pause-game">pause_game</a>
+            <a class="toc-link" href="#sec-continue-game">continue_game</a>
+            <a class="toc-link" href="#sec-vip-show">VIP_show</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        // 只把 # 锚点链接纳入滚动高亮；返回链接是外链，跳过
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+        var KEY = 'ns1008_toc_open';
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+
+        function setActive(i) {
+            anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); });
+        }
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '\u2715' : '\u2630';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+        anchors.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActive(i);
+                lock = i; clearTimeout(lockTimer);
+                lockTimer = setTimeout(function () { lock = -1; spy(); }, 700);
+            });
+        });
+
+        ['wheel', 'touchstart'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+                if (lock !== -1) { lock = -1; clearTimeout(lockTimer); spy(); }
+            }, { passive: true });
+        });
+
+        var lock = -1, lockTimer = null;
+        function spy() {
+            if (lock !== -1) return;
+            var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+            var cur = -1, lastVisible = -1;
+            targets.forEach(function (t, i) {
+                if (!t || t.offsetParent === null) return;
+                lastVisible = i;
+                if (t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1) cur = 0;
+            if (atBottom && lastVisible !== -1) cur = lastVisible;
+            setActive(cur);
+        }
+
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+        apply(); spy();
+    })();
+    </script>
+
 </body>
 </html>
