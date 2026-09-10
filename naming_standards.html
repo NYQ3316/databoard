@@ -105,6 +105,7 @@
             font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap;
         }
         .back-btn:hover { background: rgba(255,255,255,0.3); }
+        .header-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
         /* Search */
         .search-bar {
@@ -341,7 +342,10 @@
                 <h1 data-page-node-id="7MdaxH7XPJdoBN0bs2xklG">📋 埋点命名规范</h1>
                 <div class="subtitle" data-page-node-id="RCqdLwA6cHXbDpTrzeYtGi">跨项目统一标准 | 基础字段 + 事件模板 + 属性命名<span class="contact-hint">· 如有问题 @Nicholas</span></div>
             </div>
-            <a class="back-btn" href="index.html" data-page-node-id="r7pJJvmpjW5f7l1Rfw3law">&larr; 返回看板总览</a>
+            <div class="header-actions">
+                <a class="back-btn" href="changelog.html">📝 更新记录</a>
+                <a class="back-btn" href="index.html" data-page-node-id="r7pJJvmpjW5f7l1Rfw3law">&larr; 返回看板总览</a>
+            </div>
         </div>
 
         <!-- Search -->
@@ -643,6 +647,7 @@
     <div class="toc-fab" id="tocFab">
         <div class="toc-panel" id="tocPanel">
             <div class="toc-title">页面目录</div>
+            <a class="toc-link" href="changelog.html">📝 更新记录</a>
             <a class="toc-link toc-back" href="index.html">← 返回看板总览</a>
             <a class="toc-link" href="#sec-events">📐 事件命名规范</a>
             <a class="toc-link" href="#sec-base">🔒 基础字段</a>
