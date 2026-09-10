@@ -10,7 +10,6 @@
 | --- | --- |
 | 首页（按上线月份分组） | <https://nyq3316.github.io/databoard/> |
 | 命名规范总览（含 48 个项目命名页跳转） | <https://nyq3316.github.io/databoard/naming_standards> |
-| 命名规范总览（独立版 · Clean URL 历史遗留） | <https://nyq3316.github.io/databoard/naming_standards_standalone.html> |
 
 > GitHub Pages 对 *新增文件* 的 `.html` 直链偶有短暂 404，请优先使用 **Clean URL**（去掉 `.html`），或等待 1–2 分钟刷新。
 
@@ -24,7 +23,7 @@
 | 默认分支 | `main` |
 | Pages 源 | 分支根目录 |
 | 技术栈 | 纯静态 HTML + Chart.js（CDN） |
-| 总文件数 | 99 个 `.html` + `index.html` + 2 个命名规范页 + `README.md` |
+| 总文件数 | 99 个 `.html` + `index.html` + 1 个命名规范页 + `README.md` |
 | 当前看板数量 | 49 |
 | 当前命名页数量 | 49 |
 
@@ -35,8 +34,7 @@
 ```text
 databoard/
 ├── index.html                          # 首页（卡片网格 · 按上线月份分组）
-├── naming_standards.html               # 命名规范总览（新版本 · 内嵌 48 个项目入口）
-├── naming_standards_standalone.html   # 命名规范总览（独立版 · 历史遗留入口）
+├── naming_standards.html               # 命名规范总览（唯一入口 · 内嵌 48 个项目入口）
 ├── README.md                           # 本文件
 ├── .nojekyll                           # 跳过 Jekyll 直接由 Pages 服务静态文件
 │
