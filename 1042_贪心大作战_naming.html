@@ -18,13 +18,6 @@
         }
         .header h1 { font-size: 26px; margin-bottom: 6px; }
         .header .subtitle { opacity: 0.85; font-size: 14px; }
-        .back-btn {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 10px 20px; background: rgba(255,255,255,0.2);
-            color: white; text-decoration: none; border-radius: 8px;
-            font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap;
-        }
-        .back-btn:hover { background: rgba(255,255,255,0.3); }
         .info-bar {
             background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.06); display: flex; gap: 32px; flex-wrap: wrap;
@@ -106,10 +99,6 @@
             .header { background: linear-gradient(135deg, #932b2b 0%, #295283 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
             .header h1, .header h2, .header h3, .header .subtitle, .header .meta,
             .header p, .header div, .header span { color: #f1f5f9; }
-            .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
-            .back-btn:hover { background: rgba(255,255,255,0.22); }
-            .back-link { color: #60a5fa; }
-            .back-link:hover { color: #93c5fd; }
 
             /* 卡片 / 区块 */
             .event-section, .event-block, .info-bar, .legend, .note-box {
@@ -199,11 +188,18 @@
         }
         @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
         @media print { .toc-fab { display: none; } }
+    
+        .back-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap; }
+        .back-btn:hover { background: rgba(255,255,255,0.3); }
+    
+        @media (prefers-color-scheme: dark) {
+            .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
+            .back-btn:hover { background: rgba(255,255,255,0.22); }
+        }
     </style>
 </head>
 <body>
 <div class="container">
-
     <!-- Header -->
     <div class="header">
         <div>
@@ -219,14 +215,6 @@
         <div><strong>大模式：</strong>小游戏模式 / 竞技模式</div>
         <div><strong>支持人数：</strong>1~2人</div>
         <div><strong>核心指标：</strong>完美达成率、贪心比例</div>
-    </div>
-
-    <!-- Legend -->
-    <div class="legend">
-        <div class="tag"><span class="dot dot-common"></span> 通用属性（跨项目复用）</div>
-        <div class="tag"><span class="dot dot-project"></span> 项目特有属性</div>
-        <div class="tag"><span class="tag-badge">✅ 必含</span> 所有项目必须上报</div>
-        <div class="tag"><span class="tag-badge tag-optional">⚪ 可选</span> 按项目品类选用</div>
     </div>
 
     <!-- Note -->
