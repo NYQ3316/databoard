@@ -147,6 +147,19 @@
             <article class="entry">
                 <div class="entry-head">
                     <span class="entry-date">2026-09-14</span>
+                    <span class="entry-tag">字段规范</span>
+                </div>
+                <ul class="entry-list">
+                    <li><code>session_id</code> 全站统一：说明改为「<strong>本地生成 UUID v4（带横杠，36 字符）；单局session_id保持一致</strong>」，示例由 <code>s_987654321</code> 改为 <code>853b054e-1f29-4810-91d0-857471542101</code>。此前各页写法不一，包括「单次启动唯一标识」「单次对局唯一标识」「单次比赛唯一标识」「单次训练唯一标识」「与 enter_game 同一 session」等十余种。</li>
+                    <li>覆盖范围：42 个项目命名页 + <code>naming_standards.html</code> 共 43 个文件、<strong>214 处</strong>字段行；<code>session_id</code> 字段行数保持不变（214），仅改说明与示例。</li>
+                    <li><code>1011_凯斯节奏</code> 字段调整，该页字段行 49 → 45：删除首个事件中重复的 <code>song_id</code>、第五个事件中的 <code>mini_game_id</code>，以及第二个事件中的 <code>user_info.star_rating</code> 与 <code>user_info.combo_max</code>；<code>user_info</code> 说明精简为「每个对象以 user_id（文本）标识参与角色，并包含该角色本局总得分 score」，示例同步由含 score / star_rating / combo_max 的对象数组改为仅含 <code>user_id</code> 与 <code>score</code>；<code>user_info.score</code> 名称「本局得分」→「总得分」、说明改为「本局总得分（按角色分别统计）」；第六个事件的 <code>mini_game_id</code> 更名为 <code>song_id</code>，说明「当前所选曲目编号」→「曲目对应的歌曲标识（数字型文本）」，示例「曲目03」→「003」。</li>
+                    <li>本轮<strong>未改动 timestamp 字段</strong>（timestamp 行 0 变化，ISO8601 说明 217 处保持不变）。全站 <code>&lt;tr&gt;</code> 1825→1821、<code>&lt;td&gt;</code> 9393→9369、<code>field-name</code> 1544→1540，对应 1011 删除的 4 个字段行；<code>&lt;h2&gt;</code> 102、<code>event-block</code> 107 不变。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-09-14</span>
                     <span class="entry-tag">字段说明</span>
                 </div>
                 <ul class="entry-list">
