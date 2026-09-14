@@ -151,9 +151,9 @@
                 </div>
                 <ul class="entry-list">
                     <li>统一时间戳字段说明：<code>timestamp</code> 的说明由「事件发生时间（Unix毫秒）」改为「<strong>事件发生时间（ISO8601，含时区+08:00）</strong>」，与示例值 <code>2026-05-26T09:35:00+08:00</code> 的格式保持一致（此前说明与示例相互矛盾）。</li>
-                    <li>覆盖范围：42 个项目命名页 + <code>naming_standards.html</code> 共 43 个文件，合计 <strong>215 处</strong>文案替换（+215 / -215 行）。</li>
+                    <li>覆盖范围：42 个项目命名页 + <code>naming_standards.html</code> 共 43 个文件，合计 <strong>218 处</strong>文案替换（+218 / -218 行）。</li>
                     <li>仅改动说明文案，字段与事件结构未变（<code>&lt;tr&gt;</code> 1825、<code>&lt;td&gt;</code> 9393、<code>&lt;h2&gt;</code> 102、<code>field-name</code> 1544、<code>event-block</code> 107 与改动前完全一致）。</li>
-                    <li>另有 3 处<strong>非 <code>timestamp</code> 字段</strong>仍写「Unix毫秒」，源目录未改动故保持原样：<code>1027_冠军乒乓球</code> 的「开始时间戳」「完成时间戳」、<code>1071_太空沙狐球</code> 的「本回合完成时间」。</li>
+                    <li>另有 3 处<strong>非 <code>timestamp</code> 字段</strong>同样存在「说明写 Unix毫秒、示例却为 ISO8601」的矛盾，本次一并修正：<code>1027_冠军乒乓球</code> 的「开始时间戳」「完成时间戳」、<code>1071_太空沙狐球</code> 的「本回合完成时间」——说明统一改为「ISO8601，含时区+08:00」，与各自示例（如 <code>2026-09-26T10:00:00+08:00</code>、<code>2026-05-26T09:36:30+08:00</code>）一致。至此全部 <code>*_naming.html</code> 中已无「Unix毫秒」残留。</li>
                 </ul>
             </article>
 
