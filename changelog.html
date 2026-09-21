@@ -147,6 +147,20 @@
             <article class="entry">
                 <div class="entry-head">
                     <span class="entry-date">2026-09-21</span>
+                    <span class="entry-tag">字段修订</span>
+                </div>
+                <ul class="entry-list">
+                    <li><code>1018_镜之修行</code> 第二轮修订：<code>mini_game_start</code> / <code>mini_game_end</code> 事件名由「体式开始 / 体式结束」改为<strong>「课程开始 / 课程结束」</strong>，事件描述同步改为「一次课程训练单元开始（完成）时触发」，关联说明改为「如需关联具体内容，通过 <code>session_id</code> 关联 <code>mini_game_start</code>」。</li>
+                    <li>两个事件中的 <code>game_type</code> 不再固定为「0=动作教学（体式）」，改为<strong>四模式取值</strong> <code>0=动作教学 / 1=课程挑战 / 2=呼吸引导 / 3=修行之路</code>；<code>score</code> 名称与说明由「体式得分 / 本次体式训练总得分」改为<strong>「课程得分 / 本次课程训练总得分」</strong>。</li>
+                    <li>通用字段按新模式改名：<code>meditation_type</code> 冥想类型ID → <strong>呼吸引导类型ID</strong>、<code>background_id</code> 冥想背景ID → <strong>呼吸引导背景ID</strong>、<code>audio_id</code> 冥想音频ID → <strong>呼吸引导音频ID</strong>（说明均为 <code>game_type=2</code> 时有效）；页面已无「冥想」「体式」文案残留。</li>
+                    <li><code>category</code>（分类 0=普拉提 / 1=瑜伽）<strong>从 <code>enter_game</code> 移除</strong>，仅保留在 <code>mini_game_start</code> 上报；<code>act_id</code>、<code>body_part</code> 说明补充「<code>game_type=0</code> 动作教学时上报」。</li>
+                    <li>字段总数 48 → 47（<code>&lt;tr&gt;</code> 54 → 53）；看板 <code>1018_镜之修行_analytics_dashboard.html</code> 本轮仍<strong>未改动</strong>。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-09-21</span>
                     <span class="entry-tag">字段更新</span>
                 </div>
                 <ul class="entry-list">
