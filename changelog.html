@@ -147,6 +147,21 @@
             <article class="entry">
                 <div class="entry-head">
                     <span class="entry-date">2026-09-21</span>
+                    <span class="entry-tag">字段更新</span>
+                </div>
+                <ul class="entry-list">
+                    <li><code>1018_镜之修行</code> 命名页按四模式重构：训练模式由「串联课程 / 体式 / 冥想」改为<strong>「动作教学 / 课程挑战 / 呼吸引导 / 修行之路」</strong>，<code>game_type</code> 取值由 <code>0/1/2</code> 改为 <code>0=动作教学 / 1=课程挑战 / 2=呼吸引导 / 3=修行之路</code>（6 个事件全部同步）；<code>mini_game_start</code> / <code>mini_game_end</code> 由「固定为 1=体式」改为「固定为 0=动作教学（体式）」。</li>
+                    <li><code>difficulty</code> 由「0=简单 / 1=普通 / 2=困难」改为<strong>「0~4 对应 1~5 星（数字型文本）」</strong>，示例 <code>0</code> → <code>0 / 4</code>；<code>level_id</code> 说明改为「训练内容唯一标识（课程挑战课程 / 呼吸引导课程等）」。</li>
+                    <li>新增 3 个<strong>项目级</strong>字段：<code>category</code>（分类，0=普拉提 / 1=瑜伽，<code>enter_game</code> 与 <code>mini_game_start</code>）、<code>body_part</code>（部位，0=核心 / 1=手臂 / 2=背部 / 3=胸部 / 4=臀部 / 5=腿部 / 6=肩部，<code>mini_game_start</code>）。</li>
+                    <li>事件说明同步：<code>enter_game</code> / <code>end_game</code> 改为四模式表述，<code>mini_game_start</code> / <code>mini_game_end</code> 标注「体式（动作教学）」；<code>score</code> 说明改为「动作教学/课程挑战有效，呼吸引导无」。</li>
+                    <li>字段行 41 → 44（<code>&lt;tr&gt;</code> 51 → 54），页头 meta 改为「四模式：动作教学 / 课程挑战 / 呼吸引导 / 修行之路 · 分类：普拉提 / 瑜伽 · 难度 1~5 星」。</li>
+                    <li>看板 <code>1018_镜之修行_analytics_dashboard.html</code> 本轮<strong>未改动</strong>；首页 1018 卡片「更新于」日期同步为 2026-09-21。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-09-21</span>
                     <span class="entry-tag">新增项目</span>
                 </div>
                 <ul class="entry-list">
