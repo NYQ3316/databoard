@@ -1,6 +1,6 @@
 # databoard · 游戏数据埋点看板与命名规范
 
-> 一个由 49 款体感 / 互动 / 体感健身 / 儿童益智类游戏组成的数据看板与埋点命名规范站点，统一托管在 **GitHub Pages** 上，供内部 PM、数据、研发、QA 共同查阅。
+> 一个由 50 款体感 / 互动 / 体感健身 / 儿童益智类游戏组成的数据看板与埋点命名规范站点，统一托管在 **GitHub Pages** 上，供内部 PM、数据、研发、QA 共同查阅。
 
 ---
 
@@ -9,7 +9,7 @@
 | 入口 | URL |
 | --- | --- |
 | 首页（按上线月份分组） | <https://nyq3316.github.io/databoard/> |
-| 命名规范总览（含 48 个项目命名页跳转） | <https://nyq3316.github.io/databoard/naming_standards> |
+| 命名规范总览（含 49 个项目命名页跳转） | <https://nyq3316.github.io/databoard/naming_standards> |
 
 > GitHub Pages 对 *新增文件* 的 `.html` 直链偶有短暂 404，请优先使用 **Clean URL**（去掉 `.html`），或等待 1–2 分钟刷新。
 
@@ -24,8 +24,8 @@
 | Pages 源 | 分支根目录 |
 | 技术栈 | 纯静态 HTML + Chart.js（CDN） |
 | 总文件数 | 99 个 `.html` + `index.html` + 1 个命名规范页 + `README.md` |
-| 当前看板数量 | 49 |
-| 当前命名页数量 | 49 |
+| 当前看板数量 | 50 |
+| 当前命名页数量 | 50 |
 
 ---
 
@@ -34,7 +34,7 @@
 ```text
 databoard/
 ├── index.html                          # 首页（卡片网格 · 按上线月份分组）
-├── naming_standards.html               # 命名规范总览（唯一入口 · 内嵌 48 个项目入口）
+├── naming_standards.html               # 命名规范总览（唯一入口 · 内嵌 49 个项目入口）
 ├── README.md                           # 本文件
 ├── .nojekyll                           # 跳过 Jekyll 直接由 Pages 服务静态文件
 │
@@ -54,7 +54,7 @@ databoard/
 
 ---
 
-## 看板 & 命名页一览（49 个项目）
+## 看板 & 命名页一览（50 个项目）
 
 | # | 项目 ID | 游戏名 | 看板 | 命名页 |
 | ---: | ---: | --- | :-: | :-: |
@@ -107,6 +107,7 @@ databoard/
 | 47 | 1063 | 墨韵寻诗 | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_naming.html) |
 | 48 | 1068 | 完美定格 | [链接](https://nyq3316.github.io/databoard/1068_完美定格_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1068_完美定格_naming.html) |
 | 49 | 1083 | 决战世界之巅 | [链接](https://nyq3316.github.io/databoard/1083《决战世界之巅》_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1083_决战世界之巅_naming.html) |
+| 50 | 1076 | 养生功法 | [链接](https://nyq3316.github.io/databoard/1076_养生功法_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1076_养生功法_naming.html) |
 
 > 备注：1044 目录下还存在一份历史遗留文件 `1044_小伴龙与动物朋友们_analytics_dashboard.html`，只是无人引用的冗余副本；如需清理可另开 PR 删除。
 

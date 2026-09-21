@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1076《体感养生功法》事件与属性命名</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            padding: 30px 20px;
+            line-height: 1.5;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header {
+            display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+            background: linear-gradient(135deg, #2f8f68 0%, #1e6b4e 100%);
+            border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(47,143,104,0.25);
+        }
+        .header h1 { font-size: 22px; color: #fff; margin-bottom: 6px; }
+        .header .meta { font-size: 13px; color: rgba(255,255,255,0.9); }
+
+        .event-block {
+            background: #fff; border-radius: 12px; padding: 24px 28px;
+            margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .event-title {
+            font-size: 16px; font-weight: 600; color: #1a1a2e;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 2px solid #2f8f68; display: block;
+        }
+        .event-desc {
+            font-size: 13px; color: #666; margin-bottom: 14px;
+            background: #f0f9f4; padding: 10px 14px; border-radius: 8px;
+            border-left: 3px solid #2f8f68;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        colgroup col:first-child { width: 180px; }
+        colgroup col:nth-child(2) { width: 110px; }
+        colgroup col:nth-child(3) { width: 80px; }
+        colgroup col:nth-child(5) { width: 200px; }
+        colgroup col:nth-child(6) { width: 100px; }
+        th {
+            text-align: left; padding: 10px 12px; font-weight: 600; color: #666;
+            border-bottom: 2px solid #e8e8e8; background: #fafafa;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        tr:hover { background: #fafafa; }
+        .field-name {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 12px; color: #0c4a6e; background: #e0f2fe;
+            padding: 2px 8px; border-radius: 4px; font-weight: 500;
+        }
+        .type-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .type-string { background: #e6f7ff; color: #096dd9; }
+        .type-int { background: #f6ffed; color: #389e0d; }
+        .type-float { background: #fff2f0; color: #cf1322; }
+        .type-time { background: #f9f0ff; color: #531dab; }
+        .type-list { background: #fff7e6; color: #d46b08; }
+        .type-bool { background: #e6fffb; color: #006d75; }
+        .type-object { background: #fce7f3; color: #be185d; }
+        .scope-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .scope-required { background: #fff1f0; color: #cf1322; }
+        .scope-common { background: #e6f7ff; color: #096dd9; }
+        .scope-project { background: #dcfce7; color: #166534; }
+        .example { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: #595959; word-break: break-all; }
+        .note-row {
+            background: #fffbeb;
+            font-size: 12px;
+            color: #92400e;
+        }
+        .note-row td { padding: 8px 12px; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 20px; }
+            th, td { padding: 8px; font-size: 12px; }
+        }
+
+        /* ======== 深色主题：深蓝夜空 navy（自动跟随系统深浅色） ======== */
+        html { color-scheme: light dark; }
+        @media (prefers-color-scheme: dark) {
+            body { background: #0b1220; color: #cbd5e1; }
+            .container { color: #cbd5e1; }
+
+            /* 顶栏：品牌色暗化，保留项目辨识度 */
+            .header { background: linear-gradient(135deg, #1d5741 0%, #143f30 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .header h1, .header h2, .header h3, .header .subtitle, .header .meta,
+            .header p, .header div, .header span { color: #f1f5f9; }
+
+            /* 卡片 / 区块 */
+            .event-section, .event-block, .info-bar, .legend, .note-box {
+                background: #131c31; box-shadow: 0 2px 12px rgba(0,0,0,0.45);
+            }
+            .info-bar, .legend { color: #94a3b8; }
+            .info-bar strong, .legend strong { color: #f1f5f9; }
+            .event-header { border-bottom-color: #1e293b; }
+            .event-header .left h2 { color: #f1f5f9; }
+            .event-header .left .ename { color: #93c5fd; background: transparent; }
+            .event-header .left .edesc { color: #94a3b8; }
+            .event-title { color: #f1f5f9; border-bottom-color: #334155; }
+            .event-desc { background: #0f172a; color: #94a3b8; border-left-color: #334155; }
+            .tag-badge { background: rgba(74,222,128,0.15); color: #86efac; }
+            .note-title { color: #f1f5f9; }
+
+            /* 表格 */
+            th { color: #94a3b8; background: #0f172a; border-bottom-color: #1e293b; }
+            td { border-bottom-color: #1e293b; }
+            th, td { border-bottom-color: #1e293b; }
+            tr:hover, tr:hover td { background: #1e293b; }
+            .field-name { color: #93c5fd; background: transparent; }
+            .example { color: #94a3b8; }
+
+            /* 类型 / 范围标签：淡色半透明徽章 + 亮字（不做实色填充） */
+            .type-tag.type-string { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+            .type-tag.type-int { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .type-tag.type-float { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+            .type-tag.type-bool { background: rgba(45,212,191,0.15); color: #5eead4; }
+            .type-tag.type-list { background: rgba(74,222,128,0.15); color: #86efac; }
+            .type-tag.type-object { background: rgba(244,114,182,0.15); color: #f9a8d4; }
+            .type-tag.type-time { background: rgba(251,113,133,0.15); color: #fda4af; }
+            .scope-tag.scope-common { background: rgba(74,222,128,0.15); color: #86efac; }
+            .scope-tag.scope-project { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .scope-tag.scope-required { background: rgba(248,113,113,0.15); color: #fca5a5; }
+            .scope-tag.scope-new { background: rgba(148,163,184,0.18); color: #cbd5e1; }
+            /* 提示行 */
+            .note-row, .note-row td { background: #1e293b; color: #fcd34d; }
+
+            /* 强制覆盖 HTML 内联写死的深色文字 */
+            div[style], p[style], span[style], td[style], th[style],
+            h1[style], h2[style], h3[style], strong[style] { color: #cbd5e1 !important; }
+            .header [style], .event-header [style] { color: #f1f5f9 !important; }
+            .note-row [style], .note-row td[style] { color: #fcd34d !important; }
+        }
+
+        /* ======== 悬浮目录组件 ======== */
+        html { scroll-behavior: smooth; }
+        .event-section, .event-block { scroll-margin-top: 16px; }
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 188px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+        @media (prefers-color-scheme: dark) {
+            .toc-btn { background: #131c31; color: #f1f5f9; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-btn:hover { background: #1e293b; border-color: #60a5fa; }
+            .toc-panel { background: #131c31; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-title { color: #94a3b8; }
+            .toc-link { color: #cbd5e1; }
+            .toc-link:hover { background: #1e293b; }
+            .toc-link.active { color: #93c5fd; border-left-color: #60a5fa; background: #1e293b; }
+            .toc-back { border-bottom-color: #1e293b; }
+        }
+        @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
+        @media print { .toc-fab { display: none; } }
+
+        .back-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap; }
+        .back-btn:hover { background: rgba(255,255,255,0.3); }
+
+        @media (prefers-color-scheme: dark) {
+            .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
+            .back-btn:hover { background: rgba(255,255,255,0.22); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>🧘 1076《体感养生功法》事件与属性命名</h1>
+            <div class="meta">体感养生跟练 · 八段锦 8 式 + 易筋经 12 式 · 完整跟练 / 招式练习 · 1~2 人 · 计划上线 2026.10.14</div>
+        </div>
+        <a class="back-btn" href="naming_standards.html">&larr; 返回命名规范</a>
+    </div>
+
+    <!-- Event 1: enter_game -->
+    <div class="event-block" id="sec-enter-game">
+        <div class="event-title">enter_game（训练课程开始）</div>
+        <div class="event-desc">用户选择一节功法课程（完整跟练或招式练习）并开始训练时上报。用于分析热门模式、热门招式、用户年龄分布和游戏人数。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1076</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（带横杠，36 字符）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>通用 game_type 字段，本项目重定义枚举：0=完整跟练 / 1=招式练习（数字型文本）</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本次训练的玩家人数，1=单人 / 2=双人（数字型文本，复用通用 player_number）</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>user_info 每个对象含 <code>user_id</code>（数值，裸数字）与 <code>age</code>（该角色确切年龄）；双人时每个角色各一条。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（数值，裸数字）与 age（该角色确切年龄）</td><td class="example">[{"user_id":135,"age":52},{"user_id":136,"age":48}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与训练的人脸角色ID，类型为文本（含 user_info 时只在对象组内出现，顶层不重复；JSON 值按平台规范存裸数字，如 135，对齐示例）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.age</span></td><td>年龄</td><td><span class="type-tag type-int">数值</span></td><td>该角色的确切年龄（岁，可求平均；看板年龄段分布由此派生，核心用户 41-60）。本页标准外新建字段（共 2 个）</td><td class="example">52 / 48</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 2: end_game -->
+    <div class="event-block" id="sec-end-game">
+        <div class="event-title">end_game（训练课程结束）</div>
+        <div class="event-desc">一节课程训练完成，进入总结界面时上报。收到此事件即视为完成训练，课程完成率由 enter_game 与 end_game 事件数对比计算；卡路里通过 user_info 对象组按角色上报，课程总得分与各项均值均由各单式（mini_game_end）数据汇总派生，不单独建字段。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1076</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（带横杠，36 字符）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=完整跟练 / 1=招式练习（数字型文本）</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>user_info 每个对象含 <code>user_id</code>（数值，裸数字）与 <code>calories</code>（该角色卡路里消耗）；双人时每个角色各一条。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（数值，裸数字）与 calories（卡路里消耗）</td><td class="example">[{"user_id":135,"calories":78},{"user_id":136,"calories":71}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与训练的人脸角色ID，类型为文本（含 user_info 时只在对象组内出现，顶层不重复；JSON 值按平台规范存裸数字，如 135，对齐示例）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.calories</span></td><td>卡路里消耗</td><td><span class="type-tag type-int">数值</span></td><td>该角色本次训练消耗的卡路里（kcal，可求平均），复用通用 calories 字段</td><td class="example">78 / 71</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 3: pause_game -->
+    <div class="event-block" id="sec-pause-game">
+        <div class="event-title">pause_game（游戏暂停）</div>
+        <div class="event-desc">玩家在课程训练中触发暂停时上报（无 user_info，沿用顶层 user_id 列表）。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1076</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（带横杠，36 字符）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=完整跟练 / 1=招式练习（数字型文本）</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1=单人 / 2=双人（数字型文本）</td><td class="example">2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 4: continue_game -->
+    <div class="event-block" id="sec-continue-game">
+        <div class="event-title">continue_game（回到游戏）</div>
+        <div class="event-desc">玩家从暂停状态恢复训练时上报（无 user_info，沿用顶层 user_id 列表）。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1076</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（带横杠，36 字符）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=完整跟练 / 1=招式练习（数字型文本）</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>1=单人 / 2=双人（数字型文本）</td><td class="example">2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 5: mini_game_start -->
+    <div class="event-block" id="sec-mini-game-start">
+        <div class="event-title">mini_game_start（单式开始）</div>
+        <div class="event-desc">单式跟练开始时上报——完整跟练中每一式开始、或招式练习选定单式开始时（每个招式都会触发）。与 mini_game_end 按事件数对比即可计算每式完成率；round_count 记录该式在课程中的序号，用于统计用户结束位置（练习模式恒为 1）。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1076</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（带横杠，36 字符）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=完整跟练 / 1=招式练习（数字型文本）</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">mini_game_id</span></td><td>招式ID</td><td><span class="type-tag type-string">文本</span></td><td>通用 mini_game_id 字段，本项目承载招式标识（数字型文本），编码段：11~18=八段锦第一~八式 / 21~32=易筋经第一~十二式（功法由编码段派生）</td><td class="example">11 / 21~32</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">round_count</span></td><td>招式序号</td><td><span class="type-tag type-string">文本</span></td><td>当前为课程中的第几个招式（数字型文本，复用通用 round_count「当前轮次」语义）：完整跟练中按式序递增（八段锦 1~8 / 易筋经 1~12），用于统计用户结束位置；招式练习固定为 1</td><td class="example">1 / 2 / 3…</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Event 6: mini_game_end -->
+    <div class="event-block" id="sec-mini-game-end">
+        <div class="event-title">mini_game_end（单式结束）</div>
+        <div class="event-desc">单式跟练结束时上报——该式全部判定完成即触发。招式完成率由 mini_game_start 与 mini_game_end 事件数对比计算（按 mini_game_id 分组）；单式得分（即动作准确度口径）与节奏同步度通过 user_info 对象组按角色上报，双人共练时每式两条（逐角色）。</div>
+        <table>
+            <colgroup><col><col><col><col><col><col></colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1076</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（带横杠，36 字符）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=完整跟练 / 1=招式练习（数字型文本）</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">mini_game_id</span></td><td>招式ID</td><td><span class="type-tag type-string">文本</span></td><td>招式标识（数字型文本），编码同 mini_game_start：11~18=八段锦第一~八式 / 21~32=易筋经第一~十二式</td><td class="example">18</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">round_count</span></td><td>招式序号</td><td><span class="type-tag type-string">文本</span></td><td>当前为课程中的第几个招式（数字型文本，复用通用 round_count「当前轮次」语义）：完整跟练中按式序递增（八段锦 1~8 / 易筋经 1~12），与 mini_game_start 的 round_count 对应，用于统计用户结束位置；招式练习固定为 1</td><td class="example">1 / 2 / 3…</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>user_info 每个对象含 <code>user_id</code>（数值，裸数字）、<code>mini_game_score</code>（该角色本式单式得分，即动作准确度口径）与 <code>rhythm_level</code>（节奏同步度，标准外新建）；双人共练时每式两条（逐角色）。
+                    </td>
+                </tr>
+                <tr><td><span class="field-name">user_info</span></td><td>各角色单式数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（数值，裸数字）、mini_game_score（单式得分）与 rhythm_level（节奏同步度）</td><td class="example">[{"user_id":135,"mini_game_score":88,"rhythm_level":0},{"user_id":136,"mini_game_score":81,"rhythm_level":1}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与训练的人脸角色ID，类型为文本（含 user_info 时只在对象组内出现，顶层不重复；JSON 值按平台规范存裸数字，如 135，对齐示例）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.mini_game_score</span></td><td>单式得分</td><td><span class="type-tag type-int">数值</span></td><td>该角色本式单式得分（动作完成度 50% + 节奏匹配度 25% + 姿态稳定性 15% + 连贯度 10%，0~100 可求平均，即动作准确度口径），复用通用 mini_game_score 字段</td><td class="example">88 / 81</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_info.rhythm_level</span></td><td>节奏同步度</td><td><span class="type-tag type-string">文本</span></td><td>该角色本式节奏同步评价（数字型文本）：0=节奏良好 / 1=基本跟上 / 2=节奏稍快 / 3=节奏稍慢 / 4=未跟上。本页标准外新建字段（共 2 个）</td><td class="example">0 / 1 / 2 / 3 / 4</td><td><span class="scope-tag scope-project">项目</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="text-align:center;color:#999;font-size:13px;padding:20px 0;">
+        1076《体感养生功法》| 项目埋点规范 | 对齐跨项目统一标准（naming_standards.html）
+    </div>
+</div>
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="naming_standards.html">← 返回命名规范</a>
+            <a class="toc-link" href="#sec-enter-game">enter_game</a>
+            <a class="toc-link" href="#sec-end-game">end_game</a>
+            <a class="toc-link" href="#sec-pause-game">pause_game</a>
+            <a class="toc-link" href="#sec-continue-game">continue_game</a>
+            <a class="toc-link" href="#sec-mini-game-start">mini_game_start</a>
+            <a class="toc-link" href="#sec-mini-game-end">mini_game_end</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        // 只把 # 锚点链接纳入滚动高亮；返回链接是外链，跳过
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+        var KEY = 'ns1076_toc_open';
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+
+        function setActive(i) {
+            anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); });
+        }
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '\u2715' : '\u2630';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+        anchors.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActive(i);
+                lock = i; clearTimeout(lockTimer);
+                lockTimer = setTimeout(function () { lock = -1; spy(); }, 700);
+            });
+        });
+
+        ['wheel', 'touchstart'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+                if (lock !== -1) { lock = -1; clearTimeout(lockTimer); spy(); }
+            }, { passive: true });
+        });
+
+        var lock = -1, lockTimer = null;
+        function spy() {
+            if (lock !== -1) return;
+            var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+            var cur = -1, lastVisible = -1;
+            targets.forEach(function (t, i) {
+                if (!t || t.offsetParent === null) return;
+                lastVisible = i;
+                if (t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1) cur = 0;
+            if (atBottom && lastVisible !== -1) cur = lastVisible;
+            setActive(cur);
+        }
+
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+        apply(); spy();
+    })();
+    </script>
+
+</body>
+</html>

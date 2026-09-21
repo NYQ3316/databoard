@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1076《体感养生功法》数据埋点统计看板</title>
+    <!-- 本地 Chart.js（离线可用，不走 CDN） -->
+    <script src="chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            /* 中式水墨绿夜色底：宁静静养氛围，与产品"舒缓/低饱和"美术定位一致 */
+            background: linear-gradient(135deg, #16281f 0%, #0b1712 100%);
+            color: #e6efe9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            text-align: center; margin-bottom: 24px;
+            padding: 20px; background: rgba(255,255,255,0.05);
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .header h1 {
+            font-size: 2em; margin-bottom: 8px;
+            background: linear-gradient(90deg, #7fc8a9, #d9b36c);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .header .subtitle { color: #9fb3a8; font-size: 14px; }
+        .back-btn {
+            display: inline-block; margin-top: 12px; padding: 6px 16px;
+            background: rgba(127,200,169,0.15); color: #7fc8a9;
+            text-decoration: none; border-radius: 6px; font-size: 13px;
+            border: 1px solid rgba(127,200,169,0.3);
+        }
+        .back-btn:hover { background: rgba(127,200,169,0.25); }
+
+        /* 核心指标卡片 */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px; margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.06); border-radius: 10px;
+            padding: 18px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .stat-label { font-size: 13px; color: #9fb3a8; margin-bottom: 6px; }
+        .stat-value { font-size: 28px; font-weight: 700; color: #7fc8a9; }
+        .stat-unit { font-size: 13px; color: #7d8f85; margin-left: 2px; }
+
+        .section {
+            background: rgba(255,255,255,0.05); border-radius: 12px;
+            padding: 20px; margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section-title {
+            font-size: 16px; font-weight: 600; color: #7fc8a9;
+            margin-bottom: 8px; padding-bottom: 8px;
+            border-bottom: 2px solid rgba(127,200,169,0.3);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+        }
+        /* 图表容器：固定高度（防止 responsive 重绘死循环），所有图表 options 必须配 responsive:true + maintainAspectRatio:false */
+        .chart-container { position: relative; height: 320px; }
+        /* 全量 20 式榜单专用更高的固定高度（仍为固定值，规避重绘死循环） */
+        .chart-container.tall { height: 640px; }
+        .chart-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .chart-row { grid-template-columns: 1fr; }
+        }
+
+        /* Tab 切换按钮（模式/功法、趋势/构成） */
+        .age-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+        .age-tab {
+            padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 500;
+            background: rgba(255,255,255,0.06); color: #9fb3a8;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; transition: all 0.2s; user-select: none;
+        }
+        .age-tab:hover { background: rgba(255,255,255,0.12); color: #e6efe9; }
+        .age-tab.active { background: rgba(127,200,169,0.2); color: #7fc8a9; border-color: rgba(127,200,169,0.4); }
+
+        /* 图表下方的小图例（色点 + 文案，纯文字着色，不用色块徽章） */
+        .tier-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: #9fb3a8; margin-bottom: 10px; }
+        .tier-legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+        /* Chart 加载失败兜底提示 */
+        .chart-fallback { display: flex; align-items: center; justify-content: center; height: 100%; color: #7d8f85; font-size: 13px; }
+
+        .footer { text-align: center; margin-top: 30px; padding: 16px; color: #6d8076; font-size: 12px; line-height: 1.8; }
+
+        /* 招式明细表 */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { text-align: left; padding: 12px 14px; font-weight: 600; color: #7fc8a9; border-bottom: 2px solid rgba(127,200,169,0.3); white-space: nowrap; }
+        td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: #e6efe9; }
+        tr:hover { background: rgba(127,200,169,0.05); }
+
+        .rank { display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 6px; font-weight: 700; font-size: 13px; }
+        .rank-1 { background: #7fc8a9; color: #10231a; }
+        .rank-2 { background: #d9b36c; color: #10231a; }
+        .rank-3 { background: #b08d4f; color: #fff; }
+        .rank-other { background: rgba(255,255,255,0.1); color: #9fb3a8; }
+
+        .bar-wrap { display: flex; align-items: center; gap: 8px; }
+        .bar { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+        .bar-fill { height: 100%; background: #7fc8a9; border-radius: 4px; }
+        .bar-val { font-size: 12px; color: #9fb3a8; min-width: 40px; text-align: right; }
+        .gong-tag { font-size: 12px; color: #9fb3a8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧘 1076《体感养生功法》数据埋点统计看板</h1>
+            <p class="subtitle">埋点偏向：热门模式 · 热门学习招式 · 低准确度招式Top10 · 低节奏同步招式Top10 · 游戏人数 · 用户年龄分布 ｜ 支持人数：1~2人 ｜ 计划上线：2026.10.14</p>
+            <a class="back-btn" href="index.html">&larr; 返回汇总看板</a>
+        </div>
+
+        <!-- 核心指标（数据来源：训练课程开始 / 单节课程结束 两个事件聚合） -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">累计训练人次</div>
+                <div class="stat-value">18,470<span class="stat-unit">次</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">训练用户数</div>
+                <div class="stat-value">2,140<span class="stat-unit">人</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">平均动作准确度</div>
+                <div class="stat-value">74.3<span class="stat-unit">分</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">节奏同步达标率</div>
+                <div class="stat-value">76.4<span class="stat-unit">%</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">场均卡路里</div>
+                <div class="stat-value">82<span class="stat-unit">kcal</span></div>
+            </div>
+        </div>
+
+        <!-- 图表行1：热门模式（模式/功法切换） + 热门学习招式Top10 -->
+        <div class="chart-row">
+            <div class="section">
+                <div class="section-title"><span>🔥 热门模式（按训练人次）</span></div>
+                <div class="age-tabs" id="modeTabs">
+                    <span class="age-tab active" data-view="mode">按模式</span>
+                    <span class="age-tab" data-view="gong">按功法</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="modeChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title"><span>🥋 热门学习招式 Top10（按训练人次）</span></div>
+                <div class="chart-container">
+                    <canvas id="topMovesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表行2：低准确度招式Top10（按四档着色） + 低节奏同步招式Top10（五档堆叠） -->
+        <div class="chart-row">
+            <div class="section">
+                <div class="section-title"><span>📉 全量招式准确度（20式 · 平均准确度升序，最低在前）</span></div>
+                <div class="tier-legend">
+                    <span><span class="dot" style="background:#3fa760"></span>动作到位 90-100</span>
+                    <span><span class="dot" style="background:#7fc8a9"></span>动作良好 70-89</span>
+                    <span><span class="dot" style="background:#e8b04b"></span>动作完成 50-69</span>
+                    <span><span class="dot" style="background:#e07b6a"></span>多加练习 &lt;50</span>
+                </div>
+                <div class="chart-container tall">
+                    <canvas id="allAccChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title"><span>⏱️ 全量招式节奏同步度（20式 · 达标率升序，最低在前）</span></div>
+                <div class="tier-legend">
+                    <span><span class="dot" style="background:#3fa760"></span>节奏良好</span>
+                    <span><span class="dot" style="background:#7fc8a9"></span>基本跟上</span>
+                    <span><span class="dot" style="background:#e8b04b"></span>节奏稍快</span>
+                    <span><span class="dot" style="background:#d9b36c"></span>节奏稍慢</span>
+                    <span><span class="dot" style="background:#e07b6a"></span>未跟上</span>
+                </div>
+                <div class="chart-container tall">
+                    <canvas id="allSyncChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表行3：游戏人数（趋势/单双构成切换） + 用户年龄分布 -->
+        <div class="chart-row">
+            <div class="section">
+                <div class="section-title"><span>👥 游戏人数</span></div>
+                <div class="age-tabs" id="playerTabs">
+                    <span class="age-tab active" data-view="trend">近14天训练人次</span>
+                    <span class="age-tab" data-view="split">单双人数构成</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="playerChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title"><span>🎂 用户年龄分布（按训练人次）</span></div>
+                <div class="chart-container">
+                    <canvas id="ageChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 功法详情（两套功法聚合指标，由 20 式数据加权计算） -->
+        <div class="section">
+            <div class="section-title"><span>🧘 功法详情（按功法聚合）</span></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>功法</th>
+                        <th>招式数</th>
+                        <th>训练人次</th>
+                        <th>占比</th>
+                        <th>平均动作准确度</th>
+                        <th>节奏达标率</th>
+                        <th>平均完成率</th>
+                        <th>场均卡路里</th>
+                    </tr>
+                </thead>
+                <tbody id="gongTable"></tbody>
+            </table>
+        </div>
+
+        <!-- 招式明细表（全量20式，按训练人次排名） -->
+        <div class="section">
+            <div class="section-title"><span>📋 招式明细数据（全量 20 式，按训练人次排名）</span></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>招式</th>
+                        <th>所属功法</th>
+                        <th>训练人次</th>
+                        <th>占比</th>
+                        <th>平均动作准确度</th>
+                        <th>节奏达标率</th>
+                        <th>招式完成率</th>
+                    </tr>
+                </thead>
+                <tbody id="moveTable"></tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>1076《体感养生功法》数据看板 ｜ 核心事件：训练课程开始 / 单节课程结束</p>
+            <p>动作准确度四档：动作到位 90-100 ｜ 动作良好 70-89 ｜ 动作完成 50-69 ｜ 多加练习 &lt;50　·　节奏同步度五档：节奏良好 / 基本跟上 / 节奏稍快 / 节奏稍慢 / 未跟上</p>
+            <p>示例数据，待接入真实数据 ｜ 节奏达标率 = 节奏良好 + 基本跟上</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== Chart.js 加载失败兜底：图表区显示降级提示，明细表照常渲染 =====
+        if (typeof Chart === 'undefined') {
+            document.querySelectorAll('.chart-container').forEach(function (c) {
+                c.innerHTML = '<div class="chart-fallback">图表组件加载失败：未找到 chart.umd.min.js</div>';
+            });
+        } else {
+
+        Chart.defaults.color = '#9fb3a8';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.08)';
+
+        // ===== 品牌色板（中式水墨绿） =====
+        var C = {
+            primary: '#7fc8a9',  // 竹青（主强调）
+            deep:    '#3fa760',  // 深绿
+            gold:    '#d9b36c',  // 宣纸金
+            amber:   '#e8b04b',  // 琥珀
+            red:     '#e07b6a',  // 陶红
+            muted:   '#4e6e5e'   // 次级墨绿灰
+        };
+        var gridColor = 'rgba(255,255,255,0.08)';
+
+        // ===== 动作准确度四档（边界按策划口径：到位含90、良好含70、完成含50） =====
+        function accTier(acc) {
+            if (acc >= 90) return { name: '动作到位', color: C.deep };
+            if (acc >= 70) return { name: '动作良好', color: C.primary };
+            if (acc >= 50) return { name: '动作完成', color: C.amber };
+            return { name: '多加练习', color: C.red };
+        }
+
+        // ===== 节奏同步度五档 =====
+        var rhythmCats   = ['节奏良好', '基本跟上', '节奏稍快', '节奏稍慢', '未跟上'];
+        var rhythmColors = [C.deep, C.primary, C.amber, C.gold, C.red];
+        // 节奏达标率 = 良好 + 基本跟上
+        function syncOk(m) { return m.rhythm[0] + m.rhythm[1]; }
+
+        // ===== 招式数据（示例数据，待接入真实数据） =====
+        // rhythm 数组顺序：[节奏良好, 基本跟上, 节奏稍快, 节奏稍慢, 未跟上]，每行合计 100
+        // comp = 招式完成率（%）：该招式按要求次数完成练习的场次占比
+        var moves = [
+            // —— 八段锦（8式）——
+            { name: '两手托天理三焦', gong: '八段锦', visits: 1860, acc: 88.2, comp: 94.6, rhythm: [58, 31.5, 6, 3, 1.5] },
+            { name: '左右开弓似射雕', gong: '八段锦', visits: 1620, acc: 82.6, comp: 91.2, rhythm: [50, 34.1, 8, 5, 2.9] },
+            { name: '调理脾胃须单举', gong: '八段锦', visits: 1480, acc: 79.8, comp: 92.8, rhythm: [47, 35.5, 9, 5.5, 3] },
+            { name: '摇头摆尾去心火', gong: '八段锦', visits: 1380, acc: 61.5, comp: 78.4, rhythm: [26, 37.2, 14, 15.6, 7.2] },
+            { name: '五劳七伤往后瞧', gong: '八段锦', visits: 1210, acc: 74.3, comp: 88.9, rhythm: [40, 36.8, 12, 7, 4.2] },
+            { name: '两手攀足固肾腰', gong: '八段锦', visits: 1150, acc: 58.4, comp: 76.5, rhythm: [24, 36.7, 10, 21.3, 8] },
+            { name: '背后七颠百病消', gong: '八段锦', visits: 1070, acc: 91.3, comp: 97.2, rhythm: [63, 29.6, 4, 2.4, 1] },
+            { name: '攥拳怒目增气力', gong: '八段锦', visits: 990,  acc: 83.7, comp: 93.4, rhythm: [52, 33.4, 7, 5, 2.6] },
+            // —— 易筋经（12式）——
+            { name: '韦驮献杵第一式', gong: '易筋经', visits: 860, acc: 89.4, comp: 96.8, rhythm: [60, 30.2, 5, 3, 1.8] },
+            { name: '出爪亮翅势',     gong: '易筋经', visits: 810, acc: 80.6, comp: 92.1, rhythm: [49, 34.8, 7.8, 5, 3.4] },
+            { name: '韦驮献杵第二式', gong: '易筋经', visits: 780, acc: 85.1, comp: 94.3, rhythm: [53, 33.7, 6, 4.5, 2.8] },
+            { name: '韦驮献杵第三式', gong: '易筋经', visits: 720, acc: 76.9, comp: 87.6, rhythm: [42, 36.3, 9, 8, 4.7] },
+            { name: '摘星换斗势',     gong: '易筋经', visits: 690, acc: 66.8, comp: 81.7, rhythm: [30, 38.4, 11, 13.4, 7.2] },
+            { name: '倒拽九牛尾势',   gong: '易筋经', visits: 640, acc: 63.2, comp: 79.8, rhythm: [28, 37.9, 13, 13.1, 8] },
+            { name: '三盘落地势',     gong: '易筋经', visits: 600, acc: 68.5, comp: 84.5, rhythm: [31, 39.2, 10, 12.6, 7.2] },
+            { name: '青龙探爪势',     gong: '易筋经', visits: 580, acc: 62.4, comp: 82.3, rhythm: [26, 38.8, 12.6, 14.2, 8.4] },
+            { name: '九鬼拔马刀势',   gong: '易筋经', visits: 560, acc: 54.7, comp: 72.9, rhythm: [22, 35.1, 12, 19.8, 11.1] },
+            { name: '卧虎扑食势',     gong: '易筋经', visits: 520, acc: 46.8, comp: 68.3, rhythm: [18, 34.3, 13.4, 21, 13.3] },
+            { name: '打躬势',         gong: '易筋经', visits: 490, acc: 56.8, comp: 77.1, rhythm: [23, 36.5, 9.6, 19.4, 11.5] },
+            { name: '掉尾势',         gong: '易筋经', visits: 460, acc: 48.9, comp: 70.6, rhythm: [20, 35.6, 11, 21.4, 12] }
+        ];
+        var totalVisits = moves.reduce(function (a, b) { return a + b.visits; }, 0);
+
+        // ===== 榜单数据（数组顺序 = 图表自上而下的显示顺序） =====
+        var top10Moves = moves.slice().sort(function (a, b) { return b.visits - a.visits; }).slice(0, 10);  // 热门招式：人次降序 Top10
+        var allByAcc  = moves.slice().sort(function (a, b) { return a.acc - b.acc; });                      // 全量招式准确度：升序（最低在最上）
+        var allBySync = moves.slice().sort(function (a, b) { return syncOk(a) - syncOk(b); });              // 全量招式节奏同步度：达标率升序（最低在最上）
+
+        // ===== 图表实例登记表：Tab 切换用 destroy + 重建，天然规避引用残留 =====
+        var chartInstances = {};
+
+        // 通用：创建前先销毁旧实例
+        function destroyIfExist(key) {
+            if (chartInstances[key]) { chartInstances[key].destroy(); delete chartInstances[key]; }
+        }
+        // 通用：Tab 切换绑定（每个容器只绑一次监听，切换回调内部自带防御）
+        function bindTabs(tabsId, onSwitch) {
+            var tabs = document.getElementById(tabsId);
+            if (!tabs) return;
+            tabs.addEventListener('click', function (e) {
+                var btn = e.target.closest('.age-tab');
+                if (!btn || btn.classList.contains('active')) return;
+                tabs.querySelectorAll('.age-tab').forEach(function (t) { t.classList.remove('active'); });
+                btn.classList.add('active');
+                try { onSwitch(btn.dataset.view); } catch (err) { console.error(tabsId + ' 切换失败：', err); }
+            });
+        }
+
+        // ===== 1. 热门模式（按模式 / 按功法 切换） =====
+        var modeViews = {
+            // 模式维度：完整跟练（单人镜像 / 双人共练）与招式练习，各含 1~2 人局
+            mode: { labels: ['完整跟练·单人', '完整跟练·双人', '招式练习·单人', '招式练习·双人'], data: [7350, 2680, 6540, 1900] },
+            // 功法维度：八段锦 / 易筋经
+            gong: { labels: ['八段锦（8式）', '易筋经（12式）'], data: [10760, 7710] }
+        };
+        function renderModeChart(view) {
+            destroyIfExist('modeChart');
+            var v = modeViews[view];
+            chartInstances['modeChart'] = new Chart(document.getElementById('modeChart'), {
+                type: 'bar',
+                data: {
+                    labels: v.labels,
+                    datasets: [{
+                        label: '训练人次',
+                        data: v.data,
+                        // 训练人次最高的一组用主强调色，其余降为次级墨绿
+                        backgroundColor: v.data.map(function (x, i) { return i === v.data.indexOf(Math.max.apply(null, v.data)) ? C.primary : C.muted; }),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: '训练人次' }, grid: { color: gridColor } }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        // ===== 2. 热门学习招式 Top10（横向条形，训练人次降序） =====
+        function renderTopMovesChart() {
+            destroyIfExist('topMovesChart');
+            chartInstances['topMovesChart'] = new Chart(document.getElementById('topMovesChart'), {
+                type: 'bar',
+                data: {
+                    labels: top10Moves.map(function (m) { return m.name; }),
+                    datasets: [{
+                        label: '训练人次',
+                        data: top10Moves.map(function (m) { return m.visits; }),
+                        backgroundColor: top10Moves.map(function (_, i) { return i < 3 ? C.primary : C.muted; }),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { beginAtZero: true, title: { display: true, text: '训练人次' }, grid: { color: gridColor } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // ===== 3. 全量招式准确度（横向条形，20式准确度升序，按四档着色） =====
+        function renderAllAccChart() {
+            destroyIfExist('allAccChart');
+            chartInstances['allAccChart'] = new Chart(document.getElementById('allAccChart'), {
+                type: 'bar',
+                data: {
+                    labels: allByAcc.map(function (m) { return m.name; }),
+                    datasets: [{
+                        label: '平均动作准确度',
+                        data: allByAcc.map(function (m) { return m.acc; }),
+                        backgroundColor: allByAcc.map(function (m) { return accTier(m.acc).color; }),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    var m = allByAcc[ctx.dataIndex];
+                                    return '平均准确度 ' + m.acc + ' 分（' + accTier(m.acc).name + '）｜完成率 ' + m.comp + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, max: 100, title: { display: true, text: '平均动作准确度（分）' }, grid: { color: gridColor }, ticks: { callback: function (v) { return v + '%'; } } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // ===== 4. 全量招式节奏同步度（横向堆叠 100%，20式五档分布，达标率升序） =====
+        function renderAllSyncChart() {
+            destroyIfExist('allSyncChart');
+            chartInstances['allSyncChart'] = new Chart(document.getElementById('allSyncChart'), {
+                type: 'bar',
+                data: {
+                    labels: allBySync.map(function (m) { return m.name; }),
+                    datasets: rhythmCats.map(function (cat, i) {
+                        return {
+                            label: cat,
+                            data: allBySync.map(function (m) { return m.rhythm[i]; }),
+                            backgroundColor: rhythmColors[i],
+                            stack: 's'
+                        };
+                    })
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#e6efe9', boxWidth: 12, padding: 12 } },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) { return ctx.dataset.label + '：' + ctx.parsed.x.toFixed(1) + '%'; },
+                                // 页脚追加该招式节奏达标率
+                                footer: function (items) {
+                                    var m = allBySync[items[0].dataIndex];
+                                    return '节奏达标率 ' + syncOk(m).toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true, max: 100, title: { display: true, text: '节奏评价分布' }, grid: { color: gridColor }, ticks: { callback: function (v) { return v + '%'; } } },
+                        y: { stacked: true, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // ===== 5. 游戏人数（近14天趋势 / 单双人数构成 切换） =====
+        var trendDays = ['09-08', '09-09', '09-10', '09-11', '09-12', '09-13', '09-14', '09-15', '09-16', '09-17', '09-18', '09-19', '09-20', '09-21'];
+        var trendData = [1050, 1180, 980, 1120, 1260, 1090, 1340, 1420, 1180, 1260, 1380, 1210, 1520, 1480];
+        var splitData = { labels: ['1人局', '2人局（共练）'], data: [13890, 4580] };
+        function renderPlayerChart(view) {
+            destroyIfExist('playerChart');
+            var canvas = document.getElementById('playerChart');
+            if (view === 'split') {
+                // 单双人数构成（环形图）
+                var sum = splitData.data.reduce(function (a, b) { return a + b; }, 0);
+                chartInstances['playerChart'] = new Chart(canvas, {
+                    type: 'doughnut',
+                    data: { labels: splitData.labels, datasets: [{ data: splitData.data, backgroundColor: [C.primary, C.gold], borderWidth: 2, borderColor: '#16281f' }] },
+                    options: {
+                        responsive: true, maintainAspectRatio: false, cutout: '60%',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#e6efe9', padding: 16 } },
+                            tooltip: { callbacks: { label: function (ctx) { return ctx.label + '：' + ctx.parsed.toLocaleString() + ' 人次（' + (ctx.parsed * 100 / sum).toFixed(1) + '%）'; } } }
+                        }
+                    }
+                });
+            } else {
+                // 近14天训练人次趋势（折线）
+                chartInstances['playerChart'] = new Chart(canvas, {
+                    type: 'line',
+                    data: {
+                        labels: trendDays,
+                        datasets: [{ label: '训练人次', data: trendData, borderColor: C.primary, backgroundColor: 'rgba(127,200,169,0.12)', fill: true, tension: 0.4, pointRadius: 3 }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: '#e6efe9', padding: 16 } } },
+                        scales: { y: { beginAtZero: true, title: { display: true, text: '训练人次' }, grid: { color: gridColor } }, x: { grid: { display: false } } }
+                    }
+                });
+            }
+        }
+
+        // ===== 6. 用户年龄分布（按训练人次；核心年龄段 41-60 高亮） =====
+        var ageData = [
+            { age: '5-12岁', count: 920 },   // 亲子陪练场景
+            { age: '13-17岁', count: 260 },
+            { age: '18-30岁', count: 1280 },
+            { age: '31-40岁', count: 2080 },
+            { age: '41-50岁', count: 5010 }, // 核心用户段
+            { age: '51-60岁', count: 6960 }, // 核心用户段
+            { age: '60岁以上', count: 1960 }
+        ];
+        function renderAgeChart() {
+            destroyIfExist('ageChart');
+            chartInstances['ageChart'] = new Chart(document.getElementById('ageChart'), {
+                type: 'bar',
+                data: {
+                    labels: ageData.map(function (d) { return d.age; }),
+                    datasets: [{
+                        label: '训练人次',
+                        data: ageData.map(function (d) { return d.count; }),
+                        // 核心年龄段 41-60 用主强调色高亮，其余降为半透明
+                        backgroundColor: ageData.map(function (d) { return (d.age === '41-50岁' || d.age === '51-60岁') ? C.primary : 'rgba(127,200,169,0.35)'; }),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: function (ctx) { return '训练人次：' + ctx.parsed.y.toLocaleString() + '（占 ' + (ctx.parsed.y * 100 / totalVisits).toFixed(1) + '%）'; } } }
+                    },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: '训练人次' }, grid: { color: gridColor } }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        // ===== 招式明细表（全量 20 式，训练人次降序） =====
+        function renderMoveTable() {
+            var tbody = document.getElementById('moveTable');
+            var sorted = moves.slice().sort(function (a, b) { return b.visits - a.visits; });
+            sorted.forEach(function (m, i) {
+                var rank = i + 1;
+                var rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
+                var pct = (m.visits / totalVisits * 100).toFixed(1);
+                var barPct = (m.visits / sorted[0].visits * 100).toFixed(1);
+                var tier = accTier(m.acc);
+                var ok = syncOk(m);
+                // 节奏达标率配色：>=85 深绿 / >=70 竹青 / >=60 琥珀 / <60 陶红
+                var okColor = ok >= 85 ? C.deep : ok >= 70 ? C.primary : ok >= 60 ? C.amber : C.red;
+                // 招式完成率配色：>=90 深绿 / >=80 竹青 / >=70 琥珀 / <70 陶红
+                var compColor = m.comp >= 90 ? C.deep : m.comp >= 80 ? C.primary : m.comp >= 70 ? C.amber : C.red;
+                tbody.innerHTML += ''
+                    + '<tr>'
+                    + '<td><span class="rank ' + rankClass + '">' + rank + '</span></td>'
+                    + '<td><strong>' + m.name + '</strong></td>'
+                    + '<td class="gong-tag">' + m.gong + '</td>'
+                    + '<td>' + m.visits.toLocaleString() + '</td>'
+                    + '<td><div class="bar-wrap"><div class="bar"><div class="bar-fill" style="width:' + barPct + '%"></div></div><span class="bar-val">' + pct + '%</span></div></td>'
+                    + '<td><strong style="color:' + tier.color + '">' + m.acc.toFixed(1) + '</strong> <span class="gong-tag">' + tier.name + '</span></td>'
+                    + '<td><strong style="color:' + okColor + '">' + ok.toFixed(1) + '%</strong></td>'
+                    + '<td><strong style="color:' + compColor + '">' + m.comp.toFixed(1) + '%</strong></td>'
+                    + '</tr>';
+            });
+        }
+
+        // ===== 功法详情表（两套功法聚合，指标由 20 式数据按训练人次加权计算，保证口径一致） =====
+        var GONG_META = {
+            '八段锦': { count: 8,  avgCalories: 77 },   // 场均卡路里按低强度 MET 估算口径配置
+            '易筋经': { count: 12, avgCalories: 89 }
+        };
+        function renderGongTable() {
+            var tbody = document.getElementById('gongTable');
+            var gongs = ['八段锦', '易筋经'];
+            gongs.forEach(function (g) {
+                var meta = GONG_META[g];
+                var list = moves.filter(function (m) { return m.gong === g; });
+                var v = list.reduce(function (a, m) { return a + m.visits; }, 0);                       // 训练人次
+                var wAcc  = list.reduce(function (a, m) { return a + m.visits * m.acc; }, 0) / v;       // 加权平均动作准确度
+                var wOk   = list.reduce(function (a, m) { return a + m.visits * syncOk(m); }, 0) / v;   // 加权节奏达标率
+                var wComp = list.reduce(function (a, m) { return a + m.visits * m.comp; }, 0) / v;      // 加权平均完成率
+                var tier = accTier(wAcc);
+                tbody.innerHTML += ''
+                    + '<tr>'
+                    + '<td><strong>' + g + '</strong></td>'
+                    + '<td>' + meta.count + ' 式</td>'
+                    + '<td>' + v.toLocaleString() + '</td>'
+                    + '<td>' + (v / totalVisits * 100).toFixed(1) + '%</td>'
+                    + '<td><strong style="color:' + tier.color + '">' + wAcc.toFixed(1) + '</strong> <span class="gong-tag">' + tier.name + '</span></td>'
+                    + '<td><strong>' + wOk.toFixed(1) + '%</strong></td>'
+                    + '<td><strong>' + wComp.toFixed(1) + '%</strong></td>'
+                    + '<td>' + meta.avgCalories + ' kcal</td>'
+                    + '</tr>';
+            });
+        }
+
+        // ===== 初始化：每个图表独立 try/catch，单个失败不影响其余图表与表格 =====
+        function safeInit(name, fn) {
+            try { fn(); } catch (e) { console.error(name + ' 初始化失败：', e); }
+        }
+        safeInit('modeChart', function () { renderModeChart('mode'); });
+        safeInit('topMovesChart', renderTopMovesChart);
+        safeInit('allAccChart', renderAllAccChart);
+        safeInit('allSyncChart', renderAllSyncChart);
+        safeInit('playerChart', function () { renderPlayerChart('trend'); });
+        safeInit('ageChart', renderAgeChart);
+        safeInit('gongTable', renderGongTable);
+        safeInit('moveTable', renderMoveTable);
+
+        // Tab 切换绑定（只绑一次；回调内部已带 try/catch 防御）
+        bindTabs('modeTabs', renderModeChart);
+        bindTabs('playerTabs', renderPlayerChart);
+
+        }
+    </script>
+</body>
+</html>
