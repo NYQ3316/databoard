@@ -147,6 +147,20 @@
             <article class="entry">
                 <div class="entry-head">
                     <span class="entry-date">2026-09-23</span>
+                    <span class="entry-tag">导航补齐</span>
+                </div>
+                <ul class="entry-list">
+                    <li>全部 <strong>53 个看板页统一补齐「悬浮目录」组件</strong>：此前仅命名页具备悬浮目录，看板页从未配置（经全量核查源文件与 git 历史确认），本次按命名页同款交互补齐。</li>
+                    <li>组件能力与命名页一致：右下角 <code>☰</code> 目录按钮 + <code>↑</code> 回顶按钮；目录面板含<strong>「← 返回看板总览」</strong>返回项与各板块锚点；滚动自动高亮当前板块、点击平滑滚动，展开状态 <code>localStorage</code> 记忆（宽屏 ≥1560px 默认展开），打印时自动隐藏。</li>
+                    <li>锚点策略：新式看板（30 页）取<strong>板块标题</strong> <code>.section-title</code>；老式看板（23 页）取 <code>h3</code> 标题作为事实板块；图表卡片级标题<strong>不进入目录</strong>；目录标签自动去掉 emoji 前缀、超长截断（18 字）。</li>
+                    <li>共生成 <strong>246 个锚点</strong>（新式 101 + 老式 145），锚点 id 连续编号 <code>sec-1..N</code> 与目录链接一一对应；看板页无深色主题，故未包含深色覆盖样式。</li>
+                    <li>仅新增组件，<strong>未改动任何数据、图表与既有内容</strong>（1042 贪心大作战页 1 处 <code>&lt;div&gt;</code> 不配对为页面既有情况，保持原样）。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-09-23</span>
                     <span class="entry-tag">字段说明</span>
                 </div>
                 <ul class="entry-list">

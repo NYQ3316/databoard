@@ -102,6 +102,37 @@
         .bar { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
         .bar-fill { height: 100%; background: #ff6b6b; border-radius: 4px; }
         .bar-val { font-size: 12px; color: #a0a0a0; min-width: 40px; text-align: right; }
+        /* ======== 悬浮目录组件 ======== */
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 188px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+        @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
+        @media print { .toc-fab { display: none; } }
     </style>
 </head>
 <body>
@@ -131,13 +162,13 @@
         <!-- 图表行：游戏人数 + 年龄段分布 -->
         <div class="chart-row">
             <div class="section">
-                <div class="section-title">👥 游戏人数分布</div>
+                <div id="sec-1" class="section-title">👥 游戏人数分布</div>
                 <div class="chart-container">
                     <canvas id="playerCountChart"></canvas>
                 </div>
             </div>
             <div class="section">
-                <div class="section-title">👶 年龄段参与次数分布</div>
+                <div id="sec-2" class="section-title">👶 年龄段参与次数分布</div>
                 <div class="chart-container">
                     <canvas id="ageGroupChart"></canvas>
                 </div>
@@ -146,13 +177,13 @@
 
         <!-- 近7天趋势 -->
         <div class="section">
-            <div class="section-title">📈 近7天训练次数趋势</div>
+            <div id="sec-3" class="section-title">📈 近7天训练次数趋势</div>
             <div class="chart-container">
                 <canvas id="trendChart"></canvas>
             </div>
         </div>
         <div class="section">
-            <div class="section-title">🔥 课程详细数据（全量，按访问量排名）</div>
+            <div id="sec-4" class="section-title">🔥 课程详细数据（全量，按访问量排名）</div>
             <table>
                 <thead>
                     <tr>
@@ -172,7 +203,7 @@
         <!-- 图表行：热门课程Top10 + 平均得分Bottom10（含年龄段Tab） -->
         <div class="chart-row">
             <div class="section">
-                <div class="section-title">
+                <div id="sec-5" class="section-title">
                     <span>🔥 热门课程Top10（按访问量）</span>
                 </div>
                 <div class="age-tabs" id="tabsVisits">
@@ -187,7 +218,7 @@
                 </div>
             </div>
             <div class="section">
-                <div class="section-title">
+                <div id="sec-6" class="section-title">
                     <span>📉 平均得分Bottom10（得分最低）</span>
                 </div>
                 <div class="age-tabs" id="tabsScore">
@@ -206,7 +237,7 @@
         <!-- 图表行：卡路里消耗 + 重复参与次数（含年龄段Tab） -->
         <div class="chart-row">
             <div class="section">
-                <div class="section-title">
+                <div id="sec-7" class="section-title">
                     <span>🔥 课程卡路里消耗Top10</span>
                 </div>
                 <div class="age-tabs" id="tabsCalories">
@@ -221,7 +252,7 @@
                 </div>
             </div>
             <div class="section">
-                <div class="section-title">
+                <div id="sec-8" class="section-title">
                     <span>🔄 课程重复参与次数Top10</span>
                 </div>
                 <div class="age-tabs" id="tabsRepeat">
@@ -499,6 +530,87 @@
         renderBarChart('bottom10ScoreChart', 'all', 'avgScore', true, ['#f5222d', '#fa8c16'], '平均得分', '得分');
         renderBarChart('top10CaloriesChart', 'all', 'avgCalories', false, ['#ff8e53', '#ffd93d'], '平均卡路里 (kcal)', '卡路里 (kcal)');
         renderBarChart('top10RepeatChart', 'all', 'repeatCount', false, ['#52c41a', '#6bcb77'], '重复参与次数', '重复次数');
+    </script>
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="index.html">&larr; 返回看板总览</a>
+            <a class="toc-link" href="#sec-1">游戏人数分布</a>
+            <a class="toc-link" href="#sec-2">年龄段参与次数分布</a>
+            <a class="toc-link" href="#sec-3">近7天训练次数趋势</a>
+            <a class="toc-link" href="#sec-4">课程详细数据（全量，按访问量排名）</a>
+            <a class="toc-link" href="#sec-5">热门课程Top10（按访问量）</a>
+            <a class="toc-link" href="#sec-6">平均得分Bottom10（得分最低）</a>
+            <a class="toc-link" href="#sec-7">课程卡路里消耗Top10</a>
+            <a class="toc-link" href="#sec-8">课程重复参与次数Top10</a>        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">&#9776;</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">&uarr;</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        // 只把 # 锚点链接纳入滚动高亮；返回链接是外链，跳过
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+        var KEY = 'db1030_toc_open';
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+
+        function setActive(i) {
+            anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); });
+        }
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '\u2715' : '\u2630';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+        anchors.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActive(i);
+                lock = i; clearTimeout(lockTimer);
+                lockTimer = setTimeout(function () { lock = -1; spy(); }, 700);
+            });
+        });
+
+        ['wheel', 'touchstart'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+                if (lock !== -1) { lock = -1; clearTimeout(lockTimer); spy(); }
+            }, { passive: true });
+        });
+
+        var lock = -1, lockTimer = null;
+        function spy() {
+            if (lock !== -1) return;
+            var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+            var cur = -1, lastVisible = -1;
+            targets.forEach(function (t, i) {
+                if (!t || t.offsetParent === null) return;
+                lastVisible = i;
+                if (t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1) cur = 0;
+            if (atBottom && lastVisible !== -1) cur = lastVisible;
+            setActive(cur);
+        }
+
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+        apply(); spy();
+    })();
     </script>
 </body>
 </html>

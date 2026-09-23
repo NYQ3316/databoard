@@ -191,6 +191,37 @@
             .stat-card .value { font-size: 24px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
+        /* ======== 悬浮目录组件 ======== */
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 188px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+        @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
+        @media print { .toc-fab { display: none; } }
     </style>
 </head>
 <body data-page-node-id="KR52XWyDBJfDhZQ6CGhEh9">
@@ -213,7 +244,7 @@
     </div>
 
     <!-- ======== 核心指标概览 ======== -->
-    <div class="section-title" data-page-node-id="VZuItbSa6rh0suAVl1zt5N">📌 核心指标概览</div>
+    <div id="sec-1" class="section-title" data-page-node-id="VZuItbSa6rh0suAVl1zt5N">📌 核心指标概览</div>
     <div class="stats-grid" data-page-node-id="NPG3foMXvKmKD1hXE4RA0u">
         <div class="stat-card" data-page-node-id="96OA33DhGcVN7lrNuJz3Cw">
             <div class="label" data-page-node-id="zLOLVdKwGmrcDUWjdVC5GR">游戏累计启动数</div>
@@ -249,7 +280,7 @@
 
     <!-- ======== 杯赛进度分析（每个杯赛单独卡片，单打/双打可切换） ======== -->
     <div class="module-divider" data-page-node-id="zUeHM14Ge0ILRjHwsGJezc"></div>
-    <div class="section-title" data-page-node-id="3MHwtZUEJHTPEfwlySJNoa">🏆 杯赛进度分析（单打 / 双打可切换）</div>
+    <div id="sec-2" class="section-title" data-page-node-id="3MHwtZUEJHTPEfwlySJNoa">🏆 杯赛进度分析（单打 / 双打可切换）</div>
     <p class="block-hint" data-page-node-id="SFg917rkmsoihD29iCZSSP">
         每个杯赛 5 局（第1局→第5局，单局 7 分制，难度递增），柱高 = 该局到达人次；点击「单打 / 双打」切换查看两种关卡模式。<br data-page-node-id="T1B21U2q9TGYZiPDMyqm8c">
         ⚠️ 后 3 个杯赛名称待确认（当前用「杯赛4 / 杯赛5 / 杯赛6」占位）；小区杯免费，其余杯赛与双打杯赛付费解锁。<br>
@@ -371,7 +402,7 @@
 
     <!-- ======== 热门角色（按杯赛分别统计） ======== -->
     <div class="module-divider" data-page-node-id="RJf9XxDVlBlFAc13Sx5b6G"></div>
-    <div class="section-title" data-page-node-id="FfHzCobMt0hllbGzz60L6q">🎭 热门角色（按杯赛分别统计）</div>
+    <div id="sec-3" class="section-title" data-page-node-id="FfHzCobMt0hllbGzz60L6q">🎭 热门角色（按杯赛分别统计）</div>
     <p class="block-hint" data-page-node-id="rnUWlqB5lPpiVpCfXpbvOZ">
         每个杯赛独立统计 4 个角色的「使用率 vs 胜率」，定位不同难度下的角色偏好与强度差异（使用率按杯赛内选用占比，每行合计 100%）。<br data-page-node-id="zYC6xp2ZEM1JA1AuNRxVjT">
         ⚠️ 角色名待确认（大纲仅说明 4 个角色，当前用「角色1~角色4」占位）；球拍仅 1 种横拍、无选择意义，故不设球拍图。
@@ -448,7 +479,7 @@
 
     <!-- ======== 对局数分布 ======== -->
     <div class="module-divider" data-page-node-id="W6q4Zl1ukZ5N7OvgPGPEdH"></div>
-    <div class="section-title" data-page-node-id="2dofosDKFgBJ8zekYRNSZB">🆚 对局数分布（玩家对玩家 / 玩家对电脑）</div>
+    <div id="sec-4" class="section-title" data-page-node-id="2dofosDKFgBJ8zekYRNSZB">🆚 对局数分布（玩家对玩家 / 玩家对电脑）</div>
     <div class="charts-grid" data-page-node-id="2R6WwYBAcmHfHiVmEebNv0">
         <div class="chart-card" data-page-node-id="fLT2DbzkjdzsWAxoc5rumW">
             <h3 data-page-node-id="AlSYZuOVNXQ3CbXnQgZuT9">🆚 玩家对玩家 · 累计对局数</h3>
@@ -468,7 +499,7 @@
 
     <!-- ======== 启动数趋势 ======== -->
     <div class="module-divider" data-page-node-id="ujMbfEc8mjPJDLxOgEVO7C"></div>
-    <div class="section-title" data-page-node-id="ywkm6PZ2H1VEYX8t7JA6HV">📈 活跃趋势 — 游戏启动数</div>
+    <div id="sec-5" class="section-title" data-page-node-id="ywkm6PZ2H1VEYX8t7JA6HV">📈 活跃趋势 — 游戏启动数</div>
     <div class="charts-grid" style="grid-template-columns: 1fr;" data-page-node-id="06TzQe9ClTPBEAExyltx0I">
         <div class="chart-card" data-page-node-id="g9o5GnUsB0EjQwOoKNsjF4">
             <h3 data-page-node-id="GDg5EYd90nwAVNLsQIvZvJ">📈 游戏启动数趋势（近 14 天）</h3>
@@ -798,5 +829,83 @@
         });
     } catch (e) { console.error('launchTrendChart 初始化失败：', e); }
 </script>
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="index.html">&larr; 返回看板总览</a>
+            <a class="toc-link" href="#sec-1">核心指标概览</a>
+            <a class="toc-link" href="#sec-2">杯赛进度分析（单打 / 双打可切换）</a>
+            <a class="toc-link" href="#sec-3">热门角色（按杯赛分别统计）</a>
+            <a class="toc-link" href="#sec-4">对局数分布（玩家对玩家 / 玩家对…</a>
+            <a class="toc-link" href="#sec-5">活跃趋势 — 游戏启动数</a>        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">&#9776;</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">&uarr;</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        // 只把 # 锚点链接纳入滚动高亮；返回链接是外链，跳过
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+        var KEY = 'db1027_toc_open';
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+
+        function setActive(i) {
+            anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); });
+        }
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '\u2715' : '\u2630';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+        anchors.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActive(i);
+                lock = i; clearTimeout(lockTimer);
+                lockTimer = setTimeout(function () { lock = -1; spy(); }, 700);
+            });
+        });
+
+        ['wheel', 'touchstart'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+                if (lock !== -1) { lock = -1; clearTimeout(lockTimer); spy(); }
+            }, { passive: true });
+        });
+
+        var lock = -1, lockTimer = null;
+        function spy() {
+            if (lock !== -1) return;
+            var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+            var cur = -1, lastVisible = -1;
+            targets.forEach(function (t, i) {
+                if (!t || t.offsetParent === null) return;
+                lastVisible = i;
+                if (t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1) cur = 0;
+            if (atBottom && lastVisible !== -1) cur = lastVisible;
+            setActive(cur);
+        }
+
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+        apply(); spy();
+    })();
+    </script>
 </body>
 </html>
