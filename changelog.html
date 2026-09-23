@@ -146,6 +146,19 @@
 
             <article class="entry">
                 <div class="entry-head">
+                    <span class="entry-date">2026-09-23</span>
+                    <span class="entry-tag">字段说明</span>
+                </div>
+                <ul class="entry-list">
+                    <li>全站 <code>session_id</code> 说明调整：由「本地生成 UUID v4（<strong>带横杠，36 字符</strong>）；单局session_id保持一致」改为「本地生成 UUID v4（<strong>可不带横杠</strong>）；单局session_id保持一致」——<strong>不再强制横杠与 36 字符长度</strong>，兼容无横杠形式的 UUID。</li>
+                    <li>示例值保持不变（仍为带横杠形式，如 <code>853b054e-1f29-4810-91d0-857471542101</code>），仅说明文案放宽。</li>
+                    <li>覆盖范围：<strong>43 个项目命名页 + <code>naming_standards.html</code> 共 44 个文件，合计 221 处</strong>替换（+221 / -221 行）。</li>
+                    <li>仅文案调整，字段与事件结构未变（44 个文件 <code>session_id</code> 出现次数 450、<code>&lt;tr&gt;</code> 1961、<code>&lt;td&gt;</code> 10039 与改动前完全一致）；看板与总览页未改动。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
                     <span class="entry-date">2026-09-21</span>
                     <span class="entry-tag">字段修订</span>
                 </div>
