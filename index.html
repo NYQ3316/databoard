@@ -208,7 +208,40 @@
     
         /* 页头署名（低调，不抢主标题） */
         .contact-hint { opacity: 0.75; margin-left: 8px; font-weight: 400; }
-    </style>
+    
+        /* ======== 悬浮目录组件 ======== */
+        html { scroll-behavior: smooth; }
+        .section-title { scroll-margin-top: 16px; }
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 212px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 62vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #eef2f7; }
+</style>
 </head>
 <body data-page-node-id="KSeXqvfIC46V9av7gve7O2">
     <div class="container" data-page-node-id="KtTl5wBKwdfcoygdckWOem">
@@ -253,7 +286,7 @@
         </a>
 
         <!-- 早期接入项目 -->
-        <div class="section-title" data-page-node-id="mynz0fUam7w4HCzEalPHCG">✅ 早期接入项目</div>
+        <div class="section-title" data-page-node-id="mynz0fUam7w4HCzEalPHCG" id="sec-early">✅ 早期接入项目</div>
         <div class="cards-grid" data-page-node-id="VFhSAdveUJ9bBElB7B71eC">
             <a class="card" href="1001_篮球火_analytics_dashboard.html" data-page-node-id="HUuxlAUxpGYx1X3HFecfkn">
                 <div class="card-header" data-page-node-id="B4JjQDB2IikUftCApb5b03">
@@ -271,7 +304,7 @@
                     <div class="desc" data-page-node-id="M9iIHQPkALvAuwHB9HFVHF">道具模式、街机模式、1~4人个人对战</div>
                 </div>
                 <div class="card-footer" data-page-node-id="J8KVEIIuYxnMcrhye7cCNt">
-                    <div class="meta" data-page-node-id="RWNRXzPx7OBCDTe1WWvyyG">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="RWNRXzPx7OBCDTe1WWvyyG">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="edxsEQik33ytoNCPxnGiEB">查看看板 →</div>
                 </div>
             </a>
@@ -291,7 +324,7 @@
                     <div class="desc" data-page-node-id="zYVsQV02KNzfgxvMR6Aukq">竞技模式、探险模式、球赛模式、1~2人</div>
                 </div>
                 <div class="card-footer" data-page-node-id="sryT3FGAOYhIcyOgIdTM7S">
-                    <div class="meta" data-page-node-id="W0n5le1X3Qq1sKgGiiB0sw">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="W0n5le1X3Qq1sKgGiiB0sw">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="3WEaKAraXRgZV3DCJeGSuS">查看看板 →</div>
                 </div>
             </a>
@@ -311,7 +344,7 @@
                     <div class="desc" data-page-node-id="6tpHZjs8SKrjEgU2V4Irtb">20个魔法模式、1~4人、自由探索</div>
                 </div>
                 <div class="card-footer" data-page-node-id="OZE0Y0oMPx2lOKswbjVKfA">
-                    <div class="meta" data-page-node-id="hJELVsKjc5oNxwWlRMeteZ">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="hJELVsKjc5oNxwWlRMeteZ">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="vktKKzwHQFD2UCE20jyBCk">查看看板 →</div>
                 </div>
             </a>
@@ -331,7 +364,7 @@
                     <div class="desc" data-page-node-id="TnVYtgY4qAMBbZKgQvdOJG">埋点偏向：游戏人数、通关进度</div>
                 </div>
                 <div class="card-footer" data-page-node-id="Ry5vBBzGFM2UZEBXDvlmUv">
-                    <div class="meta" data-page-node-id="AnkVTbcACLnCb8VldOcukz">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="AnkVTbcACLnCb8VldOcukz">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="T3qCwmgONYAtHaXym6kxcm">查看看板 →</div>
                 </div>
             </a>
@@ -351,14 +384,14 @@
                     <div class="desc" data-page-node-id="EMYWGAQCpmdTckIfbsyN21">埋点偏向：热门动物、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="9mLwI1tBndsCyRjDsOjtlZ">
-                    <div class="meta" data-page-node-id="zR2musLPtZHPlXruinxDnd">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="zR2musLPtZHPlXruinxDnd">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="9QrXEa2i0xeOzE01J72jMb">查看看板 →</div>
                 </div>
             </a>
         </div>
 
         <!-- 2026.05.10 上线项目 -->
-        <div class="section-title" data-page-node-id="XIbU6Itaelcnh8DSU5xms7">📅 2026.05.10 上线项目</div>
+        <div class="section-title" data-page-node-id="XIbU6Itaelcnh8DSU5xms7" id="sec-2026-05-10">📅 2026.05.10 上线项目</div>
         <div class="cards-grid" data-page-node-id="XBoARh1tjHlzNgvNUIYJC1">
             <a class="card" href="1002_猫爪特工_analytics_dashboard.html" data-page-node-id="4tVrF5fqKiHVBCvUqnMM6g">
                 <div class="card-header" data-page-node-id="Ge5BjAH8ELy0e0bFoxV8PS">
@@ -376,7 +409,7 @@
                     <div class="desc" data-page-node-id="7oFDDT4Rb4B0WdatrDeSfH">欢乐模式、炸弹模式、无尽模式、1~2人合作</div>
                 </div>
                 <div class="card-footer" data-page-node-id="CnzUFHe99K4U6B8y9MWDsu">
-                    <div class="meta" data-page-node-id="3aAsROmvb5t1aMhldQmwDZ">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="3aAsROmvb5t1aMhldQmwDZ">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="801EDohY9nlhQwzW3VbzEw">查看看板 →</div>
                 </div>
             </a>
@@ -396,7 +429,7 @@
                     <div class="desc" data-page-node-id="B5299QnU2MCxo2dhne34rA">埋点偏向：热门模式、游戏人数、各模式平均得分</div>
                 </div>
                 <div class="card-footer" data-page-node-id="0k6xAF56KqYDDF734vs1oG">
-                    <div class="meta" data-page-node-id="iJ8E6zUXLqIHcQAoy1yRBR">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="iJ8E6zUXLqIHcQAoy1yRBR">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="Ii6mpepZUb6TILtP41LLY5">查看看板 →</div>
                 </div>
             </a>
@@ -416,7 +449,7 @@
                     <div class="desc" data-page-node-id="IDorw5dodPG53gHURAXdDu">埋点偏向：热门歌曲、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="dGifsZMO9QQOwcZaDPUnqe">
-                    <div class="meta" data-page-node-id="qRntM2bXyJJH0zKEW60e0P">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="qRntM2bXyJJH0zKEW60e0P">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="1cmED5bZ6EjOIhVvMFh7hi">查看看板 →</div>
                 </div>
             </a>
@@ -436,7 +469,7 @@
                     <div class="desc" data-page-node-id="Y9EGGGf0ZmSJqTleVXBun9">埋点偏向：热点图片、图片平均得分</div>
                 </div>
                 <div class="card-footer" data-page-node-id="lNzVA9nsLQfP8onL0HJUgY">
-                    <div class="meta" data-page-node-id="Wde5srTVmzBoxEKuwnL8gc">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="Wde5srTVmzBoxEKuwnL8gc">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="ogRpQ53sHZpnnFFvAXiBUn">查看看板 →</div>
                 </div>
             </a>
@@ -456,7 +489,7 @@
                     <div class="desc" data-page-node-id="eeY8TrqT1EWBfF8xt6FoTi">埋点偏向：热门模式、热门课程、关卡平均得分</div>
                 </div>
                 <div class="card-footer" data-page-node-id="cUAtb3UNi7lHj0fGcTgo7e">
-                    <div class="meta" data-page-node-id="iUBG2B93t3l2FzJ3QtvhEz">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="iUBG2B93t3l2FzJ3QtvhEz">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="EJotaBt18MxMNq4INZ0DVO">查看看板 →</div>
                 </div>
             </a>
@@ -476,7 +509,7 @@
                     <div class="desc" data-page-node-id="dowHbXpZ6Q7ARwuqKpVlB8">埋点偏向：热门模式、各模式平均得分</div>
                 </div>
                 <div class="card-footer" data-page-node-id="fmHwSAYp9XQdZlselyUHkB">
-                    <div class="meta" data-page-node-id="Hj529lIKc1Qbn6zYdP0CSu">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="Hj529lIKc1Qbn6zYdP0CSu">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="DcmrTXk1nJ44sqjQCf9eV1">查看看板 →</div>
                 </div>
             </a>
@@ -496,7 +529,7 @@
                     <div class="desc" data-page-node-id="wbKb67Fm3003gYeropuJxL">埋点偏向：通关进度、游戏人数、关卡失败率、关卡时长</div>
                 </div>
                 <div class="card-footer" data-page-node-id="SMsiM2VPiLtsbRFZ3n3uk3">
-                    <div class="meta" data-page-node-id="d5vF7zgi6CkjjMFE2PvbQA">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="d5vF7zgi6CkjjMFE2PvbQA">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="3cVHBH2NqRviNT4oHwnaNO">查看看板 →</div>
                 </div>
             </a>
@@ -516,7 +549,7 @@
                     <div class="desc" data-page-node-id="XGn6twQL99Z885TzVbLwYc">埋点偏向：热门模式、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="KUyvzuStl6uunhQVyD4RD5">
-                    <div class="meta" data-page-node-id="o4kVBQwr6VIQhALm5VZ4v7">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="o4kVBQwr6VIQhALm5VZ4v7">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="POBorUGl8OWaIGnwZBD6cF">查看看板 →</div>
                 </div>
             </a>
@@ -536,7 +569,7 @@
                     <div class="desc" data-page-node-id="R64TKOLsVVv6otYTmv3jxm">埋点偏向：场均分数、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="vv3oehapgYtkfXu9oD2tXc">
-                    <div class="meta" data-page-node-id="H6LHcyHpai6ZzTh7IhpbJt">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="H6LHcyHpai6ZzTh7IhpbJt">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="3imxRZCOZsp2ZiSZIxh8UL">查看看板 →</div>
                 </div>
             </a>
@@ -556,7 +589,7 @@
                     <div class="desc" data-page-node-id="ChYp9SVuy22oyKqihrtdJS">埋点偏向：热门关卡</div>
                 </div>
                 <div class="card-footer" data-page-node-id="XUYhnN1j4ynGuW1bYOTCNb">
-                    <div class="meta" data-page-node-id="Cw5lW6sr8s2i1vidfitVHV">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="Cw5lW6sr8s2i1vidfitVHV">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="YLGxEUv7p1JBitS54aF5n9">查看看板 →</div>
                 </div>
             </a>
@@ -576,7 +609,7 @@
                     <div class="desc" data-page-node-id="eCe8SCdIzusBzsl5ageSQd">埋点偏向：通关进度、游戏人数、关卡平均时长、能量收集总数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="VhSHz6rzUhFNnZxltvi0ix">
-                    <div class="meta" data-page-node-id="ARWsISzx05COaz6f3w5Ynb">更新于 2026-06-01</div>
+                    <div class="meta" data-page-node-id="ARWsISzx05COaz6f3w5Ynb">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="Y2SrnUNjGbWZz3QdXXUw1Z">查看看板 →</div>
                 </div>
             </a>
@@ -596,7 +629,7 @@
                     <div class="desc" data-page-node-id="esLJr6RNhDEZrtMXmvwon5">埋点偏向：游戏人数、问题正确率</div>
                 </div>
                 <div class="card-footer" data-page-node-id="m0zZwXjJVAVYxOEknr9xwF">
-                    <div class="meta" data-page-node-id="pCFsk5dtTR2odJ0FPG0zBD">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="pCFsk5dtTR2odJ0FPG0zBD">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="jX5z3I0rXnEo9MVGEX2pqN">查看看板 →</div>
                 </div>
             </a>
@@ -616,7 +649,7 @@
                     <div class="desc" data-page-node-id="w7xUpGu3BaUfWlP3HWPEY5">埋点偏向：热门模式、模式平均得分</div>
                 </div>
                 <div class="card-footer" data-page-node-id="wvSobpdvY8GmKEtB7szyZ7">
-                    <div class="meta" data-page-node-id="Tu3wapRa2zy8568Ag6Nc4y">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="Tu3wapRa2zy8568Ag6Nc4y">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="JGokIobwxFIy9FsaHLU9WG">查看看板 →</div>
                 </div>
             </a>
@@ -636,7 +669,7 @@
                     <div class="desc" data-page-node-id="kGNVG0YgjRDnHnXXM7suYY">埋点偏向：单人/双人模式分别统计、平均得分、家具购买次数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="qszyVB4D8jsOAXHwHW5xhd">
-                    <div class="meta" data-page-node-id="zTXHQZev6PruB1ClvOZxSP">更新于 2026-06-02</div>
+                    <div class="meta" data-page-node-id="zTXHQZev6PruB1ClvOZxSP">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="EdODDD22HRfJQZpQ3bmuMD">查看看板 →</div>
                 </div>
             </a>
@@ -656,7 +689,7 @@
                     <div class="desc" data-page-node-id="ojB5sncCGOGgmXsQU9EDxz">埋点偏向：关卡进度、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="xPBQP3Oi59B3hUIPaZJN4u">
-                    <div class="meta" data-page-node-id="8qxE6IqA5SWJHTnDutC50F">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="8qxE6IqA5SWJHTnDutC50F">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="c4jEiGEouJrReayhwACtdP">查看看板 →</div>
                 </div>
             </a>
@@ -676,7 +709,7 @@
                     <div class="desc" data-page-node-id="i7vP1JaCZYSUYHPmUd2Hth">埋点偏向：通关进度、游戏人数、关卡平均时长</div>
                 </div>
                 <div class="card-footer" data-page-node-id="MjrSbjMUBLjk3ldhpP2htp">
-                    <div class="meta" data-page-node-id="q7bkKi4fZ6dxHbBBDkT8yF">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="q7bkKi4fZ6dxHbBBDkT8yF">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="lD8vViMgT3IOXeIUSebWPk">查看看板 →</div>
                 </div>
             </a>
@@ -696,7 +729,7 @@
                     <div class="desc" data-page-node-id="AzmB221NxJ6dJtEMseOejX">埋点偏向：游戏人数、关卡跌落区域编号、复活点开始次数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="d24FPC5fVi2EDwLXbGnFEG">
-                    <div class="meta" data-page-node-id="7wdx6Q5wlhe92Cu5FWJoHS">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="7wdx6Q5wlhe92Cu5FWJoHS">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="2nsUPLpL2tDWl2WwV1X4Xj">查看看板 →</div>
                 </div>
             </a>
@@ -716,13 +749,13 @@
                     <div class="desc" data-page-node-id="nAHvEl3UAvOyLZTnJA9BH9">埋点偏向：关卡时长、热门关卡</div>
                 </div>
                 <div class="card-footer" data-page-node-id="nztfBEBDm01unCgGtoe0NN">
-                    <div class="meta" data-page-node-id="rU7gTkycpWqPvfP0E60QaD">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="rU7gTkycpWqPvfP0E60QaD">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="KV0fnUBUb1F6kWArKQNdgN">查看看板 →</div>
                 </div>
             </a></div>
 
         <!-- 2026.06.25 上线项目 -->
-        <div class="section-title" data-page-node-id="9s2sDYoDotP4nlukpAq2o3">📅 2026.06.25 上线项目</div>
+        <div class="section-title" data-page-node-id="9s2sDYoDotP4nlukpAq2o3" id="sec-2026-06-25">📅 2026.06.25 上线项目</div>
         <div class="cards-grid" data-page-node-id="HcD7rroy8KGtnRKZoQ5R5Z">
 <a class="card" href="1025_体感卡丁车_analytics_dashboard.html" data-page-node-id="oki8tR1FOIfHZMoIqQOjK9">
                 <div class="card-header" data-page-node-id="tqB2VVUQPKtb0C10LSbVKI">
@@ -740,7 +773,7 @@
                     <div class="desc" data-page-node-id="QYqSWWGwwfFBws3mSSPFD6">埋点偏向：热门地图、游戏人数、热门难度、热门角色、热门卡丁车、平均时长</div>
                 </div>
                 <div class="card-footer" data-page-node-id="hRxqNkHYQPjLVNHleYRS3q">
-                    <div class="meta" data-page-node-id="9wDJMDgHzZA2Q6UhDQaZla">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="9wDJMDgHzZA2Q6UhDQaZla">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="gU2cIPHqd5VJ4CbzvORwyH">查看看板 →</div>
                 </div>
             </a>
@@ -760,7 +793,7 @@
                     <div class="desc" data-page-node-id="tErZlm8eRVPfJ448REGRCk">埋点偏向：热门关卡、关卡平均得分、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="zHVjmyEZAaW1C2cr33vfhA">
-                    <div class="meta" data-page-node-id="XU3KYsIuIKDzKMxDziqDJ7">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="XU3KYsIuIKDzKMxDziqDJ7">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="m2PvT34qlAVKGakPQFESFR">查看看板 →</div>
                 </div>
             </a>
@@ -780,7 +813,7 @@
                     <div class="desc" data-page-node-id="f7B91QdU4G7Ad4dCYzXSuI">埋点偏向：通关进度、游戏人数、热门模式、竞技模式场均分数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="uAvwHhQZHVlm2Oeu1XcXt4">
-                    <div class="meta" data-page-node-id="wFAuhfkObSix9vZPITSJAb">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="wFAuhfkObSix9vZPITSJAb">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="IabNZD7Bp5xKBZvhkhK3yK">查看看板 →</div>
                 </div>
             </a>
@@ -802,7 +835,7 @@
                     <div class="desc" data-page-node-id="EekTdDbnz0I3GqqiT0zCyO">核心指标：鱼图鉴达成率 · 各钓场达成率对比 · 稀有鱼类占比 · 钓具使用分布。含 6 KPI + 10 组可视化图表。</div>
                 </div>
                 <div class="card-footer" data-page-node-id="mqqwu6DZJ15gHmGonLUYLZ">
-                    <div class="meta" data-page-node-id="peN0ntkmJBJsfCGGODtfNw">更新于 2026-06-11（v2.0）</div>
+                    <div class="meta" data-page-node-id="peN0ntkmJBJsfCGGODtfNw">更新于 2026-07-30（v2.0）</div>
                     <div class="action" data-page-node-id="GK7FgC9hYx7EcKrV8J33VT">查看看板 →</div>
                 </div>
             </a>
@@ -822,7 +855,7 @@
                     <div class="desc" data-page-node-id="t8dzPmrGdHkENOtdvoIU7U">埋点偏向：通关进度、关卡重玩率、关卡失败率</div>
                 </div>
                 <div class="card-footer" data-page-node-id="z2fTU3fEJfWPdK3JOSG3cl">
-                    <div class="meta" data-page-node-id="Avf9SGWQL83N3GfDCXup0A">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="Avf9SGWQL83N3GfDCXup0A">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="MfDHPHI0PfeAK93Eeh7ZEC">查看看板 →</div>
                 </div>
             </a>
@@ -842,13 +875,13 @@
                     <div class="desc" data-page-node-id="lEmGfHiOp5STduFavfjMkL">埋点偏向：命中率、关卡进度、游玩人数、单关时长</div>
                 </div>
                 <div class="card-footer" data-page-node-id="4n9cfFd2xyQIH4iqf0Rg4Y">
-                    <div class="meta" data-page-node-id="Of6myHihpIEcJvykhTljf3">更新于 2026-06-05</div>
+                    <div class="meta" data-page-node-id="Of6myHihpIEcJvykhTljf3">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="IKWXp3KHpNWOKnhnxdaoge">查看看板 →</div>
                 </div>
             </a></div>
 
         <!-- 2026.07 上线项目 -->
-        <div class="section-title" data-page-node-id="QQPqj35CN3n90saBM9VYBg">📅 2026.07 上线项目</div>
+        <div class="section-title" data-page-node-id="QQPqj35CN3n90saBM9VYBg" id="sec-2026-07">📅 2026.07 上线项目</div>
         <div class="cards-grid" data-page-node-id="cVAZO75MrV3DzCMHSdUnjY">
             <a class="card" href="1083%E3%80%8A%E5%86%B3%E6%88%98%E4%B8%96%E7%95%8C%E4%B9%8B%E5%B7%85%E3%80%8B_analytics_dashboard.html" data-page-node-id="XIoOCKuzLdktsE7OaDmjRX">
                 <div class="card-header" data-page-node-id="AR70KS0WnUxI6WXRBB0cEz">
@@ -866,7 +899,7 @@
                     <div class="desc" data-page-node-id="ea2GkNpRWaWEuR3ewtAueB">埋点偏向：比赛情况、热门模式、热门球队、比赛比分、球赛激烈程度。含 5 KPI + 10 组图表 + 球队排行榜。</div>
                 </div>
                 <div class="card-footer" data-page-node-id="ADX6panqTVD8wMHmchglqw">
-                    <div class="meta" data-page-node-id="NT7vwEYQBoqnnj2BYbH5so">更新于 2026-07-02</div>
+                    <div class="meta" data-page-node-id="NT7vwEYQBoqnnj2BYbH5so">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="UjpAkI1oToeJa3XOW6ayqy">查看看板 →</div>
                 </div>
             </a>
@@ -887,7 +920,7 @@
                 <div class="desc" data-page-node-id="LFspG2yB9MuG60Z7IYuY29">埋点偏向：题目难度、题目通过率、热门模式、通关进度。含 6 KPI + 8 组图表 + 题目难度排行榜。</div>
                 </div>
                 <div class="card-footer" data-page-node-id="SANisCQPP7mNw9IcHFirFb">
-                <div class="meta" data-page-node-id="mUNpcFpHoKp2FIsaVscOcS">更新于 2026-06-21</div>
+                <div class="meta" data-page-node-id="mUNpcFpHoKp2FIsaVscOcS">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="ukNa96szWDGruar4IZxu4o">查看看板 →</div>
                 </div>
             </a>
@@ -907,14 +940,14 @@
                     <div class="desc" data-page-node-id="MWjGc1FQjznGAOd3XeFr6e">埋点偏向：游戏人数、动作扣分率</div>
                 </div>
                 <div class="card-footer" data-page-node-id="7ZvGNEvefHEgD6ZASgnBNR">
-                    <div class="meta" data-page-node-id="q99YBTusvF662XJYunQPpR">更新于 2026-05-17</div>
+                    <div class="meta" data-page-node-id="q99YBTusvF662XJYunQPpR">更新于 2026-07-31</div>
                     <div class="action" data-page-node-id="INS7b0VV3TMyvwxNWdPP7a">查看看板 →</div>
                 </div>
             </a>
         </div>
 
         <!-- 2026.08 上线项目 -->
-        <div class="section-title" data-page-node-id="1FGwfOHkuEFZPo4J7CALMz">📅 2026.08 上线项目</div>
+        <div class="section-title" data-page-node-id="1FGwfOHkuEFZPo4J7CALMz" id="sec-2026-08">📅 2026.08 上线项目</div>
         <div class="cards-grid" data-page-node-id="fwdTxZaxF9ejH4dADRUihv">
             <a class="card" href="1044_啪叽啪叽叠塔对决_analytics_dashboard.html" data-page-node-id="QStC9layODjtaOeKktpzWJ">
                 <div class="card-header" data-page-node-id="JX8zqarJpjdd0rPhEwhSIc">
@@ -932,7 +965,7 @@
                 <div class="desc" data-page-node-id="V6Ko0JrSmHXXXBecESlaK7">埋点偏向：热门角色、场均时间、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="tESw6yKHBNBQctrwK3y8mE">
-                <div class="meta" data-page-node-id="T3wevrTPk03n6HLxhmxjfY">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="T3wevrTPk03n6HLxhmxjfY">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="Q4fL5FyfB91UtfbX5Fi9rO">查看看板 →</div>
                 </div>
             </a>
@@ -952,7 +985,7 @@
                     <div class="desc" data-page-node-id="f4VpEG0BqG8FkWzlAhe9fI">埋点偏向：场均分数、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="jAmRb9HHZ2h4kPYPGj5Gh8">
-                    <div class="meta" data-page-node-id="8QSKD47ADthBbsL9sb6yCa">更新于 2026-07-27</div>
+                    <div class="meta" data-page-node-id="8QSKD47ADthBbsL9sb6yCa">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="Dwqv3HDJyCBPqeINFmbicc">查看看板 →</div>
                 </div>
             </a>
@@ -972,14 +1005,14 @@
                     <div class="desc" data-page-node-id="pBfMynfOcgZT0aHinFnSIh">埋点偏向：杯赛进度、杯赛失败率、热门角色</div>
                 </div>
                 <div class="card-footer" data-page-node-id="CAZqEH95ZhMqkNy1MT1HTB">
-                    <div class="meta" data-page-node-id="FoWrfk8UslKP0RFzSNQTkI">更新于 2026-07-28</div>
+                    <div class="meta" data-page-node-id="FoWrfk8UslKP0RFzSNQTkI">更新于 2026-07-30</div>
                     <div class="action" data-page-node-id="E0ribSVmn3AR9k9aBShRIT">查看看板 →</div>
                 </div>
             </a>
         </div>
 
         <!-- 2026.09 上线项目 -->
-        <div class="section-title" data-page-node-id="eVrXTtDcjlhq7x5vWSsxYg">📅 2026.09 上线项目</div>
+        <div class="section-title" data-page-node-id="eVrXTtDcjlhq7x5vWSsxYg" id="sec-2026-09">📅 2026.09 上线项目</div>
         <div class="cards-grid" data-page-node-id="X91huTQiNExVCZiJBjUJyv">
             <a class="card" href="1037_超级贪吃鱼_analytics_dashboard.html" data-page-node-id="HF7TUZcSMgtYb1ZvCcTaQu">
                 <div class="card-header" data-page-node-id="JKoT8lqEIXXCKo8dPBJwFy">
@@ -997,7 +1030,7 @@
                     <div class="desc" data-page-node-id="3PWYdIp8XINpdibDy4qVhk">埋点偏向：热门鱼类、热门地图、结算等级分布</div>
                 </div>
                 <div class="card-footer" data-page-node-id="QITxRitpUB1rrLY6i9oQ0J">
-                    <div class="meta" data-page-node-id="5Xkqd02loCFCfmw10rgazn">更新于 2026-08-08</div>
+                    <div class="meta" data-page-node-id="5Xkqd02loCFCfmw10rgazn">更新于 2026-09-11</div>
                     <div class="action" data-page-node-id="tnqX249Yjd9ZfVPGGNbjK8">查看看板 →</div>
                 </div>
             </a>
@@ -1021,26 +1054,7 @@
                     <div class="action" data-page-node-id="iPI2WgxKm2lC4Mob892Kb9">查看看板 →</div>
                 </div>
             </a>
-            <a class="card" href="1061_奇妙萌可_analytics_dashboard.html" data-page-node-id="qQGxT407RkZYpbOZWMgR0t">
-                <div class="card-header" data-page-node-id="KWJougbuU1226YlxSQZa2w">
-                    <div class="info" data-page-node-id="xUvxfqAICYupIhMYTwHZjq">
-                        <h3 data-page-node-id="9mGhsTw2URXucw6fdXa6vq">🍭 奇妙萌可之闪耀流星</h3>
-                        <div class="id" data-page-node-id="nODDPsAQOfvC1pwA7PlrEb">项目编号：1061</div>
-                    </div>
-                    <span class="status status-done" data-page-node-id="bzRpsWVhdMA7dGMf0xOEJt">已完成</span>
-                </div>
-                <div class="card-body" data-page-node-id="avgDt7PrkcZlymaF1tz9d9">
-                    <div class="tags" data-page-node-id="7iIUMLixr4YwjVg58fThAe">
-                        <span class="tag" data-page-node-id="Dc2cw5VfHB3NpstZAOC38l">9.25上线</span>
-                        <span class="tag" data-page-node-id="Rm7SDhkaOob5foQ69NA9Th">关卡通关</span>
-                    </div>
-                    <div class="desc" data-page-node-id="tGzhKbFBXqUYwAgeDEhRFl">埋点偏向：关卡通关分布、萌可使用率、关卡详情</div>
-                </div>
-                <div class="card-footer" data-page-node-id="gBrdmzufrWziPhjwct7ZOq">
-                    <div class="meta" data-page-node-id="gu3ZP0D6gCG3nZUjC5TBlx">更新于 2026-07-29</div>
-                    <div class="action" data-page-node-id="aCPtwjBDcNAdJPIY1ew7Wq">查看看板 →</div>
-                </div>
-            </a>
+            
             <a class="card" href="1027_冠军乒乓球_analytics_dashboard.html" data-page-node-id="2Jw2Sr8U9g2NOB06ukMuZO">
                 <div class="card-header" data-page-node-id="1cSSiRe0CPJzO1KZYzN3cV">
                     <div class="info" data-page-node-id="dDETtClSmhZs3gW3QkDqPT">
@@ -1061,8 +1075,27 @@
                     <div class="action" data-page-node-id="gKgXeFHuPjC1MdonkoCwsD">查看看板 →</div>
                 </div>
             </a>
+                    <a class="card" href="1008_悦动英语单词_analytics_dashboard.html" data-page-node-id="Zl0zXjJxJVgZCpKIRQiyGI">
+                <div class="card-header" data-page-node-id="YosaoSIi4f8U2g8UVOcE5K">
+                <div class="info" data-page-node-id="himzQ1S2NN1K5oNENR8Qp5">
+                <h3 data-page-node-id="BuSlLSCzupFvLOn6HrD6Xc">📚 悦动英语单词</h3>
+                <div class="id" data-page-node-id="f4L6mb6Q61FrcchHZHzGOU">项目编号：1008</div>
+                </div>
+                <span class="status status-done" data-page-node-id="CfBkb3CrpQMPa3F4nMAs3y">已完成</span>
+                </div>
+                <div class="card-body" data-page-node-id="Rc3AEqt7IYG47pMAefBF2o">
+                <div class="tags" data-page-node-id="BqB3fjypZSfqvCJCEw3eRJ">
+                <span class="tag" data-page-node-id="kWoA888mtL9umEXetN7365">9.02上线</span>
+                <span class="tag" data-page-node-id="tu8TRdwBTrAD76IciEn2gt">关卡进度</span>
+                </div>
+                <div class="desc" data-page-node-id="29QZwC1DLlZMPVgJ5eDDEi">埋点偏向：关卡进度、关卡平均得分、语音宝箱开启率</div>
+                </div>
+                <div class="card-footer" data-page-node-id="VU7RRjkyNT8A9onGJFbpuk">
+                <div class="meta" data-page-node-id="6b1bTAwe7eeyzwa1H8sE1O">更新于 2026-09-11</div>
+                <div class="action" data-page-node-id="eBJkFEMyibGF2le9gKGJuU">查看看板 →</div>
+                </div>
+            </a>
         </div>
-
 
         <div class="section-title" id="sec-2026-10">📅 2026.10 上线项目</div>
         <div class="cards-grid">
@@ -1093,7 +1126,7 @@
         </div>
 
         <!-- 2026 未上线项目 -->
-        <div class="section-title" data-page-node-id="vsKWZUG3iGPigAVlgrktoQ">📦 未上线项目</div>
+        <div class="section-title" data-page-node-id="vsKWZUG3iGPigAVlgrktoQ" id="sec-unlaunched">📦 未上线项目</div>
         <div class="cards-grid" data-page-node-id="OnE2OnHieELJ1KIMCiwtWJ">
             <a class="card" href="1007_炫舞宝贝_analytics_dashboard.html" data-page-node-id="oKYULJAMkmZHFNBEvywZ0k">
                 <div class="card-header" data-page-node-id="WqM157IOXtmrXGEIFbrqox">
@@ -1111,30 +1144,11 @@
                 <div class="desc" data-page-node-id="1i7BOnA5FW2Df52VwjHzlh">埋点偏向：热门关卡、游戏人数、关卡平均得分</div>
                 </div>
                 <div class="card-footer" data-page-node-id="bNj2KXFM6UzOKAJS4Nt3HF">
-                <div class="meta" data-page-node-id="jhpUc5G6MtHSKbi0XhDHen">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="jhpUc5G6MtHSKbi0XhDHen">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="bTXUk0saiwJFdr6FC13fIp">查看看板 →</div>
                 </div>
             </a>
-            <a class="card" href="1008_悦动英语单词_analytics_dashboard.html" data-page-node-id="Zl0zXjJxJVgZCpKIRQiyGI">
-                <div class="card-header" data-page-node-id="YosaoSIi4f8U2g8UVOcE5K">
-                <div class="info" data-page-node-id="himzQ1S2NN1K5oNENR8Qp5">
-                <h3 data-page-node-id="BuSlLSCzupFvLOn6HrD6Xc">📚 悦动英语单词</h3>
-                <div class="id" data-page-node-id="f4L6mb6Q61FrcchHZHzGOU">项目编号：1008</div>
-                </div>
-                <span class="status status-todo" data-page-node-id="CfBkb3CrpQMPa3F4nMAs3y">未上线</span>
-                </div>
-                <div class="card-body" data-page-node-id="Rc3AEqt7IYG47pMAefBF2o">
-                <div class="tags" data-page-node-id="BqB3fjypZSfqvCJCEw3eRJ">
-                <span class="tag" data-page-node-id="kWoA888mtL9umEXetN7365">未上线</span>
-                <span class="tag" data-page-node-id="tu8TRdwBTrAD76IciEn2gt">关卡进度</span>
-                </div>
-                <div class="desc" data-page-node-id="29QZwC1DLlZMPVgJ5eDDEi">埋点偏向：关卡进度、关卡平均得分、语音宝箱开启率</div>
-                </div>
-                <div class="card-footer" data-page-node-id="VU7RRjkyNT8A9onGJFbpuk">
-                <div class="meta" data-page-node-id="6b1bTAwe7eeyzwa1H8sE1O">更新于 2026-05-17</div>
-                <div class="action" data-page-node-id="eBJkFEMyibGF2le9gKGJuU">查看看板 →</div>
-                </div>
-            </a>
+            
             <a class="card" href="1009_魔法塔防_analytics_dashboard.html" data-page-node-id="sapMR6G6v8RqTjg2NWk6W0">
                 <div class="card-header" data-page-node-id="93dzHZStM0yYBOufqve3j8">
                 <div class="info" data-page-node-id="6UQxGnKBW05LpFJUSCpUQu">
@@ -1151,7 +1165,7 @@
                 <div class="desc" data-page-node-id="XJUS58NJAatvePxifo4jNQ">埋点偏向：通关进度、游戏人数、魔法启动率、魔法释放成功率</div>
                 </div>
                 <div class="card-footer" data-page-node-id="B4a4U2bSMSGYCd4m6Y0RPn">
-                <div class="meta" data-page-node-id="zprLHiJrE5MyRlCNvGnaS6">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="zprLHiJrE5MyRlCNvGnaS6">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="9WOecC9BKDRczlkEDFCNOT">查看看板 →</div>
                 </div>
             </a>
@@ -1171,7 +1185,7 @@
                 <div class="desc" data-page-node-id="awH6SKgkrD9Ye7uYEePD8D">埋点偏向：热门关卡、关卡平均得分</div>
                 </div>
                 <div class="card-footer" data-page-node-id="YKolMKDWMyXyl0JtleEY1O">
-                <div class="meta" data-page-node-id="ES7lBpVBL0rGxQnpsGplkv">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="ES7lBpVBL0rGxQnpsGplkv">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="hfJWepwuFwmQHQ76kpoMDR">查看看板 →</div>
                 </div>
             </a>
@@ -1211,7 +1225,7 @@
                 <div class="desc" data-page-node-id="IfOZfODnRFlIEbU2JIC5x9">埋点偏向：热门关卡、关卡平均得分(区分年龄)、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="rVBrX36VMVIbafmCCOWWzq">
-                <div class="meta" data-page-node-id="I9eFkdREHii3vGpgLQasHg">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="I9eFkdREHii3vGpgLQasHg">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="vdpxKHTx6HfP0aB8oN0u8F">查看看板 →</div>
                 </div>
             </a>
@@ -1231,7 +1245,7 @@
                 <div class="desc" data-page-node-id="AnQAxtwNYQinqtJs6w46wa">埋点偏向：热门歌曲、乐队人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="D6Kq7U9RenHYvoJvhYDAhQ">
-                <div class="meta" data-page-node-id="aKmPdnc90nhsSuOkVBorfD">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="aKmPdnc90nhsSuOkVBorfD">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="47NJUb1nvGh3qcKhrb0K13">查看看板 →</div>
                 </div>
             </a>
@@ -1251,7 +1265,7 @@
                 <div class="desc" data-page-node-id="RiZQWdpkABrQ9DkNNoLnHu">埋点偏向：通关进度、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="zgIAv9hM5qRM6iXO9ib3us">
-                <div class="meta" data-page-node-id="wQov4UHvkI9ROV4TA20eRB">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="wQov4UHvkI9ROV4TA20eRB">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="Qga4azvQf80h4VSlsNLIc1">查看看板 →</div>
                 </div>
             </a>
@@ -1271,7 +1285,7 @@
                 <div class="desc" data-page-node-id="p3ZEj4YwUD20L8fSQDQxG0">埋点偏向：热门猫咪、时长</div>
                 </div>
                 <div class="card-footer" data-page-node-id="ABh0VxBdCtj23WgChChPYD">
-                <div class="meta" data-page-node-id="Fq2L48TGnPxmZzA3ZWdK1C">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="Fq2L48TGnPxmZzA3ZWdK1C">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="FhQtfizoPAnpPrtGwrojLy">查看看板 →</div>
                 </div>
             </a>
@@ -1291,7 +1305,7 @@
                 <div class="desc" data-page-node-id="wpfUThmWXFU3TFAkJ7XUa5">埋点偏向：通关进度、关卡平均时长、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="AeeMl5TR0DECZBtFax2lIe">
-                <div class="meta" data-page-node-id="xY2VnAAftSANcuWF4oKb77">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="xY2VnAAftSANcuWF4oKb77">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="nknr1kpeFVgIu6APmk62k0">查看看板 →</div>
                 </div>
             </a>
@@ -1311,7 +1325,7 @@
                 <div class="desc" data-page-node-id="ilDLZ5wxNOqHtCK9wuEtOQ">埋点偏向：游戏人数、通关进度、复活次数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="lxJEW9D5XfwK1cH8G4r44E">
-                <div class="meta" data-page-node-id="PdRuRGQZGlH30gjL2VaL8r">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="PdRuRGQZGlH30gjL2VaL8r">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="K80W3HDbI2iH8CJZheUx9M">查看看板 →</div>
                 </div>
             </a>
@@ -1331,11 +1345,102 @@
                 <div class="desc" data-page-node-id="SK1mUadyB74yLox1kD2fkt">埋点偏向：关卡进度、游戏人数</div>
                 </div>
                 <div class="card-footer" data-page-node-id="J53VFs9QNy0gscIYWBLFVL">
-                <div class="meta" data-page-node-id="R3j4OrAQQ3lHBtFKZ7S9uU">更新于 2026-05-17</div>
+                <div class="meta" data-page-node-id="R3j4OrAQQ3lHBtFKZ7S9uU">更新于 2026-07-30</div>
                 <div class="action" data-page-node-id="oFdwsF4GOJcjrMueL5iDzG">查看看板 →</div>
+                </div>
+            </a>
+                    <a class="card" href="1061_奇妙萌可_analytics_dashboard.html" data-page-node-id="qQGxT407RkZYpbOZWMgR0t">
+                <div class="card-header" data-page-node-id="KWJougbuU1226YlxSQZa2w">
+                    <div class="info" data-page-node-id="xUvxfqAICYupIhMYTwHZjq">
+                        <h3 data-page-node-id="9mGhsTw2URXucw6fdXa6vq">🍭 奇妙萌可之闪耀流星</h3>
+                        <div class="id" data-page-node-id="nODDPsAQOfvC1pwA7PlrEb">项目编号：1061</div>
+                    </div>
+                    <span class="status status-todo" data-page-node-id="bzRpsWVhdMA7dGMf0xOEJt">未上线</span>
+                </div>
+                <div class="card-body" data-page-node-id="avgDt7PrkcZlymaF1tz9d9">
+                    <div class="tags" data-page-node-id="7iIUMLixr4YwjVg58fThAe">
+                        <span class="tag" data-page-node-id="Dc2cw5VfHB3NpstZAOC38l">未上线</span>
+                        <span class="tag" data-page-node-id="Rm7SDhkaOob5foQ69NA9Th">关卡通关</span>
+                    </div>
+                    <div class="desc" data-page-node-id="tGzhKbFBXqUYwAgeDEhRFl">埋点偏向：关卡通关分布、萌可使用率、关卡详情</div>
+                </div>
+                <div class="card-footer" data-page-node-id="gBrdmzufrWziPhjwct7ZOq">
+                    <div class="meta" data-page-node-id="gu3ZP0D6gCG3nZUjC5TBlx">更新于 2026-09-11</div>
+                    <div class="action" data-page-node-id="aCPtwjBDcNAdJPIY1ew7Wq">查看看板 →</div>
                 </div>
             </a>
         </div>
     </div>
+
+    <!-- 悬浮目录 -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="naming_standards.html">← 命名规范</a>
+            <a class="toc-link" href="#sec-early">✅ 早期接入项目</a>
+            <a class="toc-link" href="#sec-2026-05-10">📅 2026.05.10 上线项目</a>
+            <a class="toc-link" href="#sec-2026-06-25">📅 2026.06.25 上线项目</a>
+            <a class="toc-link" href="#sec-2026-07">📅 2026.07 上线项目</a>
+            <a class="toc-link" href="#sec-2026-08">📅 2026.08 上线项目</a>
+            <a class="toc-link" href="#sec-2026-09">📅 2026.09 上线项目</a>
+            <a class="toc-link" href="#sec-2026-10">📅 2026.10 上线项目</a>
+            <a class="toc-link" href="#sec-unlaunched">📦 未上线项目</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        if (!panel || !toggle) return;
+        var links = Array.prototype.slice.call(panel.querySelectorAll('.toc-link'));
+        var anchors = links.filter(function (a) { return (a.getAttribute('href') || '').charAt(0) === '#'; });
+        var targets = anchors.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+        var KEY = 'index_toc_open';
+        var saved = localStorage.getItem(KEY);
+        var open  = saved === null ? (window.innerWidth >= 1560) : (saved === '1');
+        function setActive(i) { anchors.forEach(function (a, k) { a.classList.toggle('active', k === i); }); }
+        function apply() {
+            panel.hidden = !open;
+            toggle.textContent = open ? '✕' : '☰';
+            try { localStorage.setItem(KEY, open ? '1' : '0'); } catch (e) {}
+        }
+        toggle.addEventListener('click', function () { open = !open; apply(); });
+        topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        anchors.forEach(function (a, i) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                var t = targets[i];
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setActive(i); lock = i; clearTimeout(lockTimer);
+                lockTimer = setTimeout(function () { lock = -1; spy(); }, 700);
+            });
+        });
+        ['wheel','touchstart'].forEach(function (evt) {
+            window.addEventListener(evt, function () {
+                if (lock !== -1) { lock = -1; clearTimeout(lockTimer); spy(); }
+            }, { passive: true });
+        });
+        var lock = -1, lockTimer = null;
+        function spy() {
+            if (lock !== -1) return;
+            var atBottom = (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 4);
+            var cur = -1, lastVisible = -1;
+            targets.forEach(function (t, i) {
+                if (!t || t.offsetParent === null) return;
+                lastVisible = i;
+                if (t.getBoundingClientRect().top <= 120) cur = i;
+            });
+            if (cur === -1) cur = 0;
+            if (atBottom && lastVisible !== -1) cur = lastVisible;
+            setActive(cur);
+        }
+        window.addEventListener('scroll', spy, { passive: true });
+        window.addEventListener('resize', spy);
+        apply(); spy();
+    })();
+    </script>
 </body>
 </html>

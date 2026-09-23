@@ -150,6 +150,18 @@
                     <span class="entry-tag">导航补齐</span>
                 </div>
                 <ul class="entry-list">
+                    <li><strong>看板总览页 <code>index.html</code> 同步悬浮目录</strong>：源端 2026-09-11 版总览页（含目录组件）此前从未同步至仓库，导致线上总览页一直缺失跳转目录，本次整体同步上线。目录含 <strong>8 个板块锚点</strong>（早期接入 / 2026.05.10 / 06.25 / 07 / 08 / 09 / 10 上线 / 未上线）与<strong>「← 命名规范」</strong>返回项，滚动高亮、平滑滚动、<code>localStorage</code> 记忆同其余页面。</li>
+                    <li>同步源端 09-11 版卡片整理：<strong>1008 悦动英语单词</strong>由「未上线」移入「2026.09 上线」区（已完成、9.02 上线）；<strong>1061 奇妙萌可</strong>由「2026.09 上线」移回「未上线」区；全量卡片「更新于」日期刷新（05-17 → 07-30 等）。</li>
+                    <li>合并保留仓库端 2 处较新日期：1018 <code>2026-09-16</code>、1077 <code>2026-09-26</code>（源端均为 09-11）；51 个看板卡片链接与 <code>naming_standards.html</code> 入口均无缺失。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-09-23</span>
+                    <span class="entry-tag">导航补齐</span>
+                </div>
+                <ul class="entry-list">
                     <li>全部 <strong>53 个看板页统一补齐「悬浮目录」组件</strong>：此前仅命名页具备悬浮目录，看板页从未配置（经全量核查源文件与 git 历史确认），本次按命名页同款交互补齐。</li>
                     <li>组件能力与命名页一致：右下角 <code>☰</code> 目录按钮 + <code>↑</code> 回顶按钮；目录面板含<strong>「← 返回看板总览」</strong>返回项与各板块锚点；滚动自动高亮当前板块、点击平滑滚动，展开状态 <code>localStorage</code> 记忆（宽屏 ≥1560px 默认展开），打印时自动隐藏。</li>
                     <li>锚点策略：新式看板（30 页）取<strong>板块标题</strong> <code>.section-title</code>；老式看板（23 页）取 <code>h3</code> 标题作为事实板块；图表卡片级标题<strong>不进入目录</strong>；目录标签自动去掉 emoji 前缀、超长截断（18 字）。</li>
