@@ -147,6 +147,20 @@
             <article class="entry">
                 <div class="entry-head">
                     <span class="entry-date">2026-09-28</span>
+                    <span class="entry-tag">口径对齐</span>
+                </div>
+                <ul class="entry-list">
+                    <li><strong>1027《冠军乒乓球》6 个杯赛启用真实名称</strong>：看板与命名页统一由占位名改为 <strong>健将杯 / 街区杯 / 海湾杯 / 天际杯 / 校园杯 / 终极杯</strong>（<code>game_type</code> 0~5 为单打、6~11 为双打），同步改图表 <code>cupLabels</code>、区块注释、&#9855; 标题与角色分析模块，页面「后 3 个名称待确认」提示全部移除。</li>
+                    <li>解锁规则改写：健将杯、街区杯<strong>免费</strong>；其余 4 杯改为<strong>订阅解锁</strong>，且<strong>双打与对应单打共用解锁状态</strong>（原「小区杯免费、其余付费解锁」失效）。</li>
+                    <li>失败率数据修订并联动 KPI：各杯失败率下调为 单打 21/25/30/35/39/44、双打 21/27/32/36/41/45，页面 KPI「杯赛平均失败率」<code>39.3% &#8594; 32.3%</code>（双打均值 45.3% &#8594; 33.7%）。</li>
+                    <li>「完成率」口径修正：由当日早先版本的<strong>模拟值</strong>改为 <strong>胜率 + 失败率</strong>（一局分出胜负即算打完，100% 减去完成率即中途放弃占比），数值取整为 91% ~ 99%，模拟值说明同步删除；<strong>以本条为准</strong>。</li>
+                    <li>命名页 <code>player_number</code> 补充说明：<code>12=本地对战_1v</code>（1=对电脑、2=对玩家）、<code>13=本地对战_2v</code>（2=对电脑、4=对玩家）。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-09-28</span>
                     <span class="entry-tag">看板更新</span>
                 </div>
                 <ul class="entry-list">
