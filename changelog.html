@@ -146,6 +146,18 @@
 
             <article class="entry">
                 <div class="entry-head">
+                    <span class="entry-date">2026-09-29</span>
+                    <span class="entry-tag">新增项目</span>
+                </div>
+                <ul class="entry-list">
+                    <li><strong>新增 1057《欢乐喷涂》全量页面</strong>：<strong>看板</strong>（5 个 KPI：总对局数 8,642 / 活跃账号 3,128 / 人均使用颜色数 5.3 / 作品完成率 60.2% / 平均关卡时长 4'44"；7 张图表：热门关卡 Top10、热门模式占比、各关卡平均时长、结算结果分布、绘图操作使用频率、作品完成度分布、近 14 天对局趋势，另附关卡详细数据表）与 <strong>命名页</strong>（<code>enter_game</code> / <code>end_game</code> / <code>pause_game</code> / <code>continue_game</code> 共 4 个事件）。</li>
+                    <li>项目特有字段：<code>is_clear</code>（0=未完成 / 1=完成）、<code>completion_rate</code>（线稿涂色覆盖率 0~100）、<code>color_ids</code>（本局使用颜色 ID 列表，去重按首用顺序）、<code>operation_info</code> 对象组（<code>operation_id</code> 1=喷涂 / 2=装填 / 3=颜色切换 / 4=喷嘴切换 / 5=缩放 / 6=撤销 / 7=橡皮擦，<code>operation_count</code> 使用次数）；<code>game_type</code> 0=热身模式 / 1=创作模式，创作模式不上报 <code>level_id</code> 与 <code>completion_rate</code>。</li>
+                    <li><strong>入口与跳转补齐</strong>：首页「📅 2026.10 上线项目」新增 🎨 欢乐喷涂卡片（10.28 上线 · 涂鸦创作）；命名规范总览新增 <strong>1057 条目（已填充）</strong>，修复「命名页可返回总览、总览却无 1057 入口」的单向跳转；README 项目一览表插入 1057 行（后续序号顺延）并同步各处计数。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
                     <span class="entry-date">2026-09-28</span>
                     <span class="entry-tag">NFC分析</span>
                 </div>

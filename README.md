@@ -1,6 +1,6 @@
 # databoard · 游戏数据埋点看板与命名规范
 
-> 一个由 50 款体感 / 互动 / 体感健身 / 儿童益智类游戏组成的数据看板与埋点命名规范站点，统一托管在 **GitHub Pages** 上，供内部 PM、数据、研发、QA 共同查阅。
+> 一个由 51 款体感 / 互动 / 体感健身 / 儿童益智类游戏组成的数据看板与埋点命名规范站点，统一托管在 **GitHub Pages** 上，供内部 PM、数据、研发、QA 共同查阅。
 
 ---
 
@@ -9,7 +9,7 @@
 | 入口 | URL |
 | --- | --- |
 | 首页（按上线月份分组） | <https://nyq3316.github.io/databoard/> |
-| 命名规范总览（含 49 个项目命名页跳转） | <https://nyq3316.github.io/databoard/naming_standards> |
+| 命名规范总览（含 50 个项目命名页跳转） | <https://nyq3316.github.io/databoard/naming_standards> |
 
 > GitHub Pages 对 *新增文件* 的 `.html` 直链偶有短暂 404，请优先使用 **Clean URL**（去掉 `.html`），或等待 1–2 分钟刷新。
 
@@ -23,9 +23,9 @@
 | 默认分支 | `main` |
 | Pages 源 | 分支根目录 |
 | 技术栈 | 纯静态 HTML + Chart.js（CDN） |
-| 总文件数 | 99 个 `.html` + `index.html` + 1 个命名规范页 + `README.md` |
-| 当前看板数量 | 50 |
-| 当前命名页数量 | 50 |
+| 总文件数 | 101 个 `.html` + `index.html` + 1 个命名规范页 + `README.md` |
+| 当前看板数量 | 51 |
+| 当前命名页数量 | 51 |
 
 ---
 
@@ -34,7 +34,7 @@
 ```text
 databoard/
 ├── index.html                          # 首页（卡片网格 · 按上线月份分组）
-├── naming_standards.html               # 命名规范总览（唯一入口 · 内嵌 49 个项目入口）
+├── naming_standards.html               # 命名规范总览（唯一入口 · 内嵌 50 个项目入口）
 ├── README.md                           # 本文件
 ├── .nojekyll                           # 跳过 Jekyll 直接由 Pages 服务静态文件
 │
@@ -54,7 +54,7 @@ databoard/
 
 ---
 
-## 看板 & 命名页一览（50 个项目）
+## 看板 & 命名页一览（51 个项目）
 
 | # | 项目 ID | 游戏名 | 看板 | 命名页 |
 | ---: | ---: | --- | :-: | :-: |
@@ -101,13 +101,14 @@ databoard/
 | 41 | 1052 | 扭扭橡皮艇 | [链接](https://nyq3316.github.io/databoard/1052_扭扭橡皮艇_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1052_扭扭橡皮艇_naming.html) |
 | 42 | 1053 | 悦钓时光 | [链接](https://nyq3316.github.io/databoard/1053_悦钓时光_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1053_悦钓时光_naming.html) |
 | 43 | 1055 | 超智能工程机 | [链接](https://nyq3316.github.io/databoard/1055_超智能工程机_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1055_超智能工程机_naming.html) |
-| 44 | 1058 | 深空突袭 | [链接](https://nyq3316.github.io/databoard/1058_深空突袭_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1058_深空突袭_naming.html) |
-| 45 | 1061 | 奇妙萌可 | [链接](https://nyq3316.github.io/databoard/1061_奇妙萌可_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1061_奇妙萌可_naming.html) |
-| 46 | 1062 | 愿望喵喵跑酷 | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵跑酷_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵跑酷_naming.html) |
-| 47 | 1063 | 墨韵寻诗 | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_naming.html) |
-| 48 | 1068 | 完美定格 | [链接](https://nyq3316.github.io/databoard/1068_完美定格_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1068_完美定格_naming.html) |
-| 49 | 1083 | 决战世界之巅 | [链接](https://nyq3316.github.io/databoard/1083《决战世界之巅》_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1083_决战世界之巅_naming.html) |
-| 50 | 1076 | 养生功法 | [链接](https://nyq3316.github.io/databoard/1076_养生功法_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1076_养生功法_naming.html) |
+| 44 | 1057 | 欢乐喷涂 | [链接](https://nyq3316.github.io/databoard/1057_欢乐喷涂_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1057_欢乐喷涂_naming.html) |
+| 45 | 1058 | 深空突袭 | [链接](https://nyq3316.github.io/databoard/1058_深空突袭_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1058_深空突袭_naming.html) |
+| 46 | 1061 | 奇妙萌可 | [链接](https://nyq3316.github.io/databoard/1061_奇妙萌可_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1061_奇妙萌可_naming.html) |
+| 47 | 1062 | 愿望喵喵跑酷 | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵跑酷_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵跑酷_naming.html) |
+| 48 | 1063 | 墨韵寻诗 | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_naming.html) |
+| 49 | 1068 | 完美定格 | [链接](https://nyq3316.github.io/databoard/1068_完美定格_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1068_完美定格_naming.html) |
+| 50 | 1083 | 决战世界之巅 | [链接](https://nyq3316.github.io/databoard/1083《决战世界之巅》_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1083_决战世界之巅_naming.html) |
+| 51 | 1076 | 养生功法 | [链接](https://nyq3316.github.io/databoard/1076_养生功法_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1076_养生功法_naming.html) |
 
 > 备注：1044 目录下还存在一份历史遗留文件 `1044_小伴龙与动物朋友们_analytics_dashboard.html`，只是无人引用的冗余副本；如需清理可另开 PR 删除。
 
@@ -124,7 +125,7 @@ databoard/
 
 ### 2. 命名规范总览 `naming_standards.html`
 
-- 内嵌全部 48 个项目的命名页跳转入口
+- 内嵌全部 49 个项目的命名页跳转入口
 - 每个项目的命名页通常包含：
   - 该游戏的核心事件（`event_id`）列表
   - 事件通用属性 / 私有属性（`property`）定义
@@ -202,4 +203,4 @@ git push origin main
 
 ---
 
-_Last updated: 2026-08-09_
+_Last updated: 2026-09-29_

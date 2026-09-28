@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1057《欢乐喷涂》数据统计看板</title>
+    <script src="chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa07a 50%, #ffd93d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        /* 顶部区域 */
+        .header {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 { font-size: 26px; color: #1a1a2e; margin-bottom: 8px; }
+        .header .subtitle { color: #666; font-size: 14px; }
+        .header .subtitle span { margin-right: 20px; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 10px 20px; background: linear-gradient(135deg, #ff6b6b, #ffa07a);
+            color: #fff; text-decoration: none; border-radius: 10px;
+            font-size: 14px; font-weight: 600; transition: all 0.3s; white-space: nowrap;
+        }
+        .back-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,107,107,0.4); }
+
+        /* KPI 卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-4px); }
+        .stat-card .label { font-size: 13px; color: #666; margin-bottom: 8px; }
+        .stat-card .value { font-size: 32px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+        .stat-card .change { font-size: 13px; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+        .stat-card .change.positive { background: #e6f7ed; color: #52c41a; }
+        .stat-card .change.negative { background: #fff1f0; color: #f5222d; }
+        .stat-card .change.info { background: #e6f4ff; color: #1890ff; }
+
+        /* 图表区 */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .chart-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .chart-card.wide { grid-column: 1 / -1; }
+        .chart-card h3 {
+            font-size: 17px; color: #1a1a2e; margin-bottom: 20px;
+            padding-bottom: 12px; border-bottom: 2px solid #f0f0f0;
+        }
+        .chart-container { position: relative; height: 320px; }
+
+        /* 数据明细表 */
+        .table-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+        .table-card.wide { /* 同 chart-card.wide 语义 */ }
+        .table-card h3 {
+            font-size: 17px; color: #1a1a2e; margin-bottom: 20px;
+            padding-bottom: 12px; border-bottom: 2px solid #f0f0f0;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { font-weight: 600; color: #666; font-size: 13px; background: #fafafa; }
+        td { color: #333; font-size: 13px; }
+        tr:hover { background: #fafafa; }
+        .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .badge-success { background: #e6f7ed; color: #52c41a; }
+        .badge-warning { background: #fff7e6; color: #fa8c16; }
+        .badge-info { background: #e6f4ff; color: #1890ff; }
+        .badge-required { background: #fff1f0; color: #cf1322; }
+        .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+        .footer { text-align: center; color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 40px; padding-bottom: 20px; }
+
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ======== 悬浮目录组件 ======== */
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 200px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 70vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- ===== 顶部 ===== -->
+    <div class="header">
+        <div>
+            <h1>🎨 欢乐喷涂 - 数据统计看板</h1>
+            <div class="subtitle">
+                <span>📅 统计周期：2026-09-01 至 2026-09-28</span>
+                <span>🎮 game_id：1057</span>
+                <span>📌 计划上线：2026-10-28</span>
+            </div>
+        </div>
+        <a class="back-btn" href="index.html">← 返回看板总览</a>
+    </div>
+
+    <!-- ===== KPI 总览 ===== -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="label">📈 总对局数</div>
+            <div class="value">8,642</div>
+            <div class="change positive">↑ 12.4% 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">👤 活跃账号</div>
+            <div class="value">3,128</div>
+            <div class="change positive">↑ 8.7% 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">🎨 人均使用颜色数</div>
+            <div class="value">5.3</div>
+            <div class="change info">— 与上周持平</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">📋 作品完成率</div>
+            <div class="value">60.2%</div>
+            <div class="change positive">↑ 2.3pp 较上周</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">⏱️ 平均关卡时长</div>
+            <div class="value">4'44"</div>
+            <div class="change negative">↓ 8s 较上周</div>
+        </div>
+    </div>
+
+    <!-- ===== 图表区 1：热门关卡 + 热门模式 ===== -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3 id="sec-1">🏆 热门关卡 Top10</h3>
+            <div class="chart-container">
+                <canvas id="levelChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3 id="sec-2">🎮 热门模式占比</h3>
+            <div class="chart-container">
+                <canvas id="modeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 图表区 2：关卡时长 + 结算结果 ===== -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3 id="sec-3">⏱️ 各关卡平均时长</h3>
+            <div class="chart-container">
+                <canvas id="durationChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3 id="sec-4">🏁 结算结果分布</h3>
+            <div class="chart-container">
+                <canvas id="resultChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 图表区 3：绘图操作 ===== -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3 id="sec-5">🖌️ 绘图操作使用频率</h3>
+            <div class="chart-container">
+                <canvas id="operationChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 图表区 4：作品完成度分布（宽） ===== -->
+    <div class="charts-grid">
+        <div class="chart-card wide">
+            <h3 id="sec-6">📋 作品完成度分布</h3>
+            <div class="chart-container">
+                <canvas id="completionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 图表区 5：近14天对局趋势（宽） ===== -->
+    <div class="charts-grid">
+        <div class="chart-card wide">
+            <h3 id="sec-7">📈 近14天对局趋势</h3>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 关卡详细数据统计 ===== -->
+    <div class="table-card">
+        <h3 id="sec-8">📊 关卡详细数据</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>关卡ID</th>
+                    <th>关卡名称</th>
+                    <th>对局次数</th>
+                    <th>平均时长</th>
+                    <th>完成率</th>
+                    <th>人均使用颜色数</th>
+                    <th>本关最多使用3色</th>
+                    <th>作品完成度均值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>level_01</td><td>造型斑马线</td><td>1,860</td><td>3'45"</td><td>72.3%</td><td>4.6</td><td><span class="dot" style="background:#ef4444"></span>红 <span class="dot" style="background:#eab308"></span>黄 <span class="dot" style="background:#3b82f6"></span>蓝</td><td>68.5%</td></tr>
+                <tr><td>level_02</td><td>八卦图</td><td>1,420</td><td>4'10"</td><td>68.1%</td><td>4.9</td><td><span class="dot" style="background:#3b82f6"></span>蓝 <span class="dot" style="background:#ef4444"></span>红 <span class="dot" style="background:#eab308"></span>黄</td><td>71.2%</td></tr>
+                <tr><td>level_03</td><td>水果</td><td>1,180</td><td>4'32"</td><td>64.5%</td><td>5.1</td><td><span class="dot" style="background:#eab308"></span>黄 <span class="dot" style="background:#ef4444"></span>红 <span class="dot" style="background:#3b82f6"></span>蓝</td><td>66.8%</td></tr>
+                <tr><td>level_04</td><td>拟人化星球</td><td>980</td><td>4'48"</td><td>60.2%</td><td>5.2</td><td><span class="dot" style="background:#3b82f6"></span>蓝 <span class="dot" style="background:#ef4444"></span>红 <span class="dot" style="background:#eab308"></span>黄</td><td>63.5%</td></tr>
+                <tr><td>level_05</td><td>卡通人物</td><td>820</td><td>5'05"</td><td>55.7%</td><td>5.3</td><td><span class="dot" style="background:#ef4444"></span>红 <span class="dot" style="background:#3b82f6"></span>蓝 <span class="dot" style="background:#22c55e"></span>绿</td><td>59.4%</td></tr>
+                <tr><td>level_06</td><td>卡通动物</td><td>720</td><td>5'22"</td><td>51.4%</td><td>5.4</td><td><span class="dot" style="background:#eab308"></span>黄 <span class="dot" style="background:#22c55e"></span>绿 <span class="dot" style="background:#f97316"></span>橙</td><td>56.1%</td></tr>
+                <tr><td>level_07</td><td>蔬果</td><td>580</td><td>5'40"</td><td>47.8%</td><td>5.5</td><td><span class="dot" style="background:#22c55e"></span>绿 <span class="dot" style="background:#f97316"></span>橙 <span class="dot" style="background:#ef4444"></span>红</td><td>52.7%</td></tr>
+                <tr><td>level_08</td><td>人物</td><td>490</td><td>5'58"</td><td>43.5%</td><td>5.6</td><td><span class="dot" style="background:#3b82f6"></span>蓝 <span class="dot" style="background:#8b5cf6"></span>紫 <span class="dot" style="background:#1f2937"></span>黑</td><td>48.9%</td></tr>
+                <tr><td>level_09</td><td>无底洞</td><td>380</td><td>6'15"</td><td>39.2%</td><td>5.7</td><td><span class="dot" style="background:#1f2937"></span>黑 <span class="dot" style="background:#8b5cf6"></span>紫 <span class="dot" style="background:#3b82f6"></span>蓝</td><td>45.3%</td></tr>
+                <tr><td>level_10</td><td>卡通小动物</td><td>212</td><td>6'32"</td><td>35.1%</td><td>5.8</td><td><span class="dot" style="background:#ec4899"></span>粉 <span class="dot" style="background:#f97316"></span>橙 <span class="dot" style="background:#eab308"></span>黄</td><td>41.6%</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">🎨 欢乐喷涂数据统计看板 · game_id 1057 · 数据更新于 2026-09-29 · 模拟数值 · 枚举口径依据《研发策划案》《新增功能策划案》</div>
+</div>
+
+<script>
+// ===== 调色板 =====
+const PALETTE = {
+    warm: ['#ff6b6b', '#ff8e53', '#ffa07a', '#ffd93d', '#6bcf7f', '#4d96ff', '#9b5de5', '#f15bb5', '#00bbf9', '#fee440'],
+    multi: ['#ff6b6b', '#ff8e53', '#ffa07a', '#ffd93d', '#6bcf7f', '#4d96ff', '#9b5de5', '#f15bb5', '#00bbf9', '#fee440']
+};
+
+// ===== 数据 =====
+const LEVELS = ['level_01 造型斑马线', 'level_02 八卦图', 'level_03 水果', 'level_04 拟人化星球', 'level_05 卡通人物', 'level_06 卡通动物', 'level_07 蔬果', 'level_08 人物', 'level_09 无底洞', 'level_10 卡通小动物'];
+const LEVEL_PLAYS = [1860, 1420, 1180, 980, 820, 720, 580, 490, 380, 212];
+
+const MODES = ['热身模式', '创作模式'];
+const MODE_DATA = [5142, 3500];
+
+const DURATIONS = [225, 250, 272, 288, 305, 322, 340, 358, 375, 392]; // 秒
+const DURATION_LABELS = LEVELS;
+
+const RESULTS = ['完成', '未完成'];
+const RESULT_DATA = [5204, 3438];
+
+const OPERATIONS = ['喷涂', '装填', '颜色切换', '喷嘴切换', '撤销', '橡皮擦', '缩放'];
+const OP_HITS = [6840, 4280, 3120, 2680, 2140, 1420, 980];
+
+const TREND_LABELS = ['09-15','09-16','09-17','09-18','09-19','09-20','09-21','09-22','09-23','09-24','09-25','09-26','09-27','09-28'];
+const TREND_DATA = [520, 612, 548, 684, 720, 692, 760, 632, 728, 692, 748, 712, 796, 798];
+
+// ===== 图表生成器 =====
+function makeBarH(canvasId, labels, data, label, colors, options) {
+    return new Chart(document.getElementById(canvasId), {
+        type: 'bar',
+        data: { labels: labels, datasets: [{ label: label, data: data, backgroundColor: colors, borderRadius: 6 }] },
+        options: Object.assign({
+            indexAxis: 'y',
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, grid: { color: '#f0f0f0' } }, y: { grid: { display: false } } }
+        }, options || {})
+    });
+}
+function makeBar(canvasId, labels, data, label, colors, options) {
+    return new Chart(document.getElementById(canvasId), {
+        type: 'bar',
+        data: { labels: labels, datasets: [{ label: label, data: data, backgroundColor: colors, borderRadius: 6 }] },
+        options: Object.assign({
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+        }, options || {})
+    });
+}
+function makeDoughnut(canvasId, labels, data, colors) {
+    return new Chart(document.getElementById(canvasId), {
+        type: 'doughnut',
+        data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }] },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'right', labels: { padding: 16, font: { size: 13 } } } }
+        }
+    });
+}
+
+// ===== 实例化 =====
+const levelChart = makeBarH('levelChart', LEVELS, LEVEL_PLAYS, '对局次数', PALETTE.warm);
+
+const modeChart = makeDoughnut('modeChart', MODES, MODE_DATA, ['#ff6b6b', '#4d96ff']);
+
+let durationChart = new Chart(document.getElementById('durationChart'), {
+    type: 'bar',
+    data: {
+        labels: DURATION_LABELS,
+        datasets: [{
+            label: '平均时长(秒)',
+            data: DURATIONS,
+            backgroundColor: '#4d96ff',
+            borderRadius: 6
+        }]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: function(ctx) {
+                var m = Math.floor(ctx.raw / 60), s = ctx.raw % 60;
+                return m + '分' + (s < 10 ? '0' + s : s) + '秒';
+            } } }
+        },
+        scales: { x: { grid: { display: false }, ticks: { font: { size: 10 } } }, y: { beginAtZero: true, grid: { color: '#f0f0f0' }, ticks: { callback: function(v) { return Math.floor(v/60) + "'" + (v%60 < 10 ? '0' : '') + (v%60) + '"'; } } } }
+    }
+});
+
+const resultChart = makeDoughnut('resultChart', RESULTS, RESULT_DATA, ['#52c41a', '#fa8c16']);
+
+const operationChart = makeBar('operationChart', OPERATIONS, OP_HITS, '使用次数', PALETTE.warm);
+
+let completionChart = new Chart(document.getElementById('completionChart'), {
+    type: 'bar',
+    data: {
+        labels: ['0-20%', '20-40%', '40-60%', '60-80%', '80-100%'],
+        datasets: [{ label: '作品数', data: [820, 1240, 2180, 2480, 1922], backgroundColor: ['#f5222d', '#fa8c16', '#ffd93d', '#6bcf7f', '#52c41a'], borderRadius: 6 }]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+let trendChart = new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+        labels: TREND_LABELS,
+        datasets: [{
+            label: '对局数',
+            data: TREND_DATA,
+            borderColor: '#ff6b6b',
+            backgroundColor: 'rgba(255,107,107,0.1)',
+            fill: true, tension: 0.4,
+            pointRadius: 4, pointBackgroundColor: '#ff6b6b', pointHoverRadius: 6
+        }]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { grid: { display: false } }, y: { beginAtZero: false, grid: { color: '#f0f0f0' } } }
+    }
+});
+
+// ===== 响应式处理 =====
+window.addEventListener('resize', function() {
+    [levelChart, modeChart, durationChart, resultChart, operationChart, completionChart, trendChart].forEach(function(c) {
+        if (c && c.resize) c.resize();
+    });
+});
+</script>
+
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="index.html">← 返回看板总览</a>
+            <a class="toc-link" href="#sec-1">热门关卡 Top10</a>
+            <a class="toc-link" href="#sec-2">热门模式占比</a>
+            <a class="toc-link" href="#sec-3">各关卡平均时长</a>
+            <a class="toc-link" href="#sec-4">结算结果分布</a>
+            <a class="toc-link" href="#sec-5">绘图操作使用频率</a>
+            <a class="toc-link" href="#sec-6">作品完成度分布</a>
+            <a class="toc-link" href="#sec-7">近14天对局趋势</a>
+            <a class="toc-link" href="#sec-8">关卡详细数据</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        var STORAGE_KEY = 'index_toc_open';
+        function setPanel(open) {
+            if (open) { panel.removeAttribute('hidden'); toggle.textContent = '✕'; }
+            else      { panel.setAttribute('hidden', '');   toggle.textContent = '☰'; }
+            try { localStorage.setItem(STORAGE_KEY, open ? '1' : '0'); } catch (e) {}
+        }
+        try {
+            if (localStorage.getItem(STORAGE_KEY) === '0') setPanel(false);
+            else setPanel(true);
+        } catch (e) { setPanel(true); }
+        toggle.addEventListener('click', function () {
+            setPanel(panel.hasAttribute('hidden'));
+        });
+        topBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        var links = panel.querySelectorAll('.toc-link[href^="#"]');
+        links.forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                var id = a.getAttribute('href').slice(1);
+                var t = document.getElementById(id);
+                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+        });
+        var ids = Array.from(links).map(function (a) { return a.getAttribute('href').slice(1); });
+        if ('IntersectionObserver' in window) {
+            var obs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (en) {
+                    if (en.isIntersecting) {
+                        links.forEach(function (l) { l.classList.remove('active'); });
+                        var hit = panel.querySelector('.toc-link[href="#' + en.target.id + '"]');
+                        if (hit) hit.classList.add('active');
+                    }
+                });
+            }, { rootMargin: '-30% 0px -60% 0px' });
+            ids.forEach(function (id) { var el = document.getElementById(id); if (el) obs.observe(el); });
+        }
+    })();
+    </script>
+</body>
+</html>
