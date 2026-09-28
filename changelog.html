@@ -147,6 +147,19 @@
             <article class="entry">
                 <div class="entry-head">
                     <span class="entry-date">2026-09-28</span>
+                    <span class="entry-tag">NFC分析</span>
+                </div>
+                <ul class="entry-list">
+                    <li><strong>1025《体感卡丁车》NFC 模块重做</strong>：原「NFC 卡插入排行」（单一水平柱状图）升级为 <strong>NFC 卡使用分析</strong> 专区，含 2 个 KPI 卡（NFC 总激活次数 12,580 / 使用 NFC 卡账号数 3,286）、<strong>类型激活次数</strong>、<strong>各类型激活-使用比</strong>、<strong>未超时/超时激活分布</strong> 三张图表，以及 <strong>8 张卡的明细表</strong>（赤焰FX、萝卜火箭、云翼、鲨克、魅影、大鳄、团子、凌云九霄；含类型、稀有度、激活/使用次数、激活-使用比、未超时率）。</li>
+                    <li>新增 <code>card_type</code>（0=卡丁车 / 1=角色 / 2=卡丁车+角色）、<code>card_rarity</code>（0=R / 1=SR / 2=SSR）、<code>item_id</code>（刷卡获得道具ID 列表，含 1~4/101/102/401/301 全量映射）、<code>is_timeout</code>（0=未超时 / 1=已超时）四个项目特有字段，替换 NFC 刷卡事件中原 <code>role_id</code> / <code>kart_id</code> 的非结构化描述。</li>
+                    <li>命名页副标题补充业务信息：<strong>NFC 刷卡解锁</strong>（体感竞速 · 1~4人 · 挑战模式 / 大奖赛模式）。</li>
+                    <li><strong>Chart.js 改为本地引入</strong>：本页 <code>chart.js</code> 由 jsdelivr CDN 切换为仓库内 <code>chart.umd.min.js</code>（离线内网环境可正常渲染），同批 <code>1076</code> 等已本地化的页面一并补齐依赖文件。</li>
+                </ul>
+            </article>
+
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-09-28</span>
                     <span class="entry-tag">口径对齐</span>
                 </div>
                 <ul class="entry-list">

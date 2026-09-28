@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1025《体感卡丁车》数据统计看板</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -59,6 +59,8 @@
         .stat-card .change { font-size: 13px; padding: 4px 8px; border-radius: 4px; display: inline-block; }
         .stat-card .change.positive { background: #e6f7ed; color: #52c41a; }
         .stat-card .change.negative { background: #fff1f0; color: #f5222d; }
+.stat-card .change.info { background: #e6f4ff; color: #1890ff; }
+.stat-card .change.info { background: #e6f4ff; color: #1890ff; }
 
         /* 图表区 */
         .charts-grid {
@@ -257,14 +259,6 @@
             </div>
         </div>
 
-        <!-- NFC卡插入排行（水平柱状图） -->
-        <div class="chart-card">
-            <h3 id="sec-10">📇 NFC卡插入排行</h3>
-            <div class="chart-container auto-height">
-                <canvas id="nfcChart"></canvas>
-            </div>
-        </div>
-
         <!-- 近14天对局趋势（折线图） -->
         <div class="chart-card wide">
             <h3 id="sec-11">📈 近14天对局趋势</h3>
@@ -272,6 +266,61 @@
                 <canvas id="trendChart"></canvas>
             </div>
         </div>
+    </div>
+
+    <!-- ===== NFC卡使用分析 ===== -->
+    <div class="table-card wide" id="sec-10">
+        <h3>📇 NFC卡使用分析</h3>
+        <div class="stats-grid" id="nfcKpiCards">
+            <div class="stat-card">
+                <div class="label">🔄 NFC总激活次数</div>
+                <div class="value">12,580</div>
+                <div class="change positive">↑ 9.3% 较上周</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">👥 使用NFC卡账号数</div>
+                <div class="value">3,286</div>
+                <div class="change positive">↑ 5.6% 较上周</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3 id="sec-10-1">📊 NFC卡类型激活次数</h3>
+                <div class="chart-container">
+                    <canvas id="nfcTypeChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3 id="sec-10-2">📈 各类型激活-使用比</h3>
+                <div class="chart-container">
+                    <canvas id="nfcUseRatioChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3 id="sec-10-3">⏱️ 未超时/超时激活分布</h3>
+                <div class="chart-container">
+                    <canvas id="nfcTimeoutChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 24px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #f0f0f0;">🃏 NFC卡明细</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>NFC卡</th>
+                    <th>类型</th>
+                    <th>激活次数</th>
+                    <th>使用次数</th>
+                    <th>激活-使用比</th>
+                    <th>未超时率</th>
+                </tr>
+            </thead>
+            <tbody id="nfcDetailBody">
+                <!-- JS fills this -->
+            </tbody>
+        </table>
     </div>
 
     <!-- ===== 赛道详细数据统计 ===== -->
@@ -521,16 +570,61 @@ let kartWinChart = makeBarChart('kartWinChart', KART_WIN, KART_WIN_RATE, '胜率
     }
 });
 
-// NFC卡插入排行
-const NFC_CARDS = ['小熊角色卡', '哈士奇角色卡', '闪电卡丁卡', '小猫角色卡', '大象角色卡', '音速飞车卡', '幻影赛车卡', '方块战车卡'];
-const NFC_DATA = [4280, 3650, 3420, 3180, 2940, 2860, 2540, 2120];
-let nfcChart = makeBarChart('nfcChart', NFC_CARDS, NFC_DATA, '插入次数', ['#722ed1'], {
-    indexAxis: 'y',
+// NFC卡使用分析
+const NFC_TYPES = ['卡丁车R卡', '角色SR卡', '角色SSR卡', '卡丁车SSR卡'];
+const NFC_TYPE_ACTIVATION = [5420, 3860, 1250, 2050];
+const NFC_TYPE_USE = [4444, 2934, 850, 838];
+const NFC_TYPE_RATIO = NFC_TYPE_USE.map((v, i) => parseFloat((v / NFC_TYPE_ACTIVATION[i] * 100).toFixed(1)));
+
+const NFC_TIMEOUT_LABELS = ['未超时', '已超时'];
+const NFC_TIMEOUT_DATA = [10350, 2230];
+
+let nfcTypeChart = makeBarChart('nfcTypeChart', NFC_TYPES, NFC_TYPE_ACTIVATION, '激活次数', ['#722ed1'], {
     scales: {
-        x: { beginAtZero: true, grid: { color: '#f0f0f0' } },
-        y: { grid: { display: false } }
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, grid: { color: '#f0f0f0' } }
     }
 });
+
+let nfcUseRatioChart = makeBarChart('nfcUseRatioChart', NFC_TYPES, NFC_TYPE_RATIO, '激活-使用比(%)', ['#1890ff'], {
+    plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.raw + '%'; } } }
+    },
+    scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, max: 100, grid: { color: '#f0f0f0' }, ticks: { callback: v => v + '%' } }
+    }
+});
+
+let nfcTimeoutChart = makeDoughnut('nfcTimeoutChart', NFC_TIMEOUT_LABELS, NFC_TIMEOUT_DATA, ['#52c41a', '#f5222d']);
+
+// NFC卡明细表
+const NFC_DETAILS = [
+    { name: '赤焰FX', type: '卡丁车R卡', rarity: 'R', act: 1580, use: 1320, noTimeout: 1320 },
+    { name: '萝卜火箭', type: '卡丁车R卡', rarity: 'R', act: 1420, use: 1182, noTimeout: 1210 },
+    { name: '云翼', type: '卡丁车R卡', rarity: 'R', act: 1280, use: 1042, noTimeout: 1080 },
+    { name: '鲨克', type: '卡丁车R卡', rarity: 'R', act: 1140, use: 900, noTimeout: 960 },
+    { name: '魅影', type: '角色SR卡', rarity: 'SR', act: 1980, use: 1520, noTimeout: 1650 },
+    { name: '大鳄', type: '角色SR卡', rarity: 'SR', act: 1880, use: 1414, noTimeout: 1580 },
+    { name: '团子', type: '角色SSR卡', rarity: 'SSR', act: 1250, use: 850, noTimeout: 1020 },
+    { name: '凌云九霄', type: '卡丁车SSR卡', rarity: 'SSR', act: 2050, use: 838, noTimeout: 1530 }
+];
+const nfcBody = document.getElementById('nfcDetailBody');
+if (nfcBody) {
+    nfcBody.innerHTML = NFC_DETAILS.map(function(item) {
+        var ratio = (item.use / item.act * 100).toFixed(1);
+        var noTimeoutRate = (item.noTimeout / item.act * 100).toFixed(1);
+        return '<tr>' +
+            '<td>' + item.name + '</td>' +
+            '<td><span class="badge badge-info">' + item.rarity + '</span> ' + item.type + '</td>' +
+            '<td>' + item.act.toLocaleString() + '</td>' +
+            '<td>' + item.use.toLocaleString() + '</td>' +
+            '<td>' + ratio + '%</td>' +
+            '<td>' + noTimeoutRate + '%</td>' +
+        '</tr>';
+    }).join('');
+}
 
 // 近14天趋势
 let trendChart = new Chart(document.getElementById('trendChart'), {
@@ -564,7 +658,7 @@ let trendChart = new Chart(document.getElementById('trendChart'), {
 
 // ===== 响应式处理 =====
 window.addEventListener('resize', function() {
-    [mapChart50, mapChart100, mapChart150, playerChart, diffChart, roleChart, kartChart, roleWinChart, kartWinChart, nfcChart, trendChart].forEach(function(c) {
+    [mapChart50, mapChart100, mapChart150, playerChart, diffChart, roleChart, kartChart, roleWinChart, kartWinChart, nfcTypeChart, nfcUseRatioChart, nfcTimeoutChart, trendChart].forEach(function(c) {
         if (c && c.resize) c.resize();
     });
 });
@@ -584,7 +678,7 @@ window.addEventListener('resize', function() {
             <a class="toc-link" href="#sec-7">热门卡丁车排名</a>
             <a class="toc-link" href="#sec-8">胜率 Top5 角色</a>
             <a class="toc-link" href="#sec-9">胜率 Top5 卡丁车</a>
-            <a class="toc-link" href="#sec-10">NFC卡插入排行</a>
+            <a class="toc-link" href="#sec-10">NFC卡使用分析</a>
             <a class="toc-link" href="#sec-11">近14天对局趋势</a>
             <a class="toc-link" href="#sec-12">赛道详细数据 — 50cc</a>
             <a class="toc-link" href="#sec-13">赛道详细数据 — 100cc</a>
