@@ -150,6 +150,18 @@
                     <span class="entry-tag">新增项目</span>
                 </div>
                 <ul class="entry-list">
+                    <li><strong>新增 1038《奥特曼·体感超激斗》全量页面</strong>：<strong>看板</strong>（2 个 KPI：总对局数 8,655 / 活跃账号 2,650；7 张图表：热门关卡 Top13（4 章节）、热门奥特曼 Top15、热门模式占比、玩家年龄段统计、各奥特曼平均变身时长、各奥特曼变身完成率、近 14 天对局趋势；另附 <strong>12 个战斗剧本</strong>详情图与指标表、官方合影背景拍照详情表（20 组）、关卡详细数据表（13 关））与 <strong>命名页</strong>（<code>enter_game</code> / <code>end_game</code> / <code>pause_game</code> / <code>continue_game</code> / <code>mini_game_start</code> / <code>mini_game_end</code> / <code>photo_start</code> / <code>photo_end</code> / <code>transform_start</code> / <code>transform_end</code> 共 10 个事件）。</li>
+                    <li>项目特有字段：<code>level_id</code>（关卡，13 关按 4 章节解锁）、<code>role_id</code>（奥特曼，15 款）、<code>age_group</code>（玩家年龄段）、<code>result</code>（0=未完成 / 1=完成）、<code>score</code>、<code>hp</code>、<code>collecting</code> 对象组（<code>item_id</code> / <code>item_count</code>）、<code>action_info</code> 对象组（<code>action_id</code> / <code>input_count</code>）、<code>photo_id</code> / <code>retake_count</code> / <code>is_saved</code>（拍照环节）。</li>
+                    <li><strong>入口与跳转补齐</strong>：首页新增「📅 2026.11 上线项目」分区并置入 🦸 奥特曼·体感超激斗卡片（11.11 上线 · 奥特体感闯关），悬浮目录同步新增 <code>#sec-2026-11</code> 锚点；命名规范总览新增 <strong>1038 条目（已填充）</strong>，修复「命名页可返回总览、总览却无 1038 入口」的单向跳转；README 项目一览表插入 1038 行并同步各处计数。</li>
+                    <li><strong>页面结构修复</strong>：首页页脚（footer）原先夹在 2026.10 与「未上线项目」分区之间，已移至最后一个分区之后，并放回主容器内，视觉上不再穿插在 project 列表中。</li>
+                </ul>
+            </article>
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-09-29</span>
+                    <span class="entry-tag">新增项目</span>
+                </div>
+                <ul class="entry-list">
                     <li><strong>新增 1064《热身达人》全量页面</strong>：<strong>看板</strong>（5 个 KPI：总对局数 6,420 / 活跃账号 2,384 / 平均热身时长 2'27" / 游戏完成率 93.4% / 平均评分 80.4；4 张图表：热门模式占比、游戏完成率、各模式平均评分、近 14 天对局趋势，另附模式详细数据表与题目明细表，共 27 个动作 × 每动作 6 题 = 162 题）与 <strong>命名页</strong>（<code>enter_game</code> / <code>end_game</code> / <code>pause_game</code> / <code>continue_game</code> / <code>mini_game_start</code> / <code>mini_game_end</code> 共 6 个事件）。</li>
                     <li>项目特有字段：<code>mini_game_id</code>（动作 ID）、<code>result</code>（0=未完成 / 1=完成，仅 <code>end_game</code> 上报）、<code>user_info</code> 对象组（<code>user_info.user_id</code> / <code>user_info.score</code> 分数 / <code>user_info.question_id</code> 题目 ID），全局继承 <code>game_type</code>（模式）与 <code>player_number</code>（同局人数）。</li>
                     <li><strong>入口与跳转补齐</strong>：首页「📅 2026.10 上线项目」新增 🏃 热身达人卡片（10.28 上线 · 节拍热身）；命名规范总览新增 <strong>1064 条目（已填充）</strong>，并补齐通用字段 <code>result</code>（0=未完成 / 1=完成），修复「命名页可返回总览、总览却无 1064 入口」的单向跳转；README 项目一览表插入 1064 行（后续序号顺延）并同步各处计数。</li>
