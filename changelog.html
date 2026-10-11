@@ -146,6 +146,18 @@
 
             <article class="entry">
                 <div class="entry-head">
+                    <span class="entry-date">2026-10-11</span>
+                    <span class="entry-tag">新增项目</span>
+                </div>
+                <ul class="entry-list">
+                    <li><strong>新增 1021《动物指挥家》全量页面（含对旧版的重写）</strong>：<strong>看板</strong>（2 个 KPI：总演出场次 4,320 / 活跃账号 1,560；6 张图表：热门歌曲演出场次（初版 15 首 × 3 难度堆叠 · 中国 5 + 外国 10）、活跃用户-歌曲评价分布、活跃用户-高评价歌曲数量分布、活跃用户-乐手获得数量分布、近 14 天演出趋势、音符命中率（按音符类型，全局 82.6%）；另附歌曲详细数据表 15 首 × 3 难度，含地域/难度/演出场次/平均上场角色数/平均节奏准确率/平均评分）与 <strong>命名页</strong>（<code>enter_game</code> / <code>end_game</code> / <code>pause_game</code> / <code>continue_game</code> / <code>item_buy</code> 共 5 个事件）。</li>
+                    <li>项目特有字段：<code>song_id</code>、<code>role_count</code>（上场乐队人数）、<code>difficulty</code>（简单/普通/困难三级谱面）、<code>score</code>、<code>hit_rate</code>、<code>star_rating</code>、<code>note_info</code> 对象组（<code>note_id</code> / <code>appear_count</code> / <code>hit_count</code>，按音符类型统计出现与命中）、<code>item_type</code> / <code>role_id</code> / <code>price</code> / <code>coin_type</code>（乐手获得，商店招募与知名度赠送双渠道）。其中 <code>pause_game</code> / <code>continue_game</code> 为全局必含事件，大纲未描述局内暂停，待 CP 确认。</li>
+                    <li><strong>入口与状态同步</strong>：首页新增「📅 2026.12 上线项目」分区，1021 卡片由「📦 未上线项目」迁入并更新为已完成 / 12 月上线 / 体感指挥（状态 未上线 → 已完成，卡片去重，全站仅保留一处），悬浮目录同步新增 <code>#sec-2026-12</code> 锚点；命名规范总览 1021 条目标记为<strong>「已填充」</strong>，跨项目通用业务属性表补充 <code>role_count</code>（上场角色数）字段。</li>
+                    <li><strong>旧版替换说明</strong>：仓库内原有的 1021 看板（277 行旧版）与命名页（近乎空白）已用新版整体覆盖——本次为内容重写而非首次新增，README 项目一览表中 1021 条目此前已存在，故未新增行。</li>
+                </ul>
+            </article>
+            <article class="entry">
+                <div class="entry-head">
                     <span class="entry-date">2026-09-29</span>
                     <span class="entry-tag">新增项目</span>
                 </div>
