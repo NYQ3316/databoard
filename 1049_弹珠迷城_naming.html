@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1049《弹珠迷城》事件与属性命名</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            padding: 30px 20px;
+            line-height: 1.5;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(6,182,212,0.25);
+            display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+        }
+        .header h1 { font-size: 22px; color: #fff; margin-bottom: 6px; }
+        .header .meta { font-size: 13px; color: rgba(255,255,255,0.9); }
+        .event-block {
+            background: #fff; border-radius: 12px; padding: 24px 28px;
+            margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .event-title {
+            font-size: 16px; font-weight: 600; color: #1a1a2e;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 2px solid #06b6d4; display: inline-block;
+        }
+        .event-desc {
+            font-size: 13px; color: #666; margin-bottom: 14px;
+            background: #ecfeff; padding: 10px 14px; border-radius: 8px;
+            border-left: 3px solid #06b6d4;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+        colgroup col:first-child { width: 245px; }
+        colgroup col:nth-child(2) { width: 110px; }
+        colgroup col:nth-child(3) { width: 80px; }
+        colgroup col:nth-child(4) { width: auto; }
+        colgroup col:nth-child(5) { width: 200px; }
+        colgroup col:nth-child(6) { width: 90px; }
+        th {
+            text-align: left; padding: 10px 12px; font-weight: 600; color: #666;
+            border-bottom: 2px solid #e8e8e8; background: #fafafa;
+        }
+        td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        tr:hover { background: #fafafa; }
+        .field-name {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 12px; color: #0c4a6e; background: #e0f2fe;
+            padding: 2px 8px; border-radius: 4px; font-weight: 500;
+            word-break: break-all;
+        }
+        .type-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .type-string { background: #e6f7ff; color: #096dd9; }
+        .type-int { background: #f6ffed; color: #389e0d; }
+        .type-float { background: #fff2f0; color: #cf1322; }
+        .type-time { background: #f9f0ff; color: #531dab; }
+        .type-list { background: #fff7e6; color: #d46b08; }
+        .type-object { background: #fef9c3; color: #854d0e; }
+        .type-bool { background: #e6fffb; color: #006d75; }
+        .note-row td {
+            text-align: left;
+            background: #ecfeff;
+            color: #92400e;
+            font-size: 12px;
+            padding: 8px 12px;
+        }
+        .note-row td code {
+            background: #a5f3fc;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        .scope-tag {
+            display: inline-block; padding: 2px 10px; border-radius: 4px;
+            font-size: 12px; font-weight: 500;
+        }
+        .scope-required { background: #fff1f0; color: #cf1322; }
+        .scope-common { background: #e6f7ff; color: #096dd9; }
+        .scope-project { background: #f6ffed; color: #389e0d; }
+        .example { font-family: 'SF Mono', Monaco, monospace; font-size: 12px; color: #595959; word-break: break-all; }
+        .sub-field td:first-child { padding-left: 28px; }
+        .sub-field .field-name { background: #f0fdf4; color: #166534; }
+
+        /* ======== 深色主题：深蓝夜空 navy（自动跟随系统深浅色） ======== */
+        html { color-scheme: light dark; }
+        @media (prefers-color-scheme: dark) {
+            body { background: #0b1220; color: #cbd5e1; }
+            .container { color: #cbd5e1; }
+
+            /* 顶栏：品牌色暗化，保留项目辨识度 */
+            .header { background: linear-gradient(135deg, #0c4a6e 0%, #155e75 100%); box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .header h1, .header h2, .header h3, .header .subtitle, .header .meta,
+            .header p, .header div, .header span { color: #f1f5f9; }
+
+            /* 卡片 / 区块 */
+            .event-section, .event-block, .info-bar, .legend, .note-box {
+                background: #131c31; box-shadow: 0 2px 12px rgba(0,0,0,0.45);
+            }
+            .event-title { color: #f1f5f9; border-bottom-color: #334155; }
+            .event-desc { background: #0f172a; color: #94a3b8; border-left-color: #334155; }
+
+            /* 表格 */
+            th { color: #94a3b8; background: #0f172a; border-bottom-color: #1e293b; }
+            td { border-bottom-color: #1e293b; }
+            th, td { border-bottom-color: #1e293b; }
+            tr:hover, tr:hover td { background: #1e293b; }
+            .field-name { color: #93c5fd; background: transparent; }
+            .example { color: #94a3b8; }
+
+            /* 类型 / 范围标签：淡色半透明徽章 + 亮字（不做实色填充） */
+            .type-tag.type-string { background: rgba(56,189,248,0.15); color: #7dd3fc; }
+            .type-tag.type-int { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .type-tag.type-float { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+            .type-tag.type-bool { background: rgba(45,212,191,0.15); color: #5eead4; }
+            .type-tag.type-list { background: rgba(74,222,128,0.15); color: #86efac; }
+            .type-tag.type-object { background: rgba(244,114,182,0.15); color: #f9a8d4; }
+            .type-tag.type-time { background: rgba(251,113,133,0.15); color: #fda4af; }
+            .scope-tag.scope-common { background: rgba(74,222,128,0.15); color: #86efac; }
+            .scope-tag.scope-project { background: rgba(250,204,21,0.15); color: #fcd34d; }
+            .scope-tag.scope-required { background: rgba(248,113,113,0.15); color: #fca5a5; }
+            /* 提示行 */
+            .note-row, .note-row td { background: #1e293b; color: #fcd34d; }
+
+            /* 强制覆盖 HTML 内联写死的深色文字 */
+            div[style], p[style], span[style], td[style], th[style],
+            h1[style], h2[style], h3[style], strong[style] { color: #cbd5e1 !important; }
+            .header [style] { color: #f1f5f9 !important; }
+            .note-row [style], .note-row td[style] { color: #fcd34d !important; }
+        }
+
+        /* ======== 悬浮目录组件 ======== */
+        html { scroll-behavior: smooth; }
+        .event-section, .event-block { scroll-margin-top: 16px; }
+        .toc-fab {
+            position: fixed; right: 20px; bottom: 20px; z-index: 900;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+        }
+        .toc-btn {
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+            background: #ffffff; color: #1a1a2e;
+            border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            font-size: 15px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .15s, border-color .15s;
+        }
+        .toc-btn:hover { background: #f1f5f9; border-color: #2563eb; }
+        .toc-panel {
+            width: 210px; padding: 8px; border-radius: 12px;
+            background: #ffffff; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08); max-height: 70vh; overflow: auto;
+        }
+        .toc-panel[hidden] { display: none; }
+        .toc-title { font-size: 11px; color: #666; padding: 4px 8px 6px; letter-spacing: .5px; font-weight: 600; }
+        .toc-link {
+            display: block; padding: 7px 10px; border-radius: 8px;
+            color: #1a1a2e; text-decoration: none; font-size: 13px;
+            border-left: 2px solid transparent;
+        }
+        .toc-link:hover { background: #f1f5f9; }
+        .toc-link.active { color: #2563eb; border-left-color: #2563eb; background: #f1f5f9; }
+        .toc-back { margin-bottom: 6px; border-bottom: 1px solid #e2e8f0; border-radius: 8px 8px 0 0; }
+        @media (prefers-color-scheme: dark) {
+            .toc-btn { background: #131c31; color: #f1f5f9; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-btn:hover { background: #1e293b; border-color: #60a5fa; }
+            .toc-panel { background: #131c31; border-color: #1e293b; box-shadow: 0 4px 16px rgba(0,0,0,0.45); }
+            .toc-title { color: #94a3b8; }
+            .toc-link { color: #cbd5e1; }
+            .toc-link:hover { background: #1e293b; }
+            .toc-link.active { color: #93c5fd; border-left-color: #60a5fa; background: #1e293b; }
+            .toc-back { border-bottom-color: #1e293b; }
+        }
+        @media (max-width: 640px) { .toc-fab { right: 12px; bottom: 12px; } .toc-panel { width: 168px; } }
+        @media print { .toc-fab { display: none; } }
+
+        .back-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.3s; white-space: nowrap; }
+        .back-btn:hover { background: rgba(255,255,255,0.3); }
+
+        @media (prefers-color-scheme: dark) {
+            .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
+            .back-btn:hover { background: rgba(255,255,255,0.22); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>🔮 1049《弹珠迷城》事件与属性命名</h1>
+            <div class="meta">体感弹珠打砖块 · 1~2 人（多人各控一挡板） · 战役 15 关 + 挑战 3 关 · 计划上线：2027-01 · 事件共 4 个</div>
+        </div>
+        <a class="back-btn" href="naming_standards.html">&larr; 返回命名规范</a>
+    </div>
+
+    <!-- ===== Event 1: enter_game ===== -->
+    <div class="event-block" id="sec-enter-game">
+        <div class="event-title">enter_game（开始对局）</div>
+        <div class="event-desc">玩家选定关卡与模式、本局开始时触发（支撑看板：活跃账号、模式分布、游戏人数分布、关卡进度分布；对局时长由 end_game 与本事件的时间差派生）</div>
+        <table>
+            <colgroup>
+                <col style="width: 245px"><col style="width: 110px"><col style="width: 80px"><col style="width: auto"><col style="width: 200px"><col style="width: 90px">
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1049</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致，与对应 end_game 一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:10+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>本局模式（数值型文本）：0=战役 / 1=挑战 / 2=多人</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>关卡唯一标识（战役 1~15，按章节顺序；挑战 101~103，与主线分开单独算）</td><td class="example">5</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数（1~2，多人模式为 2、各控一个挡板）</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>性别为参与者属性，封装在 <code>user_info</code> 对象组中（账号级属性，进入对局时上报，统计端取各账号最新值）。
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="field-name">user_info</span></td>
+                    <td>参与者信息</td>
+                    <td><span class="type-tag type-object">对象组</span></td>
+                    <td>对象数组，每个对象包含 user_id（文本）与 gender</td>
+                    <td class="example">[{"user_id":135,"gender":0},{"user_id":136,"gender":1}]</td>
+                    <td><span class="scope-tag scope-project">项目特有</span></td>
+                </tr>
+                <tr class="sub-field"><td><span class="field-name">user_info.user_id</span></td><td>↳ 人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与角色ID（JSON 值为裸数字，类型按文本统计）</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="sub-field"><td><span class="field-name">user_info.gender</span></td><td>↳ 性别</td><td><span class="type-tag type-string">文本</span></td><td>玩家性别（数值型文本）：0=男 / 1=女</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== Event 2: end_game ===== -->
+    <div class="event-block" id="sec-end-game">
+        <div class="event-title">end_game（对局结束）</div>
+        <div class="event-desc">一局游戏结束时触发（关卡血量清空过关 / 基地血量清空或重新发球次数耗尽失败），承载本局全部结算数据（支撑看板：总对局数、模式分布、通关率、各关卡失败原因构成、关卡详细数据表全部指标）</div>
+        <table>
+            <colgroup>
+                <col style="width: 245px"><col style="width: 110px"><col style="width: 80px"><col style="width: auto"><col style="width: 200px"><col style="width: 90px">
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1049</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致，与对应 enter_game 一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:37:52+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>本局模式（数值型文本）：0=战役 / 1=挑战 / 2=多人</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">level_id</span></td><td>关卡ID</td><td><span class="type-tag type-string">文本</span></td><td>关卡唯一标识（战役 1~15，按章节顺序；挑战 101~103，与主线分开单独算）</td><td class="example">5</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">result</span></td><td>通关结果</td><td><span class="type-tag type-string">文本</span></td><td>本局结束原因（数值型文本，口径与统计看板「各关卡失败原因构成」一致）：0=通关 / 1=基地被攻破 / 2=发球次数耗尽</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">score</span></td><td>本局得分</td><td><span class="type-tag type-int">数值</span></td><td>本局最终得分（排行榜评分维度之一）</td><td class="example">48600</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">combo_max</span></td><td>最高连击</td><td><span class="type-tag type-int">数值</span></td><td>本局最高连击数（连续破坏砖块累积，连击 20/40/60 奖励额外弹珠，上限 999）；弹珠为局内共享，连击不归属角色，置于事件顶层；排行榜评分维度之一</td><td class="example">31</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">boss_hit_count</span></td><td>击破 BOSS 击球次数</td><td><span class="type-tag type-int">数值</span></td><td>本局 BOSS 从出现到被击杀所用的击球次数（仅章节末关出现 BOSS 时上报，其余关卡不上报）</td><td class="example">182</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="note-row">
+                    <td colspan="6">
+                        <strong>📦 对象组字段：</strong>道具与击球为角色级数据（多人模式各控一个挡板），封装在 <code>user_info</code> 对象组中（1~2 人时逐角色各上报一条，<code>user_info</code> 内仅含本角色数据）。
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="field-name">user_info</span></td>
+                    <td>参与者结算信息</td>
+                    <td><span class="type-tag type-object">对象组</span></td>
+                    <td>对象数组，每个对象包含 user_id（文本）、item_count、hit_count 与 miss_count</td>
+                    <td class="example">[{"user_id":135,"item_count":8,"hit_count":186,"miss_count":28},{"user_id":136,"item_count":4,"hit_count":174,"miss_count":33}]</td>
+                    <td><span class="scope-tag scope-project">项目特有</span></td>
+                </tr>
+                <tr class="sub-field"><td><span class="field-name">user_info.user_id</span></td><td>↳ 人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与角色ID（JSON 值为裸数字，类型按文本统计）</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="sub-field"><td><span class="field-name">user_info.item_count</span></td><td>↳ 道具获得次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色本局获得道具的总次数（弹珠触碰道具立即生效）</td><td class="example">8</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="sub-field"><td><span class="field-name">user_info.hit_count</span></td><td>↳ 击球次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色本局击球次数的总和（含命中与空击，与是否命中无关）</td><td class="example">186</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="sub-field"><td><span class="field-name">user_info.miss_count</span></td><td>↳ 空击次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色本局空击次数（单次击球既不触发撞砖、也不触发获得道具）；空击率 = miss_count/hit_count，由统计端派生</td><td class="example">28</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== Event 3: pause_game ===== -->
+    <div class="event-block" id="sec-pause-game">
+        <div class="event-title">pause_game（暂停对局）</div>
+        <div class="event-desc">对局中触发暂停时上报（暂停选项：继续 / 重新开始 / 返回大厅）</div>
+        <table>
+            <colgroup>
+                <col style="width: 245px"><col style="width: 110px"><col style="width: 80px"><col style="width: auto"><col style="width: 200px"><col style="width: 90px">
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1049</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:36:10+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>本局模式（数值型文本）：0=战役 / 1=挑战 / 2=多人</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== Event 4: continue_game ===== -->
+    <div class="event-block" id="sec-continue-game">
+        <div class="event-title">continue_game（继续对局）</div>
+        <div class="event-desc">从暂停恢复对局时上报（选择「重新开始」则本局作废、重新以新 session_id 开始；选择「返回大厅」则本局不产生 end_game）</div>
+        <table>
+            <colgroup>
+                <col style="width: 245px"><col style="width: 110px"><col style="width: 80px"><col style="width: auto"><col style="width: 200px"><col style="width: 90px">
+            </colgroup>
+            <thead>
+                <tr><th>属性名</th><th>显示名</th><th>类型</th><th>说明</th><th>示例</th><th>来源</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1049</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:37:05+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>本局模式（数值型文本）：0=战役 / 1=挑战 / 2=多人</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <!-- ======== 悬浮目录组件 ======== -->
+    <div class="toc-fab" id="tocFab">
+        <div class="toc-panel" id="tocPanel">
+            <div class="toc-title">页面目录</div>
+            <a class="toc-link toc-back" href="naming_standards.html">← 返回命名规范</a>
+            <a class="toc-link" href="#sec-enter-game">enter_game</a>
+            <a class="toc-link" href="#sec-end-game">end_game</a>
+            <a class="toc-link" href="#sec-pause-game">pause_game</a>
+            <a class="toc-link" href="#sec-continue-game">continue_game</a>
+        </div>
+        <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
+        <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
+    </div>
+    <script>
+    (function () {
+        var panel  = document.getElementById('tocPanel');
+        var toggle = document.getElementById('tocToggle');
+        var topBtn = document.getElementById('tocTop');
+        var STORAGE_KEY = 'naming_toc_open_1049';
+        function setPanel(open) {
+            if (open) { panel.removeAttribute('hidden'); toggle.textContent = '✕'; }
+            else      { panel.setAttribute('hidden', '');   toggle.textContent = '☰'; }
+            try { localStorage.setItem(STORAGE_KEY, open ? '1' : '0'); } catch (e) {}
+        }
+        try {
+            if (localStorage.getItem(STORAGE_KEY) === '0') setPanel(false);
+            else setPanel(true);
+        } catch (e) { setPanel(true); }
+        toggle.addEventListener('click', function () {
+            setPanel(panel.hasAttribute('hidden'));
+        });
+        topBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        var links = panel.querySelectorAll('.toc-link[href^="#"]');
+        links.forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                var id = a.getAttribute('href').slice(1);
+                var t = document.getElementById(id);
+                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            });
+        });
+        var ids = Array.from(links).map(function (a) { return a.getAttribute('href').slice(1); });
+        if ('IntersectionObserver' in window) {
+            var obs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (en) {
+                    if (en.isIntersecting) {
+                        links.forEach(function (l) { l.classList.remove('active'); });
+                        var hit = panel.querySelector('.toc-link[href="#' + en.target.id + '"]');
+                        if (hit) hit.classList.add('active');
+                    }
+                });
+            }, { rootMargin: '-30% 0px -60% 0px' });
+            ids.forEach(function (id) { var el = document.getElementById(id); if (el) obs.observe(el); });
+        }
+    })();
+    </script>
+</body>
+</html>

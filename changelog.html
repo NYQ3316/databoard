@@ -146,6 +146,18 @@
             <article class="entry">
                 <div class="entry-head">
                     <span class="entry-date">2026-10-20</span>
+                    <span class="entry-tag">新增项目 · 字段调整</span>
+                </div>
+                <ul class="entry-list">
+                    <li><strong>1049《弹珠迷城》上线</strong>：看板 2 个 KPI（总对局数 22,740 / 活跃账号 4,650）+ 4 张图表（🎮 模式分布 战役/挑战/多人、👥 游戏人数分布 1~2 人、🗺️ 关卡进度分布、💥 各关卡失败原因构成）+ 18 关明细表（战役 15 关 + 挑战 3 关）；统计周期 2026-10-06 至 2026-10-19，Chart 依赖使用仓库内 <code>chart.umd.min.js</code>。</li>
+                    <li><strong>1049 命名页补全</strong>：原文件为 <strong>0 字节空文件</strong>，现填充 4 个事件 <code>enter_game</code> / <code>end_game</code> / <code>pause_game</code> / <code>continue_game</code>，共 35 条属性定义。</li>
+                    <li><strong>入口同步</strong>：首页新增「📅 2027.01 上线项目」分区（含悬浮目录锚点 <code>#sec-2027-01</code>），1049 卡片由「📦 未上线项目」迁入并标记为<strong>已完成</strong>（2027.01 上线 · 体感弹珠）；命名规范总览 1049 条目补标<strong>「已填充」</strong>；README 原已有 1049 行，故未新增。</li>
+                    <li><strong>1016《悦动儿歌》、1072《脑力训练营》命名页调整</strong>：两页各移除 2 处顶层 <code>user_id</code>（人脸角色ID · 列表 · 示例 <code>["135"]</code>）属性行，角色 ID 统一保留在 <code>user_info.user_id</code> 子字段中（1016 属性数 37→35，1072 属性数 41→39）。</li>
+                </ul>
+            </article>
+            <article class="entry">
+                <div class="entry-head">
+                    <span class="entry-date">2026-10-20</span>
                     <span class="entry-tag">项目重写</span>
                 </div>
                 <ul class="entry-list">
