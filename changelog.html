@@ -145,6 +145,18 @@
         <div class="timeline">
             <article class="entry">
                 <div class="entry-head">
+                    <span class="entry-date">2026-10-21</span>
+                    <span class="entry-tag">项目重写 · 改名</span>
+                </div>
+                <ul class="entry-list">
+                    <li><strong>1020《体适能测试》看板重写上线</strong>：2 个 KPI（总测试次数 22,810 / 活跃账号 3,860），6 张图表（🔥 热门测试排名 15 项、🎯 各测试得分分布 S~C 评级占比、📊 年龄偏向 7~12 岁、🚻 性别偏向、🔁 各测试复玩次数分布 0~10+ 次、📈 统计页访问热度），以及 15 个测试项目的数据明细表（含 S / A / B / C 评级占比）；统计周期 2026-10-06 至 2026-10-19，Chart 依赖使用仓库内 <code>chart.umd.min.js</code>。</li>
+                    <li><strong>1020 命名页补全</strong>：原命名页为 <strong>0 字节空文件</strong>，现填充 5 个事件 <code>enter_game</code> / <code>end_game</code> / <code>page_visit</code> / <code>pause_game</code> / <code>continue_game</code>，共 34 条属性定义（较常规 4 事件多出 <code>page_visit</code>，用于支撑「统计页访问热度」图表）。</li>
+                    <li><strong>项目改名与旧文件清理</strong>：项目名称由「家庭健康体能测试档案」正式更名为「体适能测试」，文件同步重命名为 <code>1020_体适能测试_*</code>；仓库内原有的 <code>1020_家庭健康体能测试档案_analytics_dashboard.html</code>（277 行旧版）与 0 字节的 <code>1020_家庭健康体能测试档案_naming.html</code> 已删除（全站引用已同步迁移，需回溯可从 Git 历史取回）。</li>
+                    <li><strong>入口同步</strong>：首页卡片由「📦 未上线项目」迁入「📅 2026.12 上线项目」区（排在 1016 与 1021 之间），状态更新为<strong>已完成</strong>（12月上线 · 体适能评测）；命名规范总览 1020 条目更名为「体适能测试」并补标<strong>「已填充」</strong>；README 项目一览表 1020 行同步更名与链接。项目总数不变（仍为 54）。</li>
+                </ul>
+            </article>
+            <article class="entry">
+                <div class="entry-head">
                     <span class="entry-date">2026-10-20</span>
                     <span class="entry-tag">新增项目 · 字段调整</span>
                 </div>

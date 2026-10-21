@@ -73,7 +73,7 @@ databoard/
 | 13 | 1017 | 天天拳击 | [链接](https://nyq3316.github.io/databoard/1017_天天拳击_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1017_天天拳击_naming.html) |
 | 14 | 1018 | 镜之修行 | [链接](https://nyq3316.github.io/databoard/1018_镜之修行_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1018_镜之修行_naming.html) |
 | 15 | 1019 | 客厅运动会 | [链接](https://nyq3316.github.io/databoard/1019_客厅运动会_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1019_客厅运动会_naming.html) |
-| 16 | 1020 | 家庭健康体能测试档案 | [链接](https://nyq3316.github.io/databoard/1020_家庭健康体能测试档案_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1020_家庭健康体能测试档案_naming.html) |
+| 16 | 1020 | 体适能测试 | [链接](https://nyq3316.github.io/databoard/1020_体适能测试_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1020_体适能测试_naming.html) |
 | 17 | 1021 | 动物指挥家 | [链接](https://nyq3316.github.io/databoard/1021_动物指挥家_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1021_动物指挥家_naming.html) |
 | 18 | 1023 | 唐唐甜品屋 | [链接](https://nyq3316.github.io/databoard/1023_唐唐甜品屋_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1023_唐唐甜品屋_naming.html) |
 | 19 | 1024 | 蟹蟹大冒险 | [链接](https://nyq3316.github.io/databoard/1024_蟹蟹大冒险_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1024_蟹蟹大冒险_naming.html) |
