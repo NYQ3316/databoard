@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1019《客厅运动会》数据埋点统计看板</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -154,29 +154,24 @@
 
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="label">总体验次数</div>
+            <div class="label">【小游戏】总体验次数</div>
             <div class="value">15,680</div>
             <div class="change positive">↑ 22.5% 较上周</div>
         </div>
         <div class="stat-card">
-            <div class="label">全能锦标赛占比</div>
+            <div class="label">【小游戏】全能锦标赛占比</div>
             <div class="value">58.3%</div>
             <div class="change positive">↑ 8.2% 较上周</div>
         </div>
         <div class="stat-card">
-            <div class="label">活跃玩家</div>
+            <div class="label">【小游戏】活跃玩家</div>
             <div class="value">4,250</div>
             <div class="change positive">↑ 15.8% 较上周</div>
         </div>
         <div class="stat-card">
-            <div class="label">2v2团队战参与率</div>
+            <div class="label">【小游戏】2v2团队战参与率</div>
             <div class="value">32.6%</div>
             <div class="change positive">↑ 5.4% 较上周</div>
-        </div>
-        <div class="stat-card">
-            <div class="label">热门赛制</div>
-            <div class="value">五项全能</div>
-            <div class="change positive">占 38.5%</div>
         </div>
     </div>
 
@@ -184,33 +179,34 @@
 
     <div class="charts-grid">
         <div class="chart-card">
-            <h3>🎯 游戏模式分布</h3>
-            <div class="chart-container">
-                <canvas id="modePieChart"></canvas>
-            </div>
-        </div>
-        <div class="chart-card">
-            <h3>🏆 全能锦标赛赛制分布</h3>
-            <div class="chart-container">
-                <canvas id="matchTypeChart"></canvas>
-            </div>
-        </div>
-        <div class="chart-card chart-full">
             <h3>🔥 10个小游戏热门排行（体验次数）</h3>
+            <div class="legend-inline">含锦标赛内游玩 · 13 个玩法库中的 10 个已上线玩法</div>
             <div class="chart-container">
                 <canvas id="topGamesChart"></canvas>
             </div>
         </div>
         <div class="chart-card">
             <h3>👥 游戏人数分布</h3>
+            <div class="legend-inline">按场次统计（1~4 人） · 场次口径，与体验次数不直接相加</div>
             <div class="chart-container">
                 <canvas id="playerCountChart"></canvas>
             </div>
         </div>
+    </div>
+
+    <div class="charts-grid">
         <div class="chart-card">
             <h3>📈 近7天体验趋势</h3>
+            <div class="legend-inline">按日体验次数 · 周末（五六）为高峰</div>
             <div class="chart-container">
                 <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3>🎯 各小游戏平均得分</h3>
+            <div class="legend-inline">按玩法平均得分着色：≥9000 橙 / ≥8000 绿 / ≥7000 蓝 / 其余灰</div>
+            <div class="chart-container">
+                <canvas id="avgScoreChart"></canvas>
             </div>
         </div>
     </div>
@@ -219,72 +215,104 @@
 
     <div class="charts-grid">
         <div class="chart-card">
+            <h3>🏆 全能锦标赛赛制分布</h3>
+            <div class="legend-inline">锦标赛总参与 9,140 次 · 四种赛制合计与 KPI 口径一致</div>
+            <div class="chart-container">
+                <canvas id="matchTypeChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
             <h3>🆚 2v2团队战 vs 个人战</h3>
+            <div class="legend-inline">锦标赛内局数口径 · 团队战占 32.6%（与 KPI 一致）</div>
             <div class="chart-container">
                 <canvas id="teamVsSoloChart"></canvas>
             </div>
         </div>
+    </div>
+
+    <div id="sec-3" class="section-title">🛍️ 营销模式专项分析（展销 / 无人值守）</div>
+
+    <div style="font-size:13px;color:#fff;background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 16px;margin-bottom:16px;">⚠️ 本区块为<strong>营销模式独立统计口径</strong>（game_type=99 英雄铁人三项），与常规模式分开统计、不混算。<br>埋点：<strong>enter_marketing</strong>（GM 指令进入）/ <strong>end_marketing</strong>（退出，round_count 上报会话内启动局数）；使用时长 = 两事件时间差。</div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="label">【营销模式】启动次数</div>
+            <div class="value">186</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">【营销模式】启动时长</div>
+            <div class="value">57.8<span style="font-size:14px;font-weight:500;"> 分钟</span></div>
+            <div class="change positive">累计 10,750 分钟</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">【游戏】完赛率</div>
+            <div class="value">87.6%</div>
+            <div class="change positive">有成绩位置 ÷ 准备人数</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">【游戏】开启局数</div>
+            <div class="value">3,490</div>
+            <div class="change positive">13 个玩法随机</div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
         <div class="chart-card">
-            <h3>📊 各小游戏平均得分</h3>
+            <h3>📈 营销模式每日启动次数（近 7 天）</h3>
             <div class="chart-container">
-                <canvas id="avgScoreChart"></canvas>
+                <canvas id="marketingTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>⏱️ 单次启动时长分布</h3>
+            <div class="chart-container">
+                <canvas id="marketingDurChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3>🎱 单次启动比赛局数分布</h3>
+            <div class="chart-container">
+                <canvas id="marketingStartChart"></canvas>
             </div>
         </div>
     </div>
 
     <div class="table-card">
-        <h3>📋 10个小游戏详细统计</h3>
+        <h3>📋 营销模式小游戏明细</h3>
         <table>
             <thead>
                 <tr>
                     <th>排名</th>
                     <th>小游戏</th>
-                    <th>体验次数</th>
-                    <th>占比</th>
+                    <th>启动场次</th>
+                    <th>完赛场次</th>
+                    <th>完赛率</th>
                     <th>平均得分</th>
-                    <th>状态</th>
+                    <th>营销模式 : 常规模式得分比</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td><strong>1</strong></td><td>拔萝卜</td><td>1,820</td><td><div class="progress-bar"><div class="progress-fill" style="width: 91%"></div></div><span style="font-size: 12px; color: #666;">11.6%</span></td><td>8,520</td><td><span class="badge badge-success">热门</span></td></tr>
-                <tr><td><strong>2</strong></td><td>砸西瓜</td><td>1,680</td><td><div class="progress-bar"><div class="progress-fill" style="width: 84%"></div></div><span style="font-size: 12px; color: #666;">10.7%</span></td><td>7,890</td><td><span class="badge badge-success">热门</span></td></tr>
-                <tr><td><strong>3</strong></td><td>全速出拳</td><td>1,550</td><td><div class="progress-bar"><div class="progress-fill" style="width: 78%"></div></div><span style="font-size: 12px; color: #666;">9.9%</span></td><td>9,120</td><td><span class="badge badge-success">热门</span></td></tr>
-                <tr><td><strong>4</strong></td><td>举杠铃</td><td>1,480</td><td><div class="progress-bar"><div class="progress-fill" style="width: 74%"></div></div><span style="font-size: 12px; color: #666;">9.4%</span></td><td>8,350</td><td><span class="badge badge-success">热门</span></td></tr>
-                <tr><td><strong>5</strong></td><td>打鼓</td><td>1,420</td><td><div class="progress-bar"><div class="progress-fill" style="width: 71%"></div></div><span style="font-size: 12px; color: #666;">9.1%</span></td><td>7,650</td><td><span class="badge badge-warning">一般</span></td></tr>
-                <tr><td><strong>6</strong></td><td>拉绳子</td><td>1,350</td><td><div class="progress-bar"><div class="progress-fill" style="width: 68%"></div></div><span style="font-size: 12px; color: #666;">8.6%</span></td><td>8,020</td><td><span class="badge badge-warning">一般</span></td></tr>
-                <tr><td><strong>7</strong></td><td>杂技平衡大师</td><td>1,280</td><td><div class="progress-bar"><div class="progress-fill" style="width: 64%"></div></div><span style="font-size: 12px; color: #666;">8.2%</span></td><td>6,780</td><td><span class="badge badge-warning">一般</span></td></tr>
-                <tr><td><strong>8</strong></td><td>液压榨汁机</td><td>1,150</td><td><div class="progress-bar"><div class="progress-fill" style="width: 58%"></div></div><span style="font-size: 12px; color: #666;">7.3%</span></td><td>7,420</td><td><span class="badge badge-warning">一般</span></td></tr>
-                <tr><td><strong>9</strong></td><td>直冲云梯</td><td>1,080</td><td><div class="progress-bar"><div class="progress-fill" style="width: 54%"></div></div><span style="font-size: 12px; color: #666;">6.9%</span></td><td>8,890</td><td><span class="badge badge-info">冷门</span></td></tr>
-                <tr><td><strong>10</strong></td><td>嘶！地板好烫！</td><td>980</td><td><div class="progress-bar"><div class="progress-fill" style="width: 49%"></div></div><span style="font-size: 12px; color: #666;">6.3%</span></td><td>6,350</td><td><span class="badge badge-info">冷门</span></td></tr>
+                <tr><td><strong>1</strong></td><td>拔萝卜</td><td>278</td><td>244</td><td>87.8%</td><td>1,420</td><td>1:5.2</td></tr>
+                <tr><td><strong>2</strong></td><td>砸西瓜</td><td>274</td><td>240</td><td>87.6%</td><td>1,265</td><td>1:6.2</td></tr>
+                <tr><td><strong>3</strong></td><td>全速出拳</td><td>273</td><td>239</td><td>87.5%</td><td>1,215</td><td>1:7.5</td></tr>
+                <tr><td><strong>4</strong></td><td>举杠铃</td><td>271</td><td>237</td><td>87.5%</td><td>1,390</td><td>1:6.0</td></tr>
+                <tr><td><strong>5</strong></td><td>打鼓</td><td>270</td><td>237</td><td>87.8%</td><td>1,320</td><td>1:5.8</td></tr>
+                <tr><td><strong>6</strong></td><td>拉绳子</td><td>269</td><td>236</td><td>87.7%</td><td>1,150</td><td>1:7.0</td></tr>
+                <tr><td><strong>7</strong></td><td>杂技平衡大师</td><td>268</td><td>235</td><td>87.7%</td><td>1,130</td><td>1:6.0</td></tr>
+                <tr><td><strong>8</strong></td><td>液压榨汁机</td><td>267</td><td>234</td><td>87.6%</td><td>1,290</td><td>1:5.8</td></tr>
+                <tr><td><strong>9</strong></td><td>直冲云梯</td><td>266</td><td>233</td><td>87.6%</td><td>1,425</td><td>1:6.2</td></tr>
+                <tr><td><strong>10</strong></td><td>嘶！地板好烫！</td><td>265</td><td>232</td><td>87.5%</td><td>1,060</td><td>1:6.0</td></tr>
+                <tr><td><strong>11</strong></td><td>呼啦圈</td><td>264</td><td>231</td><td>87.5%</td><td>1,210</td><td>—</td></tr>
+                <tr><td><strong>12</strong></td><td>拉面大师</td><td>263</td><td>231</td><td>87.8%</td><td>1,175</td><td>—</td></tr>
+                <tr><td><strong>13</strong></td><td>自己喂自己</td><td>262</td><td>230</td><td>87.8%</td><td>1,105</td><td>—</td></tr>
             </tbody>
         </table>
     </div>
 
-    <div class="table-card">
-        <h3>📋 4种赛制详细统计</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>排名</th>
-                    <th>赛制</th>
-                    <th>参与次数</th>
-                    <th>占比</th>
-                    <th>平均总局数</th>
-                    <th>平均总得分</th>
-                    <th>完成率</th>
-                    <th>状态</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><strong>1</strong></td><td>五项全能</td><td>3,520</td><td><div class="progress-bar"><div class="progress-fill" style="width: 77%"></div></div><span style="font-size: 12px; color: #666;">38.5%</span></td><td>5</td><td>385</td><td>92.5%</td><td><span class="badge badge-success">热门</span></td></tr>
-                <tr><td><strong>2</strong></td><td>三项全能</td><td>2,680</td><td><div class="progress-bar"><div class="progress-fill" style="width: 58%"></div></div><span style="font-size: 12px; color: #666;">29.3%</span></td><td>3</td><td>220</td><td>95.8%</td><td><span class="badge badge-success">热门</span></td></tr>
-                <tr><td><strong>3</strong></td><td>七项全能</td><td>1,850</td><td><div class="progress-bar"><div class="progress-fill" style="width: 40%"></div></div><span style="font-size: 12px; color: #666;">20.2%</span></td><td>7</td><td>520</td><td>85.2%</td><td><span class="badge badge-warning">一般</span></td></tr>
-                <tr><td><strong>4</strong></td><td>十项全能</td><td>1,100</td><td><div class="progress-bar"><div class="progress-fill" style="width: 24%"></div></div><span style="font-size: 12px; color: #666;">12.0%</span></td><td>10</td><td>780</td><td>72.5%</td><td><span class="badge badge-info">冷门</span></td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="footer">
+<div class="footer">
         <p>游戏数据埋点统计看板 | 本地 Git 仓库管理</p>
     </div>
 </div>
@@ -292,22 +320,12 @@
 <script>
 Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
 
-// ========== 游戏模式分布 ==========
-new Chart(document.getElementById('modePieChart'), {
-    type: 'pie',
-    data: {
-        labels: ['小游戏列表', '全能锦标赛'],
-        datasets: [{ data: [6540, 9140], backgroundColor: ['#667eea', '#ffd700'], borderWidth: 2, borderColor: '#fff' }]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
-});
-
 // ========== 全能锦标赛赛制分布 ==========
 new Chart(document.getElementById('matchTypeChart'), {
     type: 'doughnut',
     data: {
         labels: ['三项全能', '五项全能', '七项全能', '十项全能'],
-        datasets: [{ data: [2680, 3520, 1850, 1100], backgroundColor: ['#52c41a', '#1890ff', '#fa8c16', '#f5222d'], borderWidth: 2, borderColor: '#fff' }]
+        datasets: [{ data: [2680, 3520, 1850, 1090], backgroundColor: ['#52c41a', '#1890ff', '#fa8c16', '#f5222d'], borderWidth: 2, borderColor: '#fff' }]
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
 });
@@ -392,6 +410,57 @@ new Chart(document.getElementById('avgScoreChart'), {
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
 });
+
+// ========== 营销模式每日进入趋势 ==========
+new Chart(document.getElementById('marketingTrendChart'), {
+    type: 'line',
+    data: {
+        labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+        datasets: [{
+            label: '启动次数',
+            data: [22, 25, 19, 28, 31, 29, 32],
+            borderColor: '#52c41a',
+            backgroundColor: 'rgba(82,196,26,0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: '#52c41a'
+        }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+
+// ========== 营销模式会话使用时长分布 ==========
+new Chart(document.getElementById('marketingDurChart'), {
+    type: 'bar',
+    data: {
+        labels: ['<10 分钟', '10~30 分钟', '30~60 分钟', '60~120 分钟', '120 分钟以上'],
+        datasets: [{
+            label: '会话数',
+            data: [12, 38, 74, 45, 17],
+            backgroundColor: ['#b7eb8f', '#95de64', '#52c41a', '#389e0d', '#237804'],
+            borderRadius: 6,
+            barPercentage: 0.6
+        }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+
+// ========== 单次启动比赛局数分布 ==========
+new Chart(document.getElementById('marketingStartChart'), {
+    type: 'bar',
+    data: {
+        labels: ['1~5 局', '6~10 局', '11~20 局', '21~40 局', '40 局以上'],
+        datasets: [{
+            label: '会话数',
+            data: [22, 41, 68, 38, 17],
+            backgroundColor: ['#fff1b8', '#ffd666', '#faad14', '#d48806', '#874d00'],
+            borderRadius: 6,
+            barPercentage: 0.6
+        }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
 </script>
     <!-- ======== 悬浮目录组件 ======== -->
     <div class="toc-fab" id="tocFab">
@@ -399,7 +468,8 @@ new Chart(document.getElementById('avgScoreChart'), {
             <div class="toc-title">页面目录</div>
             <a class="toc-link toc-back" href="index.html">&larr; 返回看板总览</a>
             <a class="toc-link" href="#sec-1">游戏模式与小游戏分析</a>
-            <a class="toc-link" href="#sec-2">锦标赛专项分析</a>        </div>
+            <a class="toc-link" href="#sec-2">锦标赛专项分析</a>
+            <a class="toc-link" href="#sec-3">营销模式专项分析</a>        </div>
         <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">&#9776;</button>
         <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">&uarr;</button>
     </div>

@@ -145,6 +145,18 @@
         <div class="timeline">
             <article class="entry">
                 <div class="entry-head">
+                    <span class="entry-date">2026-10-26</span>
+                    <span class="entry-tag">看板重构 · 埋点扩充</span>
+                </div>
+                <ul class="entry-list">
+                    <li><strong>1019《客厅运动会》看板更新</strong>：KPI 由 5 个重构为 <strong>8 个</strong>，按【小游戏】（总体验次数 15,680 / 全能锦标赛占比 58.3% / 活跃玩家 4,250 / 2v2团队战参与率 32.6%）、【营销模式】（启动次数 186 / 启动时长 57.8 分钟）、【游戏】（完赛率 87.6% / 开启局数 3,490）三组口径分列；新增「🛍️ 营销模式专项分析（展销 / 无人值守）」分区，图表 7 → 9 张（新增 📈 营销模式每日启动次数、⏱️ 单次启动时长分布、🎱 单次启动比赛局数分布；移除原「游戏模式分布」饼图），并新增营销模式小游戏明细表（13 行，含「营销模式 : 常规模式得分比」）；统计周期 2026-05-01 至 2026-05-14，Chart 依赖由 CDN 改为仓库内 <code>chart.umd.min.js</code>。</li>
+                    <li><strong>1019 命名页由 6 事件扩为 8 事件</strong>：新增 <code>enter_marketing</code> / <code>end_marketing</code>（管理人员用遥控器 GM 指令长按下键 5 秒进入展销模式，<strong>无玩家身份、不上报 <code>user_id</code></strong>）；属性定义 43 → 52 条。</li>
+                    <li><strong>字段口径修订</strong>：<code>game_type</code> 增加 <code>99=营销模式</code>，营销模式下 <code>user_id</code> 固定按位置号上报（位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004，位置无准备则上报为空）；新增 <code>level</code>（本局小游戏时长，秒 · 整数），<code>mini_game_end</code> 的游戏时长改为直接取该字段上报，不再由两个事件时间戳相减计算。</li>
+                    <li><strong>入口核对</strong>：首页卡片、命名规范总览 1019 条目（已填充）、README 项目一览表三处链接均未变化，本次仅将首页卡片「更新于」同步为 <strong>2026-10-26</strong>；跳转全部正常。</li>
+                </ul>
+            </article>
+            <article class="entry">
+                <div class="entry-head">
                     <span class="entry-date">2026-10-21</span>
                     <span class="entry-tag">项目重写 · 改名</span>
                 </div>

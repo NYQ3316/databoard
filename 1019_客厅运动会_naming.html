@@ -207,7 +207,7 @@
 
         <div class="info-bar">
             <div><strong>项目编号：</strong>1019</div>
-            <div><strong>当前事件数：</strong>6</div>
+            <div><strong>当前事件数：</strong>8</div>
             <div><strong>最后更新：</strong>2026-05-26</div>
         </div>
 
@@ -242,13 +242,14 @@
   <td><span class="field-name">user_id</span></td>
   <td>人脸角色ID</td>
   <td><span class="type-tag type-list">列表</span></td>
-  <td>所有参与角色ID，元素为文本类型</td>
+  <td>所有参与角色ID，元素为文本类型；营销模式（game_type=99）下固定按位置号上报：位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004；进入游戏时位置无准备则该位置上报为空</td>
   <td class="example">["135", "136"]</td>
   <td><span class="scope-tag scope-required">必含</span></td>
 </tr>
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">level</span></td><td>游戏时长</td><td><span class="type-tag type-int">数值</span></td><td>本局小游戏时长（秒，整数）；全局统一上报</td><td class="example">145</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 </tbody>
             </table>
@@ -280,14 +281,15 @@
   <td><span class="field-name">user_id</span></td>
   <td>人脸角色ID</td>
   <td><span class="type-tag type-list">列表</span></td>
-  <td>所有参与角色ID，元素为文本类型</td>
+  <td>所有参与角色ID，元素为文本类型；营销模式（game_type=99）下固定按位置号上报：位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004；进入游戏时位置无准备则该位置上报为空</td>
   <td class="example">["135", "136"]</td>
   <td><span class="scope-tag scope-required">必含</span></td>
 </tr>
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">mini_game_id</span></td><td>小游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>小游戏编号</td><td class="example">0=举杠铃 / 1=拔萝卜 / 2=放烟花 / 3=杂技平衡大师 / 4=直冲云梯 / 5=打鼓 / 6=嘶！地板好烫！ / 7=全速出拳 / 8=拉绳子 / 9=砸西瓜 / 10=呼啦圈 / 11=拉面大师 / 12=自己喂自己</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">level</span></td><td>游戏时长</td><td><span class="type-tag type-int">数值</span></td><td>本局小游戏时长（秒，整数）；营销模式（game_type=99）下必报，常规模式按需上报</td><td class="example">145</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 </tbody>
             </table>
         </div>
@@ -297,7 +299,7 @@
             <div class="event-header">
                 <div class="left">
                     <h2>事件三：<span class="ename">mini_game_end</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">小游戏结束</span></h2>
-                    <div class="edesc">某个小游戏结束时触发；游戏时长由 mini_game_end.timestamp − mini_game_start.timestamp 计算</div>
+                    <div class="edesc">某个小游戏结束时触发；游戏时长以 mini_game_start 的 level 属性上报，无需时间差计算</div>
                 </div>
                 <span class="tag-badge-mini">小游戏</span>
             </div>
@@ -319,13 +321,12 @@
                     <tr><td><span class="field-name">mini_game_id</span></td><td>小游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>小游戏编号</td><td class="example">3</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     
                     
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <!-- 对象组说明行 -->
                     <tr class="note-row">
                         <td colspan="6">
                             <strong>📦 对象组字段：</strong>以下字段为封装在 <code>user_info</code> 对象组中的各角色明细数据，
-                            各字段已在事件顶层保留（见上方独立行），
-                            <code>user_info</code> 为对象数组，每个对象以 <code>user_id</code>（文本类型）标识角色，
+                            <code>user_info</code> 为对象数组，每个对象以 <code>user_id</code>（文本类型）标识角色；营销模式（game_type=99）下 user_id 固定按位置号上报（位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004），位置无准备上报为空，
                             包含该角色的各字段数据，取值须符合子属性原本的类型约束。
                         </td>
                     </tr>
@@ -359,7 +360,7 @@
                         <td><span class="field-name">user_info.user_id</span></td>
                         <td>角色ID</td>
                         <td><span class="type-tag type-string">文本</span></td>
-                        <td>参与游戏的角色ID</td>
+                        <td>参与游戏的角色ID；营销模式（game_type=99）下按位置号上报（9001~9004），位置无准备上报为空</td>
                         <td class="example">135</td>
                         <td><span class="scope-tag scope-project">项目特有</span></td>
                     </tr>
@@ -391,15 +392,14 @@
                     <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                                         <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-string">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     
                     <!-- 对象组说明行 -->
                     <tr class="note-row">
                         <td colspan="6">
                             <strong>📦 对象组字段：</strong>以下字段为封装在 <code>user_info</code> 对象组中的各角色明细数据，
-                            各字段已在事件顶层保留（见上方独立行），
-                            <code>user_info</code> 为对象数组，每个对象以 <code>user_id</code>（文本类型）标识角色，
+                            <code>user_info</code> 为对象数组，每个对象以 <code>user_id</code>（文本类型）标识角色；营销模式（game_type=99）下 user_id 固定按位置号上报（位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004），位置无准备上报为空，
                             包含该角色的各字段数据，取值须符合子属性原本的类型约束。
                         </td>
                     </tr>
@@ -425,7 +425,7 @@
                         <td><span class="field-name">user_info.user_id</span></td>
                         <td>角色ID</td>
                         <td><span class="type-tag type-string">文本</span></td>
-                        <td>参与游戏的角色ID</td>
+                        <td>参与游戏的角色ID；营销模式（game_type=99）下按位置号上报（9001~9004），位置无准备上报为空</td>
                         <td class="example">135</td>
                         <td><span class="scope-tag scope-project">项目特有</span></td>
                     </tr>
@@ -456,13 +456,13 @@
                 <tbody>
                     <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr>
   <td><span class="field-name">user_id</span></td>
   <td>人脸角色ID</td>
   <td><span class="type-tag type-list">列表</span></td>
-  <td>所有参与角色ID，元素为文本类型</td>
+  <td>所有参与角色ID，元素为文本类型；营销模式（game_type=99）下固定按位置号上报：位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004；进入游戏时位置无准备则该位置上报为空</td>
   <td class="example">["135", "136"]</td>
   <td><span class="scope-tag scope-required">必含</span></td>
 </tr>
@@ -494,13 +494,13 @@
                 <tbody>
                     <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1~4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr>
   <td><span class="field-name">user_id</span></td>
   <td>人脸角色ID</td>
   <td><span class="type-tag type-list">列表</span></td>
-  <td>所有参与角色ID，元素为文本类型</td>
+  <td>所有参与角色ID，元素为文本类型；营销模式（game_type=99）下固定按位置号上报：位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004；进入游戏时位置无准备则该位置上报为空</td>
   <td class="example">["135", "136"]</td>
   <td><span class="scope-tag scope-required">必含</span></td>
 </tr>
@@ -509,10 +509,64 @@
             </table>
         </div>
 
+        <!-- Event 7: enter_marketing -->
+        <div class="event-section" id="sec-enter-marketing">
+            <div class="event-header">
+                <div class="left">
+                    <h2>事件七：<span class="ename">enter_marketing</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">进入营销模式</span></h2>
+                    <div class="edesc">管理人员用遥控器 GM 指令（长按下键 5 秒）进入展销模式时触发；无玩家身份，不上报 user_id</div>
+                </div>
+            </div>
+            <table>
+                <colgroup>
+                    <col style="width: 160px">
+                    <col style="width: 110px">
+                    <col style="width: 80px">
+                    <col style="width: auto">
+                    <col style="width: 170px">
+                    <col style="width: 100px">
+                </colgroup>
+                <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
+                <tbody>
+                    <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；营销模式会话内（enter ~ exit）保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Event 8: end_marketing -->
+        <div class="event-section" id="sec-end-marketing">
+            <div class="event-header">
+                <div class="left">
+                    <h2>事件八：<span class="ename">end_marketing</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">退出营销模式</span></h2>
+                    <div class="edesc">退出展销模式时触发（返回键回主菜单 / home 键回平台；局内与结算界面返回键无效）；无玩家身份，不上报 user_id</div>
+                </div>
+            </div>
+            <table>
+                <colgroup>
+                    <col style="width: 160px">
+                    <col style="width: 110px">
+                    <col style="width: 80px">
+                    <col style="width: auto">
+                    <col style="width: 170px">
+                    <col style="width: 100px">
+                </colgroup>
+                <thead><tr><th>属性名</th><th>属性显示名</th><th>类型</th><th>说明</th><th>示例</th><th>属性来源</th></tr></thead>
+                <tbody>
+                    <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1019</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；营销模式会话内保持一致，与对应 enter_marketing 一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）；使用时长 = end_marketing.timestamp − enter_marketing.timestamp</td><td class="example">2026-05-26T10:32:48+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">round_count</span></td><td>游戏启动局数</td><td><span class="type-tag type-int">数值</span></td><td>本次营销模式会话内启动的游戏局数（含未完赛局）</td><td class="example">19</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
         <div class="note-box">
             <strong>📝 补充说明：</strong><br>
             • 完成率统计：通过同一 <code>session_id</code> 收到的 <code>mini_game_end</code> 事件数量 ÷ 该赛制应包含的小游戏总数计算，无需上报 <code>result</code> 字段。<br>
-            • <code>game_type</code> 取值：0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战<br>
+            • <code>game_type</code> 取值：0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）<br>
+            • <strong>营销模式（game_type=99）</strong>：GM 指令进入，user_id 固定按位置号上报（位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004），进入游戏时位置无准备则该位置上报为空（如仅位置 1、3 有玩家：["9001","","9003",""]）；<code>enter_marketing</code> / <code>end_marketing</code> 记录会话，使用时长 = 两者 timestamp 差，启动局数由 exit 的 <code>round_count</code> 上报；会话内 <code>mini_game_start</code> 需上报 <code>level</code>（游戏时长）。<br>
             • <code>mini_game_id</code> 取值：0=举杠铃 / 1=拔萝卜 / 2=放烟花 / 3=杂技平衡大师 / 4=直冲云梯 / 5=打鼓 / 6=嘶！地板好烫！ / 7=全速出拳 / 8=拉绳子 / 9=砸西瓜 / 10=呼啦圈 / 11=拉面大师 / 12=自己喂自己</div>
 
         <div style="text-align: center; color: #999; font-size: 13px; padding: 20px 0;">
@@ -530,6 +584,8 @@
             <a class="toc-link" href="#sec-end-game">end_game</a>
             <a class="toc-link" href="#sec-pause-game">pause_game</a>
             <a class="toc-link" href="#sec-continue-game">continue_game</a>
+            <a class="toc-link" href="#sec-enter-marketing">enter_marketing</a>
+            <a class="toc-link" href="#sec-end-marketing">end_marketing</a>
         </div>
         <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">☰</button>
         <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">↑</button>
