@@ -193,7 +193,18 @@
             .back-btn { background: rgba(255,255,255,0.12); color: #f1f5f9; }
             .back-btn:hover { background: rgba(255,255,255,0.22); }
         }
-    </style>
+        .badge-new {
+            display: inline-block; font-size: 11px; font-weight: 600;
+            color: #b91c1c; background: #fee2e2;
+            padding: 1px 6px; border-radius: 4px; margin-right: 6px;
+            white-space: nowrap; vertical-align: 1px;
+        }
+        .dot-new { background: #ef4444; }
+        @media (prefers-color-scheme: dark) {
+            .badge-new { background: rgba(248,113,113,0.2); color: #fca5a5; }
+            .dot-new { background: #f87171; }
+        }
+        </style>
 </head>
 <body>
     <div class="container">
@@ -214,6 +225,7 @@
         <div class="legend">
             <div class="tag"><span class="dot dot-common"></span> 跨项目通用属性</div>
             <div class="tag"><span class="dot dot-project"></span> 项目特有属性</div>
+<div class="tag"><span class="dot dot-new"></span> 本次更新新增的事件 / 属性（<span class="badge-new">【新增】</span>）</div>
         </div>
 
         <!-- Event 1: enter_game -->
@@ -249,7 +261,7 @@
                     <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">level</span></td><td>游戏时长</td><td><span class="type-tag type-int">数值</span></td><td>本局小游戏时长（秒，整数）；全局统一上报</td><td class="example">145</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                    <tr><td><span class="badge-new">【新增】</span><span class="field-name">level</span></td><td>游戏时长</td><td><span class="type-tag type-int">数值</span></td><td>本局小游戏时长（秒，整数）；全局统一上报</td><td class="example">145</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                     <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 </tbody>
             </table>
@@ -289,7 +301,7 @@
                     <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">mini_game_id</span></td><td>小游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>小游戏编号</td><td class="example">0=举杠铃 / 1=拔萝卜 / 2=放烟花 / 3=杂技平衡大师 / 4=直冲云梯 / 5=打鼓 / 6=嘶！地板好烫！ / 7=全速出拳 / 8=拉绳子 / 9=砸西瓜 / 10=呼啦圈 / 11=拉面大师 / 12=自己喂自己</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                     <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>游戏模式（赛制）</td><td class="example">0=小游戏列表 / 1=三项全能 / 2=五项全能 / 3=七项全能 / 4=十项全能 / 5=2v2团队战 / 99=英雄铁人三项（营销模式）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                    <tr><td><span class="field-name">level</span></td><td>游戏时长</td><td><span class="type-tag type-int">数值</span></td><td>本局小游戏时长（秒，整数）；营销模式（game_type=99）下必报，常规模式按需上报</td><td class="example">145</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                    <tr><td><span class="badge-new">【新增】</span><span class="field-name">level</span></td><td>游戏时长</td><td><span class="type-tag type-int">数值</span></td><td>本局小游戏时长（秒，整数）；营销模式（game_type=99）下必报，常规模式按需上报</td><td class="example">145</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 </tbody>
             </table>
         </div>
@@ -513,7 +525,7 @@
         <div class="event-section" id="sec-enter-marketing">
             <div class="event-header">
                 <div class="left">
-                    <h2>事件七：<span class="ename">enter_marketing</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">进入营销模式</span></h2>
+                    <h2>事件七：<span class="badge-new">【新增】</span><span class="ename">enter_marketing</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">进入营销模式</span></h2>
                     <div class="edesc">管理人员用遥控器 GM 指令（长按下键 5 秒）进入展销模式时触发；无玩家身份，不上报 user_id</div>
                 </div>
             </div>
@@ -539,7 +551,7 @@
         <div class="event-section" id="sec-end-marketing">
             <div class="event-header">
                 <div class="left">
-                    <h2>事件八：<span class="ename">end_marketing</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">退出营销模式</span></h2>
+                    <h2>事件八：<span class="badge-new">【新增】</span><span class="ename">end_marketing</span><span style="font-size:15px;color:#333;font-weight:400;margin-left:8px;">退出营销模式</span></h2>
                     <div class="edesc">退出展销模式时触发（返回键回主菜单 / home 键回平台；局内与结算界面返回键无效）；无玩家身份，不上报 user_id</div>
                 </div>
             </div>

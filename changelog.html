@@ -153,7 +153,8 @@
                     <li><strong>1019 命名页由 6 事件扩为 8 事件</strong>：新增 <code>enter_marketing</code> / <code>end_marketing</code>（管理人员用遥控器 GM 指令长按下键 5 秒进入展销模式，<strong>无玩家身份、不上报 <code>user_id</code></strong>）；属性定义 43 → 52 条。</li>
                     <li><strong>字段口径修订</strong>：<code>game_type</code> 增加 <code>99=营销模式</code>，营销模式下 <code>user_id</code> 固定按位置号上报（位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004，位置无准备则上报为空）；新增 <code>level</code>（本局小游戏时长，秒 · 整数），<code>mini_game_end</code> 的游戏时长改为直接取该字段上报，不再由两个事件时间戳相减计算。</li>
                     <li><strong>入口核对</strong>：首页卡片、命名规范总览 1019 条目（已填充）、README 项目一览表三处链接均未变化，本次仅将首页卡片「更新于」同步为 <strong>2026-10-26</strong>；跳转全部正常。</li>
-                </ul>
+                                    <li><strong>命名页变更标注</strong>：本次新增的 2 个事件（<code>enter_marketing</code> / <code>end_marketing</code>）与新增属性 <code>level</code>（游戏时长）在页面中统一加 <strong>【新增】</strong> 标签，图例同步增加「本次更新新增的事件 / 属性」说明，便于开发对照本次改动范围。</li>
+</ul>
             </article>
             <article class="entry">
                 <div class="entry-head">
