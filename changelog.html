@@ -154,6 +154,7 @@
                     <li><strong>字段口径修订</strong>：<code>game_type</code> 增加 <code>99=营销模式</code>，营销模式下 <code>user_id</code> 固定按位置号上报（位置1=9001 / 位置2=9002 / 位置3=9003 / 位置4=9004，位置无准备则上报为空）；新增 <code>level</code>（本局小游戏时长，秒 · 整数），<code>mini_game_end</code> 的游戏时长改为直接取该字段上报，不再由两个事件时间戳相减计算。</li>
                     <li><strong>入口核对</strong>：首页卡片、命名规范总览 1019 条目（已填充）、README 项目一览表三处链接均未变化，本次仅将首页卡片「更新于」同步为 <strong>2026-10-26</strong>；跳转全部正常。</li>
                                     <li><strong>命名页变更标注</strong>：本次新增的 2 个事件（<code>enter_marketing</code> / <code>end_marketing</code>）与新增属性 <code>level</code>（游戏时长）在页面中统一加 <strong>【新增】</strong> 标签，图例同步增加「本次更新新增的事件 / 属性」说明，便于开发对照本次改动范围。</li>
+                    <li><strong>命名页标注修订</strong>：属性 <code>game_type</code> 新增取值 <code>99=英雄铁人三项（营销模式）</code>，6 个既有事件中的该行统一加 <strong>【修改】</strong> 标签；图例同步增加「本次更新修改的属性」说明（紫色）。至此本次改动范围：新增 2 事件 + 新增属性 <code>level</code> + 修改属性 <code>game_type</code>。</li>
 </ul>
             </article>
             <article class="entry">
