@@ -198,7 +198,7 @@
     <div class="header">
         <div>
             <h1>💃 1007 炫舞宝贝</h1>
-            <div class="subtitle">埋点事件与属性定义 &nbsp;|&nbsp; 舞蹈体感</div>
+            <div class="subtitle">埋点事件与属性定义 &nbsp;|&nbsp; 舞蹈体感 · 计划上线：2026-10-21</div>
         </div>
         <a class="back-btn" href="naming_standards.html">← 返回命名规范</a>
     </div>
@@ -235,7 +235,7 @@
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136","137","138"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135","136","137","138"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">difficulty</span></td><td>难度</td><td><span class="type-tag type-string">文本</span></td><td>0=简单 / 1=普通 / 2=困难</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">song_id</span></td><td>歌曲ID</td><td><span class="type-tag type-string">文本</span></td><td>当前所选歌曲编号</td><td class="example">song_01（小火车）</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
@@ -267,6 +267,7 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>固定值 1007</td><td class="example">1007</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                    <tr><td><span class="field-name">song_id</span></td><td>歌曲ID</td><td><span class="type-tag type-string">文本</span></td><td>本局游玩的歌曲编号（与对应 enter_game 一致）</td><td class="example">003</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr class="note-row">
                     <td colspan="6">
                         <strong>📦 对象组字段：</strong>以下字段为封装在 <code>user_info</code> 对象组中的各角色结算数据，
@@ -281,7 +282,7 @@
                     <td class="example">[{"user_id":135,"total_score":8850,"star_rating":4,"hit_rate":0.85},{"user_id":136,"total_score":7620,"star_rating":3,"hit_rate":0.72}]</td>
                     <td><span class="scope-tag scope-project">项目特有</span></td>
                 </tr>
-                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 <tr><td><span class="field-name">user_info.total_score</span></td><td>最终得分</td><td><span class="type-tag type-int">数值</span></td><td>本局舞蹈最终得分（0~10000）</td><td class="example">8850</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">user_info.star_rating</span></td><td>星级评价</td><td><span class="type-tag type-string">文本</span></td><td>1~5 星评级</td><td class="example">1 / 2 / 3 / 4 / 5</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">user_info.hit_rate</span></td><td>舞蹈准确率</td><td><span class="type-tag type-string">文本</span></td><td>动作判定准确率（0~1）</td><td class="example">0.85</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -312,7 +313,7 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>固定值 1007</td><td class="example">1007</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -343,7 +344,7 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>固定值 1007</td><td class="example">1007</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_count</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏人数</td><td class="example">1 / 2 / 3 / 4</td><td><span class="scope-tag scope-common">通用</span></td></tr>

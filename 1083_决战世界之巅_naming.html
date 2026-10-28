@@ -245,7 +245,7 @@
                     </td>
                 </tr>
                 <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（文本）及 role_id</td><td class="example">[{"user_id":135,"role_id":1},{"user_id":136,"role_id":2}]</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_info.role_id</span></td><td>球队ID</td><td><span class="type-tag type-string">文本</span></td><td>玩家选择的球队标识</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
@@ -272,7 +272,7 @@
                     </td>
                 </tr>
                 <tr><td><span class="field-name">user_info</span></td><td>各角色比赛结果</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（文本）、role_id（文本）及 score、winner、possession 与射门/抢断/扑救/踢人/点球进球数据</td><td class="example">[{"user_id":135,"role_id":1,"score":5,"winner":1,"possession":55,"shot_count":12,"steal_count":8,"save_count":5,"kick_count":4,"penalty":1},{"user_id":136,"role_id":2,"score":4,"winner":0,"possession":45,"shot_count":10,"steal_count":6,"save_count":3,"kick_count":2,"penalty":0}]</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_info.role_id</span></td><td>球队ID</td><td><span class="type-tag type-string">文本</span></td><td>玩家选择的球队标识</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">user_info.score</span></td><td>得分</td><td><span class="type-tag type-int">数值</span></td><td>该角色的最终进球数</td><td class="example">5</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">user_info.winner</span></td><td>胜利方</td><td><span class="type-tag type-string">文本</span></td><td>0=负 / 1=胜 / 2=平</td><td class="example">1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -297,7 +297,7 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -317,7 +317,7 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -338,7 +338,7 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1083</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型；若对手为 AI 则填 999<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>0=比赛模式 / 1=世界杯模式 / 2=训练模式</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -349,7 +349,7 @@
                     </td>
                 </tr>
                 <tr><td><span class="field-name">user_info</span></td><td>各角色入球数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（文本）及射门/抢断/扑救/踢人/点球/进球数据</td><td class="example">[{"user_id":135,"shot_count":12,"steal_count":8,"save_count":5,"kick_count":4,"is_penalty":0,"is_goal":1}]</td><td><span class="scope-tag scope-project">项目</span></td></tr>
-                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的角色ID，若对手为 AI 则填 999<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_info.shot_count</span></td><td>射门次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色累计射门次数</td><td class="example">12</td><td><span class="scope-tag scope-project">项目</span></td></tr>
                 <tr><td><span class="field-name">user_info.steal_count</span></td><td>抢断次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色累计抢断次数</td><td class="example">8</td><td><span class="scope-tag scope-project">项目</span></td></tr>
                 <tr><td><span class="field-name">user_info.save_count</span></td><td>扑救次数</td><td><span class="type-tag type-int">数值</span></td><td>该角色累计扑救次数</td><td class="example">5</td><td><span class="scope-tag scope-project">项目</span></td></tr>

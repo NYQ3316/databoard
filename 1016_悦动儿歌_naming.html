@@ -232,7 +232,7 @@
                     <td class="example">[{"user_id":135,"gender":0},{"user_id":136,"gender":1}]</td>
                     <td><span class="scope-tag scope-project">项目特有</span></td>
                 </tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.user_id</span></td><td>↳ 人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与角色ID（JSON 值为裸数字，类型按文本统计）</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="sub-field"><td><span class="field-name">user_info.user_id</span></td><td>↳ 人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与角色ID（JSON 值为裸数字，类型按文本统计）<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 <tr class="sub-field"><td><span class="field-name">user_info.gender</span></td><td>↳ 性别</td><td><span class="type-tag type-string">文本</span></td><td>玩家性别（数值型文本）：0=男 / 1=女</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
@@ -270,7 +270,7 @@
                     <td class="example">[{"user_id":135,"score":52600,"star_rating":3,"hit_rate":0.85,"combo_max":14},{"user_id":136,"score":41800,"star_rating":2,"hit_rate":0.76,"combo_max":11}]</td>
                     <td><span class="scope-tag scope-project">项目特有</span></td>
                 </tr>
-                <tr class="sub-field"><td><span class="field-name">user_info.user_id</span></td><td>↳ 人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与角色ID（JSON 值为裸数字，类型按文本统计）</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
+                <tr class="sub-field"><td><span class="field-name">user_info.user_id</span></td><td>↳ 人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与角色ID（JSON 值为裸数字，类型按文本统计）<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">135</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 <tr class="sub-field"><td><span class="field-name">user_info.score</span></td><td>↳ 最终得分</td><td><span class="type-tag type-int">数值</span></td><td>该角色本局最终得分（Hit 次数×判定分 + 每局最高 Combo×10，含等级加成）；多人取各角色均值可计算场均总得分</td><td class="example">52600</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 <tr class="sub-field"><td><span class="field-name">user_info.star_rating</span></td><td>↳ 完成评级</td><td><span class="type-tag type-string">文本</span></td><td>该角色本局星级（数值型文本，按理论最高总分百分比判定，阈值可配置）：0=无星 / 1=一星 / 2=二星 / 3=三星</td><td class="example">3</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
                 <tr class="sub-field"><td><span class="field-name">user_info.hit_rate</span></td><td>↳ 准确率</td><td><span class="type-tag type-float">浮点</span></td><td>该角色本局答题环节正确率（0~1；多重答题：作答时间内每 2 秒判定一次，共 5 次）</td><td class="example">0.85</td><td><span class="scope-tag scope-project">项目特有</span></td></tr>
@@ -292,7 +292,7 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1016</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:36:10+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏模式（数值型文本）：本作无其他模式，默认 0</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>
@@ -313,7 +313,7 @@
             </thead>
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品唯一编号</td><td class="example">1016</td><td><span class="scope-tag scope-required">必含</span></td></tr>
-                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:37:05+08:00</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>本局游戏模式（数值型文本）：本作无其他模式，默认 0</td><td class="example">0</td><td><span class="scope-tag scope-common">通用</span></td></tr>

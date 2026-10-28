@@ -219,7 +219,7 @@
                     </td>
                 </tr>
                 <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（人脸角色ID，裸数字）与 role_id（人脸角色随机到的游戏角色，数字型文本；具体定义由研发组提供，此处仅提供格式参考）</td><td class="example">[{"user_id":135,"role_id":0},{"user_id":136,"role_id":1}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">user_info.user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135）<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_info.role_id</span></td><td>游戏角色ID</td><td><span class="type-tag type-string">文本</span></td><td>人脸角色随机到的游戏角色（数字型文本，值存数字编码，不可求平均）；具体定义由研发组提供，此处仅提供格式参考</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
@@ -242,7 +242,7 @@
                     <td><span class="field-name">user_id</span></td>
                     <td>人脸角色ID</td>
                     <td><span class="type-tag type-list">列表</span></td>
-                    <td>所有参与角色ID，元素为文本类型</td>
+                    <td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td>
                     <td class="example">["135"]</td>
                     <td><span class="scope-tag scope-required">必含</span></td>
                 </tr>
@@ -281,7 +281,7 @@
                     </td>
                 </tr>
                 <tr><td><span class="field-name">user_info</span></td><td>各角色数据</td><td><span class="type-tag type-object">对象组</span></td><td>对象数组，每个对象包含 user_id（人脸角色ID，裸数字）、role_id（游戏角色ID，数字型文本；具体定义由研发组提供，此处仅提供格式参考）与 score（本局得分，数值，per-player）</td><td class="example">[{"user_id":135,"role_id":0,"score":48},{"user_id":136,"role_id":1,"score":35}]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">user_info.user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135）</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">user_info.user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-string">文本</span></td><td>参与游戏的人脸角色ID（含 user_info 时只在对象组内出现，顶层不重复；裸数字，如 135）<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">135</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">user_info.role_id</span></td><td>游戏角色ID</td><td><span class="type-tag type-string">文本</span></td><td>人脸角色随机到的游戏角色（数字型文本，值存数字编码，不可求平均）；具体定义由研发组提供，此处仅提供格式参考</td><td class="example">0 / 1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">user_info.score</span></td><td>本局得分</td><td><span class="type-tag type-int">数值</span></td><td>该玩家本局累计得分（per-player，可求平均）</td><td class="example">48 / 35</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
@@ -305,7 +305,7 @@
                     <td><span class="field-name">user_id</span></td>
                     <td>人脸角色ID</td>
                     <td><span class="type-tag type-list">列表</span></td>
-                    <td>所有参与角色ID，元素为文本类型</td>
+                    <td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td>
                     <td class="example">["135","136","137"]</td>
                     <td><span class="scope-tag scope-required">必含</span></td>
                 </tr>
@@ -334,7 +334,7 @@
                     <td><span class="field-name">user_id</span></td>
                     <td>人脸角色ID</td>
                     <td><span class="type-tag type-list">列表</span></td>
-                    <td>所有参与角色ID，元素为文本类型</td>
+                    <td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td>
                     <td class="example">["135","136","137"]</td>
                     <td><span class="scope-tag scope-required">必含</span></td>
                 </tr>

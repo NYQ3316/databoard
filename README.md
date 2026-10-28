@@ -105,7 +105,7 @@ databoard/
 | 45 | 1057 | 欢乐喷涂 | [链接](https://nyq3316.github.io/databoard/1057_欢乐喷涂_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1057_欢乐喷涂_naming.html) |
 | 46 | 1058 | 深空突袭 | [链接](https://nyq3316.github.io/databoard/1058_深空突袭_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1058_深空突袭_naming.html) |
 | 47 | 1061 | 奇妙萌可 | [链接](https://nyq3316.github.io/databoard/1061_奇妙萌可_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1061_奇妙萌可_naming.html) |
-| 48 | 1062 | 愿望喵喵跑酷 | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵跑酷_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵跑酷_naming.html) |
+| 48 | 1062 | 愿望喵喵叠叠乐 | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵叠叠乐_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵叠叠乐_naming.html) |
 | 49 | 1063 | 墨韵寻诗 | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_naming.html) |
 | 50 | 1064 | 热身达人 | [链接](https://nyq3316.github.io/databoard/1064_热身达人_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1064_热身达人_naming.html) |
 | 51 | 1068 | 完美定格 | [链接](https://nyq3316.github.io/databoard/1068_完美定格_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1068_完美定格_naming.html) |

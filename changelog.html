@@ -145,6 +145,19 @@
         <div class="timeline">
             <article class="entry">
                 <div class="entry-head">
+                    <span class="entry-date">2026-10-28</span>
+                    <span class="entry-tag">新增项目 · 规范补充</span>
+                </div>
+                <ul class="entry-list">
+                    <li><strong>新增项目 1062《愿望喵喵叠叠乐》</strong>：上线看板（【主线】关卡次数 20,310 / 通关率 76.8% / 活跃账号 5,820 / 场均人数 2.3 人，含 4 张图表与 16 行关卡明细表）与命名页（<code>enter_game</code> / <code>end_game</code> / <code>pause_game</code> / <code>continue_game</code> 共 4 个事件、34 条属性）。首页卡片由「愿望喵喵跑酷（未上线）」迁入「2026.06.25 上线项目」区并标记为已完成，命名规范总览 1062 条目已填充。</li>
+                    <li><strong>炫舞宝贝命名调整</strong>：<code>mini_game_start</code> / <code>mini_game_end</code> 新增属性 <code>song_id</code>（本局游玩的歌曲编号，与对应 <code>enter_game</code> 一致），页面副标题补充计划上线日期 2026-10-21。</li>
+                    <li><strong>全站 <code>user_id</code> 补充游客口径</strong>：50 个命名页 + 命名规范总览的 <code>user_id</code> / <code>user_info.user_id</code> 说明统一补充「游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4」，区分未注册/未识别的游客玩家。</li>
+                    <li><strong>命名规范总览</strong>：通用属性补充 <code>gender</code>（玩家性别：0=男 / 1=女，账号级，封装在 <code>enter_game</code> 的 <code>user_info</code> 对象组内上报）。</li>
+                    <li><strong>入口核对</strong>：首页卡片、命名规范总览、README 项目表三处 1062 链接均已同步为新文件名；旧「愿望喵喵跑酷」看板文件保留在仓库中（首页已不再挂载卡片）。</li>
+                </ul>
+            </article>
+            <article class="entry">
+                <div class="entry-head">
                     <span class="entry-date">2026-10-26</span>
                     <span class="entry-tag">看板重构 · 埋点扩充</span>
                 </div>
