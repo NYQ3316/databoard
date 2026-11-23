@@ -247,7 +247,7 @@
 
         <!-- 图表1：热门模式分布（环形图） -->
         <div class="chart-card" style="padding:16px 20px;">
-            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🎮 挑战模式 vs 对战模式</h3>
+            <h3 style="margin-bottom:4px;padding-bottom:8px;font-size:15px;">🎮 普通模式 vs 对战模式</h3>
             <div class="chart-desc" style="margin-bottom:10px;font-size:11px;">来源：level_start 事件 → mode_id 字段 · 分析两种玩法模式的场次占比</div>
             <div class="chart-container" style="max-width:220px;margin:0 auto;">
                 <canvas id="modeDoughnutChart" height="220"></canvas>
@@ -283,8 +283,8 @@
 
     </div>
 
-    <!-- ======== 挑战模式通关题数分布（紧凑卡片）======== -->
-    <div id="sec-3" class="section-title">🎯 挑战模式通关题目分布</div>
+    <!-- ======== 普通模式通关题数分布（紧凑卡片）======== -->
+    <div id="sec-3" class="section-title">🎯 普通模式通关题目分布</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px;max-width:520px;">
         <div class="chart-card" style="padding:16px 20px;">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
@@ -298,10 +298,10 @@
         </div>
     </div>
 
-    <!-- ======== 挑战模式动作通过率 Bottom 20 ======== -->
-    <div id="sec-4" class="section-title">🎯 挑战模式动作通过率 Bottom 20（最难动作排行）</div>
+    <!-- ======== 普通模式动作通过率 Bottom 20 ======== -->
+    <div id="sec-4" class="section-title">🎯 普通模式动作通过率 Bottom 20（最难动作排行）</div>
     <div class="table-card">
-        <h3>📋 挑战模式 — 通过率最低的 20 个动作</h3>
+        <h3>📋 普通模式 — 通过率最低的 20 个动作</h3>
         <table>
             <thead>
                 <tr>
@@ -366,7 +366,7 @@ const PALETTE = {
     gold: '#faad14'
 };
 
-// ======== 挑战模式通关题数分布（柱状图，0~3题）========
+// ======== 普通模式通关题数分布（柱状图，0~3题）========
 // 来源：single_answer 按 session_id 聚合，game_type=1，统计每局通过题数
 // 示例数据：[0题, 1题, 2题, 3题] 的场次数
 new Chart(document.getElementById('challengeDistChart'), {
@@ -415,11 +415,11 @@ const THEME_COLOR = {
     '动物类': PALETTE.green
 };
 
-// ======== 图表1：挑战模式 vs 对战模式（环形图） ========
+// ======== 图表1：普通模式 vs 对战模式（环形图） ========
 new Chart(document.getElementById('modeDoughnutChart'), {
     type: 'doughnut',
     data: {
-        labels: ['挑战模式', '对战模式'],
+        labels: ['普通模式', '对战模式'],
         datasets: [{
             data: [2745, 1102],
             backgroundColor: [PALETTE.primary, PALETTE.purple],
@@ -577,7 +577,7 @@ const battleBottom20Data = [
     { rank:20, id:'T_BD_010', tries:421, rate:73.6, match:78.4, eval:1, err:['R_WRIST','L_WRIST','SPINE','R_ELBOW','L_SHOULDER'] }
 ];
 
-// ======== 挑战模式 Bottom 20 数据 ========
+// ======== 普通模式 Bottom 20 数据 ========
 const challengeBottom20Data = [
     { rank:1,  id:'N_017',    tries:612, rate:32.1, match:59.8, eval:0, err:['L_KNEE','R_SHOULDER','L_HIP','R_WRIST','L_ANKLE'] },
     { rank:2,  id:'N_023',    tries:548, rate:36.5, match:57.2, eval:0, err:['R_HIP','L_SHOULDER','R_ELBOW','L_KNEE','R_ANKLE'] },
@@ -654,8 +654,8 @@ renderBottom20('battleBottom20tbody', battleBottom20Data);
             <a class="toc-link toc-back" href="index.html">&larr; 返回看板总览</a>
             <a class="toc-link" href="#sec-1">核心指标概览</a>
             <a class="toc-link" href="#sec-2">模式分布 &amp; 题目分析</a>
-            <a class="toc-link" href="#sec-3">挑战模式通关题目分布</a>
-            <a class="toc-link" href="#sec-4">挑战模式动作通过率 Bottom …</a>
+            <a class="toc-link" href="#sec-3">普通模式通关题目分布</a>
+            <a class="toc-link" href="#sec-4">普通模式动作通过率 Bottom …</a>
             <a class="toc-link" href="#sec-5">对战模式动作通过率 Bottom …</a>        </div>
         <button class="toc-btn" id="tocToggle" title="目录" aria-label="目录">&#9776;</button>
         <button class="toc-btn" id="tocTop" title="回到顶部" aria-label="回到顶部">&uarr;</button>

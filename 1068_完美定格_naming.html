@@ -206,7 +206,7 @@
     <!-- 信息栏 -->
     <div class="info-bar">
         <div><strong>项目编号：</strong>1068</div>
-        <div><strong>游戏模式：</strong>0=对战模式 / 1=挑战模式（1~2人）</div>
+        <div><strong>游戏模式：</strong>0=对战模式 / 1=普通模式（1~2人）</div>
         <div><strong>埋点偏向：</strong>题目难度（动作通过率）</div>
         <div><strong>当前事件数：</strong>6</div>
         <div><strong>最后更新：</strong>2026-06-21</div>
@@ -236,9 +236,10 @@
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1068</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135"] / ["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">role_id</span></td><td>角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与玩家选择的游戏角色ID，元素为文本类型</td><td class="example">["101", "102"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前选择的游戏模式：0=对战模式，1=挑战模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前选择的游戏模式：0=对战模式，1=普通模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
@@ -263,8 +264,9 @@
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1068</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式：0=对战模式，1=挑战模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式：0=对战模式，1=普通模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">role_id</span></td><td>角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与玩家选择的游戏角色ID，元素为文本类型</td><td class="example">["101", "102"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <!-- 对象组说明行 -->
                 <tr class="note-row">
                     <td colspan="6">
@@ -320,7 +322,7 @@
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135"] / ["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式：0=对战模式，1=挑战模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式：0=对战模式，1=普通模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
@@ -346,7 +348,7 @@
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135"] / ["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式：0=对战模式，1=挑战模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前游戏模式：0=对战模式，1=普通模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
             </tbody>
         </table>
@@ -370,9 +372,10 @@
             <tbody>
                 <tr><td><span class="field-name">game_id</span></td><td>游戏ID</td><td><span class="type-tag type-string">文本</span></td><td>产品/游戏唯一编号</td><td class="example">1068</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">user_id</span></td><td>人脸角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与角色ID，元素为文本类型<br>游客按位置号上报：位置1=-1 / 位置2=-2 / 位置3=-3 / 位置4=-4</td><td class="example">["135"] / ["135","136"]</td><td><span class="scope-tag scope-required">必含</span></td></tr>
+                <tr><td><span class="field-name">role_id</span></td><td>角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与玩家选择的游戏角色ID，元素为文本类型</td><td class="example">["101", "102"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">session_id</span></td><td>会话ID</td><td><span class="type-tag type-string">文本</span></td><td>本地生成 UUID v4（可不带横杠）；单局session_id保持一致</td><td class="example">853b054e-1f29-4810-91d0-857471542101</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
-                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前选择的游戏模式：0=对战模式，1=挑战模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">game_type</span></td><td>游戏模式</td><td><span class="type-tag type-string">文本</span></td><td>当前选择的游戏模式：0=对战模式，1=普通模式</td><td class="example">0 / 1</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">question_id</span></td><td>动作题目ID</td><td><span class="type-tag type-string">文本</span></td><td>本次开始的题目唯一标识</td><td class="example">N_017 / T_SB_006</td><td><span class="scope-tag scope-common">通用</span></td></tr>
 
@@ -403,6 +406,7 @@
                 <tr><td><span class="field-name">timestamp</span></td><td>时间戳</td><td><span class="type-tag type-time">时间</span></td><td>事件发生时间（ISO8601，含时区+08:00）</td><td class="example">2026-05-26T09:35:00+08:00</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">question_id</span></td><td>动作题目ID</td><td><span class="type-tag type-string">文本</span></td><td>本次判定的动作题目唯一标识</td><td class="example">N_017 / T_SB_006</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <tr><td><span class="field-name">player_number</span></td><td>游戏人数</td><td><span class="type-tag type-string">文本</span></td><td>参与本局的玩家人数</td><td class="example">1 / 2</td><td><span class="scope-tag scope-common">通用</span></td></tr>
+                <tr><td><span class="field-name">role_id</span></td><td>角色ID</td><td><span class="type-tag type-list">列表</span></td><td>所有参与玩家选择的游戏角色ID，元素为文本类型</td><td class="example">["101", "102"]</td><td><span class="scope-tag scope-common">通用</span></td></tr>
                 <!-- 对象组说明行 -->
                 <tr class="note-row">
                     <td colspan="6">

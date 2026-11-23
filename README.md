@@ -108,7 +108,7 @@ databoard/
 | 48 | 1061 | 奇妙萌可 | [链接](https://nyq3316.github.io/databoard/1061_奇妙萌可_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1061_奇妙萌可_naming.html) |
 | 49 | 1062 | 愿望喵喵叠叠乐 | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵叠叠乐_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1062_愿望喵喵叠叠乐_naming.html) |
 | 50 | 1063 | 墨韵寻诗 | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1063_墨韵寻诗_naming.html) |
-| 51 | 1064 | 热身达人 | [链接](https://nyq3316.github.io/databoard/1064_热身达人_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1064_热身达人_naming.html) |
+| 51 | 1064 | 律动达人 | [链接](https://nyq3316.github.io/databoard/1064_律动达人_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1064_律动达人_naming.html) |
 | 52 | 1068 | 完美定格 | [链接](https://nyq3316.github.io/databoard/1068_完美定格_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1068_完美定格_naming.html) |
 | 53 | 1072 | 脑力训练营 | [链接](https://nyq3316.github.io/databoard/1072_脑力训练营_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1072_脑力训练营_naming.html) |
 | 54 | 1083 | 决战世界之巅 | [链接](https://nyq3316.github.io/databoard/1083《决战世界之巅》_analytics_dashboard.html) | [链接](https://nyq3316.github.io/databoard/1083_决战世界之巅_naming.html) |
